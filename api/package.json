@@ -1,13 +1,14 @@
 {
-  "name": "api-landing-page",
+  "name": "dailymind-api",
   "version": "1.0.0",
-  "description": "API para captura de leads da Landing Page",
+  "description": "API do DailyMind - App de autocuidado para neurodivergentes",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js"
   },
   "dependencies": {
+    "better-sqlite3": "^11.7.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

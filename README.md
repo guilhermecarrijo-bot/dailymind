@@ -1,33 +1,45 @@
-# DailyMind - Landing Page de Pré-Cadastro
+# DailyMind - App de Autocuidado para Neurodivergentes
 
-> **Projeto Acadêmico:** Aplicação Full Stack para captura de pré-cadastros do app DailyMind — uma plataforma de autocuidado para pessoas neurodivergentes.
+> **Projeto Acadêmico:** Aplicação Full Stack de autocuidado para pessoas neurodivergentes, com registro de humor, sono, energia, lembretes diários e sugestões personalizadas.
 
 ---
 
 ## Sobre o Projeto
 
-O **DailyMind** é um aplicativo de autocuidado pensado para pessoas com dificuldades de organização e divergências cognitivas, como TDAH, autismo ou outros perfis neurodivergentes. Esta landing page permite o pré-cadastro de interessados no aplicativo.
+O **DailyMind** é um aplicativo de autocuidado pensado para pessoas com dificuldades de organização e divergências cognitivas, como **TDAH, autismo** ou outros perfis neurodivergentes. O sistema conta com uma **área autenticada** (cadastro/login), um **dashboard** diário e gráficos de evolução, ajudando o usuário a perceber mudanças no próprio comportamento ao longo do tempo.
 
 ### Problema Identificado
 
-Muitas pessoas neurodivergentes enfrentam desafios para manter em ordem sua rotina diária. Tarefas importantes como beber água, se alimentar, estudar e cumprir compromissos acabam sendo esquecidas, gerando desânimo e prejudicando o desempenho nos estudos e autocuidado.
+Muitas pessoas neurodivergentes enfrentam desafios para manter em ordem sua rotina diária. Tarefas importantes como beber água, se alimentar, estudar e cumprir compromissos acabam sendo esquecidas, gerando desânimo e prejudicando o desempenho nos estudos e no autocuidado.
 
 ### Solução Proposta
 
-O DailyMind oferece uma solução simples que ajuda a organizar a rotina com lembretes leves, registro de humor, sono e nível de energia, permitindo que a pessoa perceba mudanças no próprio comportamento ao longo do tempo.
+O DailyMind oferece uma solução simples que ajuda a organizar a rotina com **lembretes leves**, **registro de humor**, **sono** e **nível de energia**, com **notificações discretas** (badge) e **sugestões de autocuidado** baseadas no humor do dia — tudo em uma interface acolhedora, sem pressão.
 
 ---
 
-## Funcionalidades do Aplicativo
+## Funcionalidades do Sistema
 
-- **Cadastro Simplificado** — Criação de conta com e-mail e senha rápidos
-- **Registro de Humor** — Escolha de emojis para registrar emoções diárias
-- **Horas de Sono** — Registro de qualidade e horas de sono
-- **Nível de Energia** — Acompanhamento do nível de energia diário
-- **Lembretes Diários** — Criação de lembretes para hábitos importantes
-- **Gráficos de Evolução** — Visualização mensal de humor e sono
-- **Sugestões Personalizadas** — Recomendações de autocuidado baseadas no humor
-- **Notificações Discretas** — Badges e alertas sem pressão
+### Autenticação e Perfil
+- **Cadastro de conta** — Criação de conta com nome, e-mail, senha, idade e ocupação
+- **Login / Logout** — Sessão persistida no `localStorage`
+- **Edição de perfil** — Atualização de nome, idade e ocupação
+
+### Registro Diário
+- **Humor** — Registro de emoção do dia via emojis (😊 😔 😰 😫 😤 😐 ...), atualizado automaticamente se já registrado no dia
+- **Sono** — Registro de horas de sono (0–24h) e qualidade
+- **Energia** — Registro do nível de energia de 1 a 10
+
+### Lembretes Diários
+- **Criação** — Lembrete com título e ícone (📌 ⏰ 💧 🍎 📖 ...)
+- **Concluir / Reabrir** — Marcação de lembretes como concluídos
+- **Remoção** — Exclusão de lembretes
+- **Badge de pendentes** — Contador de tarefas em aberto na barra de navegação
+
+### Inteligência e Visualização
+- **Sugestões personalizadas** — Recomendações de autocuidado baseadas no humor do dia
+- **Gráficos de evolução** — Visualização mensal de humor (linha) e sono (barras) com **Chart.js**
+- **Notificações discretas** — Badge de alertas sem pressão
 
 ---
 
@@ -36,19 +48,21 @@ O DailyMind oferece uma solução simples que ajuda a organizar a rotina com lem
 ### Backend (API RESTful)
 - **Node.js** — Ambiente de execução JavaScript no servidor
 - **Express.js** — Framework web minimalista para rotas e middlewares
-- **node:sqlite** — Driver síncrono nativo para banco SQLite
+- **better-sqlite3** — Driver síncrono e performático para SQLite
 - **Helmet** — Middleware para cabeçalhos de segurança HTTP
 - **CORS** — Habilitação de Cross-Origin Resource Sharing
 - **Validator** — Lib para sanitização e validação de entradas
 - **Dotenv** — Gerenciamento de variáveis de ambiente
+- **crypto** — Hash de senhas (SHA-256, para fins de demonstração)
 
 ### Frontend (Interface do Usuário)
 - **HTML5 Semântico** — Marcação acessível e estruturada
-- **Tailwind CSS** — Framework CSS utilitário para design responsivo
+- **Tailwind CSS** — Framework CSS utilitário (CDN) para design responsivo
 - **JavaScript ES6+ (Vanilla)** — Lógica do cliente e chamadas assíncronas via Fetch
+- **Chart.js** — Biblioteca de gráficos para a evolução de humor e sono
 
 ### Banco de Dados
-- **SQLite** — Banco de dados leve e local
+- **SQLite** — Banco de dados leve e local (modo WAL ativo)
 
 ---
 
@@ -56,59 +70,132 @@ O DailyMind oferece uma solução simples que ajuda a organizar a rotina com lem
 
 ```text
 dailymind/
-├── api/                          # Servidor Backend em Node.js
-│   ├── db/                       # Banco de dados SQLite (criado em runtime)
-│   │   └── landing.db            # Arquivo da base de dados local
+├── api/                            # Servidor Backend em Node.js
+│   ├── db/                         # Banco de dados SQLite (criado em runtime)
+│   │   └── dailymind.db            # Arquivo da base de dados local
 │   ├── src/
 │   │   ├── config/
-│   │   │   └── conexaoBanco.js   # Inicialização e conexão do SQLite
+│   │   │   └── conexaoBanco.js     # Conexão e configuração do SQLite (WAL)
 │   │   ├── controladores/
-│   │   │   └── leadControlador.js# Regras de negócio da API
+│   │   │   ├── usuarioControlador.js # Cadastro, login e perfil de usuários
+│   │   │   ├── humorControlador.js   # Registro e consulta de humor
+│   │   │   ├── sonoControlador.js    # Registro e consulta de sono
+│   │   │   ├── energiaControlador.js # Registro e consulta de energia
+│   │   │   ├── lembreteControlador.js# CRUD de lembretes e badge de pendentes
+│   │   │   ├── sugestaoControlador.js# Sugestões de autocuidado por humor
+│   │   │   └── leadControlador.js    # Módulo legado de pré-cadastro (lead)
 │   │   ├── rotas/
-│   │   │   └── leadRotas.js      # Endpoints da aplicação
+│   │   │   ├── dailyMindRotas.js   # Endpoints ativos da aplicação
+│   │   │   └── leadRotas.js        # Rotas legadas de leads (não montadas)
 │   │   ├── utilitarios/
-│   │   │   └── validadores.js    # Sanitização e validação dos inputs
-│   │   ├── app.js                # Configuração do Express e Middlewares
-│   │   └── server.js             # Inicialização da porta e servidor
-│   ├── .env                      # Variáveis de ambiente
-│   ├── iniciarBanco.js           # DDL de criação da tabela de leads
-│   └── package.json              # Dependências e scripts do Node.js
+│   │   │   └── validadores.js      # Sanitização e validação dos inputs
+│   │   ├── app.js                  # Configuração do Express e Middlewares
+│   │   └── server.js               # Inicialização da porta e servidor
+│   ├── .env                        # Variáveis de ambiente
+│   ├── iniciarBanco.js             # DDL das tabelas + dados padrão
+│   └── package.json                # Dependências e scripts do Node.js
 │
-├── frontend/                     # Interface Web (Landing Page)
+├── frontend/                       # Interface Web (SPA)
 │   ├── css/
-│   │   └── estilo.css            # Estilos CSS adicionais
+│   │   └── estilo.css              # Estilos CSS adicionais
 │   ├── js/
-│   │   └── app.js                # Script client-side (máscaras e Fetch API)
-│   └── index.html                # Estrutura visual da Landing Page
+│   │   └── app.js                  # Lógica da aplicação (auth, APIs e gráficos)
+│   └── index.html                  # Telas da aplicação (login, dashboard, etc.)
 │
-├── doc/                          # Documentação do projeto
-│   └── descricao_projeto/        # Documentos de descrição e requisitos
+├── doc/                            # Documentação do projeto
+│   └── descricao_projeto/          # Documentos de descrição e requisitos
 │
-├── .gitignore                    # Arquivos ignorados pelo Git
-└── README.md                     # Documentação oficial do repositório
+├── .gitignore                      # Arquivos ignorados pelo Git
+└── README.md                       # Documentação oficial do repositório
 ```
 
 ---
 
 ## Modelagem do Banco de Dados (SQLite)
 
-### Tabela `leads`
+### Tabela `usuarios`
 
 ```sql
-CREATE TABLE IF NOT EXISTS leads (
-    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome_completo       TEXT    NOT NULL,
-    email               TEXT    NOT NULL,
-    telefone_whatsapp   TEXT    NOT NULL,
-    mensagem            TEXT    DEFAULT NULL,
-    data_cadastro       TEXT    DEFAULT (datetime('now','localtime')),
-    status_atendimento  TEXT    DEFAULT 'novo'
-                                CHECK(status_atendimento IN ('novo','contatado','convertido','perdido'))
+CREATE TABLE IF NOT EXISTS usuarios (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome            TEXT    NOT NULL,
+    email           TEXT    NOT NULL UNIQUE,
+    senha           TEXT    NOT NULL,
+    idade           INTEGER DEFAULT NULL,
+    ocupacao        TEXT    DEFAULT NULL,
+    data_cadastro   TEXT    DEFAULT (datetime('now','localtime'))
 );
-
-CREATE INDEX IF NOT EXISTS idx_leads_email ON leads(email);
-CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status_atendimento);
 ```
+
+### Tabela `humor`
+
+```sql
+CREATE TABLE IF NOT EXISTS humor (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id      INTEGER NOT NULL,
+    emoji           TEXT    NOT NULL,
+    data_registro   TEXT    DEFAULT (date('now','localtime')),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+```
+
+### Tabela `sono`
+
+```sql
+CREATE TABLE IF NOT EXISTS sono (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id      INTEGER NOT NULL,
+    horas_sono      REAL    NOT NULL,
+    qualidade       INTEGER DEFAULT 5,
+    data_registro   TEXT    DEFAULT (date('now','localtime')),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+```
+
+### Tabela `energia`
+
+```sql
+CREATE TABLE IF NOT EXISTS energia (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id      INTEGER NOT NULL,
+    nivel_energia   INTEGER NOT NULL,
+    data_registro   TEXT    DEFAULT (date('now','localtime')),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+```
+
+### Tabela `lembretes`
+
+```sql
+CREATE TABLE IF NOT EXISTS lembretes (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id      INTEGER NOT NULL,
+    titulo          TEXT    NOT NULL,
+    icone           TEXT    DEFAULT '📌',
+    horario         TEXT    DEFAULT NULL,
+    concluido       INTEGER DEFAULT 0,
+    data_criacao    TEXT    DEFAULT (datetime('now','localtime')),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+```
+
+### Tabela `sugestoes`
+
+```sql
+CREATE TABLE IF NOT EXISTS sugestoes (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    humor_tipo      TEXT    NOT NULL,
+    titulo          TEXT    NOT NULL,
+    descricao       TEXT    NOT NULL,
+    icone           TEXT    DEFAULT '💡'
+);
+```
+
+### Índices e Seed
+
+O arquivo `iniciarBanco.js` cria índices para todas as tabelas e insere automaticamente **12 sugestões padrão de autocuidado** (mapping: `feliz`, `triste`, `ansioso`, `cansado`, `irritado`, `neutro`) quando a tabela `sugestoes` está vazia.
+
+> **Obs.:** O módulo de **leads** (pré-cadastro da antiga landing page) permanece no código como legado (`leadControlador.js` / `leadRotas.js`), porém não faz mais parte do banco nem das rotas ativas.
 
 ---
 
@@ -116,20 +203,38 @@ CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status_atendimento);
 
 | Método | Endpoint | Descrição | Payload (Body) |
 |---|---|---|---|
-| `GET` | `/` | Servidor estático da Landing Page | — |
+| `GET` | `/` | Servidor estático da aplicação (SPA) | — |
 | `GET` | `/api/health` | Health Check da API | — |
-| `POST` | `/api/leads` | Cadastra um novo pré-cadastro | JSON (nome, email, telefone, mensagem) |
-| `GET` | `/api/leads` | Lista todos os pré-cadastrados | — |
+| `POST` | `/api/usuarios/cadastro` | Cria uma nova conta | JSON (nome, email, senha, idade?, ocupacao?) |
+| `POST` | `/api/usuarios/login` | Autentica o usuário | JSON (email, senha) |
+| `PUT` | `/api/usuarios/perfil` | Atualiza dados do perfil | JSON (id, nome?, idade?, ocupacao?) |
+| `POST` | `/api/humor` | Registra/atualiza humor do dia | JSON (usuario_id, emoji) |
+| `GET` | `/api/humor/:usuario_id` | Lista últimos 30 registros de humor | — |
+| `GET` | `/api/humor/:usuario_id/hoje` | Obtém humor de hoje | — |
+| `POST` | `/api/sono` | Registra/atualiza sono do dia | JSON (usuario_id, horas_sono, qualidade?) |
+| `GET` | `/api/sono/:usuario_id` | Lista últimos 30 registros de sono | — |
+| `GET` | `/api/sono/:usuario_id/hoje` | Obtém sono de hoje | — |
+| `POST` | `/api/energia` | Registra/atualiza energia do dia | JSON (usuario_id, nivel_energia) |
+| `GET` | `/api/energia/:usuario_id` | Lista últimos 30 registros de energia | — |
+| `GET` | `/api/energia/:usuario_id/hoje` | Obtém energia de hoje | — |
+| `POST` | `/api/lembretes` | Cria um novo lembrete | JSON (usuario_id, titulo, icone?, horario?) |
+| `GET` | `/api/lembretes/:usuario_id` | Lista lembretes do usuário | — |
+| `PUT` | `/api/lembretes/:id/toggle` | Alterna lembrete entre concluído/pendente | — |
+| `DELETE` | `/api/lembretes/:id` | Remove um lembrete | — |
+| `GET` | `/api/lembretes/:usuario_id/pendentes` | Conta lembretes pendentes (badge) | — |
+| `GET` | `/api/sugestoes/:usuario_id` | Sugestões de autocuidado do humor de hoje | — |
+| `GET` | `/api/sugestoes` | Lista todas as sugestões cadastradas | — |
 
-### Exemplo de Requisição `POST /api/leads`
+### Exemplo de Requisição `POST /api/usuarios/cadastro`
 
 **Body (JSON):**
 ```json
 {
-  "nome_completo": "Maria Silva",
+  "nome": "Maria Silva",
   "email": "maria.silva@exemplo.com",
-  "telefone_whatsapp": "(11) 98888-7777",
-  "mensagem": "Tenho TDAH e preciso de ajuda com organização."
+  "senha": "123456",
+  "idade": 25,
+  "ocupacao": "Estudante"
 }
 ```
 
@@ -137,7 +242,27 @@ CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status_atendimento);
 ```json
 {
   "sucesso": true,
-  "mensagem": "Os dados do formulário foram enviados com sucesso!"
+  "mensagem": "Conta criada com sucesso!",
+  "usuario": { "id": 1, "nome": "Maria Silva", "email": "maria.silva@exemplo.com" }
+}
+```
+
+### Exemplo de Requisição `POST /api/humor`
+
+**Body (JSON):**
+```json
+{
+  "usuario_id": 1,
+  "emoji": "😊"
+}
+```
+
+**Resposta de Sucesso (HTTP 201):**
+```json
+{
+  "sucesso": true,
+  "mensagem": "Humor registrado!",
+  "id": 1
 }
 ```
 
@@ -161,8 +286,10 @@ CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status_atendimento);
    npm run dev
    ```
 
+   > O servidor executa automaticamente o script `iniciarBanco.js`, criando as tabelas e os dados padrão do banco.
+
 3. **Acesse a aplicação no navegador:**
-   - **Landing Page:** [http://localhost:3000/](http://localhost:3000/)
+   - **Aplicação (SPA):** [http://localhost:3000/](http://localhost:3000/)
    - **Health Check da API:** [http://localhost:3000/api/health](http://localhost:3000/api/health)
 
 ### Parar o Servidor
@@ -173,9 +300,12 @@ CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status_atendimento);
 ## Segurança e Boas Práticas
 
 - **Prepared Statements:** Uso de consultas preparadas para prevenir SQL Injection
-- **Sanitização de Entradas:** Limpeza de strings com a biblioteca `validator`
+- **Hash de Senhas:** Senhas armazenadas com hash SHA-256 (crypto)
+- **Sanitização de Entradas:** Limpeza de strings com a biblioteca `validator` (módulo de leads)
 - **Proteção contra Payload Abusivo:** Middleware com limite de `10kb` por requisição
-- **Respostas Padronizadas:** Tratamento de erros com códigos HTTP semânticos
+- **Cabeçalhos de Segurança:** Middleware `helmet` habilitado
+- **CORS configurável:** Origem permitida via variável de ambiente `ORIGEM_PERMITIDA`
+- **Respostas Padronizadas:** Tratamento de erros com códigos HTTP semânticos (422, 401, 409, 404)
 
 ---
 

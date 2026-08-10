@@ -3,17 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transforme Seu Negócio - Landing Page</title>
+  <title>DailyMind - Cuide da sua mente, um dia de cada vez</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mint: { 50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a' },
+            lavender: { 50: '#faf5ff', 100: '#f3e8ff', 200: '#e9d5ff', 300: '#d8b4fe', 400: '#c084fc', 500: '#a855f7', 600: '#9333ea' },
+            peach: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316' },
+            sky: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' }
+          }
+        }
+      }
+    }
+  </script>
   <link rel="stylesheet" href="css/estilo.css">
 </head>
-<body class="font-sans antialiased text-gray-800">
+<body class="font-sans antialiased text-gray-800 bg-gradient-to-b from-mint-50 to-lavender-50">
 
   <!-- Navbar fixa -->
-  <header class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur z-50 border-b border-gray-100">
+  <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-mint-100">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-      <span class="text-xl font-bold text-indigo-600">MinhaMarca</span>
-      <a href="#formulario" class="bg-indigo-600 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-indigo-700 transition">Quero saber mais</a>
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🧠</span>
+        <span class="text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span>
+      </div>
+      <a href="#cadastro" class="bg-gradient-to-r from-mint-500 to-lavender-500 text-white px-5 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition shadow-md">Comece agora</a>
     </div>
   </header>
 
@@ -23,73 +40,193 @@
   <main>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-indigo-50 via-white to-indigo-100 py-20 px-4">
-      <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+    <section class="py-20 px-4 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-30">
+        <div class="absolute top-10 left-10 w-32 h-32 bg-mint-200 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-10 w-40 h-40 bg-lavender-200 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 w-24 h-24 bg-peach-200 rounded-full blur-2xl"></div>
+      </div>
+      <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 relative z-10">
         <div class="flex-1 text-center md:text-left">
           <h1 class="text-4xl md:text-5xl font-extrabold leading-tight text-gray-900">
-            A solução que seu negócio <span class="text-indigo-600">precisava</span>
+            Cuide da sua mente,<br><span class="bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">um dia de cada vez</span>
           </h1>
           <p class="mt-4 text-lg text-gray-600 max-w-lg">
-            Transforme leads em clientes com nossa plataforma inteligente. Simples, rápido e eficiente.
+            Organize sua rotina, registre seu humor, acompanhe seu sono e receba sugestões personalizadas de autocuidado. Feito para quem pensa diferente.
           </p>
-          <a href="#formulario" class="mt-6 inline-block bg-indigo-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-indigo-700 transition shadow-lg">Solicitar contato</a>
+          <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+            <a href="#cadastro" class="bg-gradient-to-r from-mint-500 to-lavender-500 text-white px-8 py-3 rounded-full font-bold text-lg hover:opacity-90 transition shadow-lg text-center">Criar minha conta</a>
+            <a href="#funcionalidades" class="border-2 border-mint-400 text-mint-600 px-8 py-3 rounded-full font-bold text-lg hover:bg-mint-50 transition text-center">Saiba mais</a>
+          </div>
         </div>
-        <div class="flex-1">
-          <img src="https://placehold.co/600x400/indigo/white?text=Sua+Imagem" alt="Ilustração do produto" class="w-full max-w-md mx-auto rounded-2xl shadow-xl">
+        <div class="flex-1 relative">
+          <div class="relative w-full max-w-md mx-auto">
+            <!-- Mockup do celular -->
+            <div class="bg-white rounded-3xl shadow-2xl p-6 border border-gray-100">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-sm font-semibold text-gray-700">Bom dia! ☀️</span>
+                <span class="text-xs text-gray-400">Hoje</span>
+              </div>
+              <!-- Humor -->
+              <div class="bg-mint-50 rounded-2xl p-4 mb-4">
+                <p class="text-sm text-gray-600 mb-2">Como você está?</p>
+                <div class="flex gap-3 text-2xl">
+                  <span class="cursor-pointer hover:scale-125 transition">😊</span>
+                  <span class="cursor-pointer hover:scale-125 transition">😐</span>
+                  <span class="cursor-pointer hover:scale-125 transition">😔</span>
+                  <span class="cursor-pointer hover:scale-125 transition">😴</span>
+                  <span class="cursor-pointer hover:scale-125 transition">😤</span>
+                </div>
+              </div>
+              <!-- Sono -->
+              <div class="bg-lavender-50 rounded-2xl p-4 mb-4">
+                <p class="text-sm text-gray-600 mb-1">Horas de sono</p>
+                <p class="text-2xl font-bold text-lavender-600">7h30</p>
+                <div class="w-full bg-lavender-200 rounded-full h-2 mt-2">
+                  <div class="bg-lavender-500 h-2 rounded-full" style="width: 75%"></div>
+                </div>
+              </div>
+              <!-- Lembretes -->
+              <div class="bg-peach-50 rounded-2xl p-4">
+                <p class="text-sm text-gray-600 mb-2">Lembretes de hoje</p>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 text-sm">
+                    <span class="w-5 h-5 border-2 border-peach-400 rounded-full flex items-center justify-center text-xs">💧</span>
+                    <span>Beber água</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-sm">
+                    <span class="w-5 h-5 border-2 border-peach-400 rounded-full flex items-center justify-center text-xs">🧘</span>
+                    <span>Meditar 5 min</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Benefícios -->
-    <section class="py-16 px-4 bg-white">
+    <!-- Funcionalidades -->
+    <section id="funcionalidades" class="py-16 px-4 bg-white">
       <div class="max-w-6xl mx-auto">
-        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Por que escolher nossa solução?</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="text-center p-6 rounded-xl bg-indigo-50 hover:shadow-md transition">
-            <div class="text-4xl mb-4">⚡</div>
-            <h3 class="text-xl font-semibold">Rápido</h3>
-            <p class="mt-2 text-gray-600">Resultados em tempo real com nossa infraestrutura otimizada.</p>
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-4">Tudo que você precisa</h2>
+        <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Ferramentas simples e poderosas para ajudar você a manter sua rotina e cuidar de si mesmo.</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Registro de Humor -->
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-mint-50 to-mint-100 hover:shadow-lg transition border border-mint-100">
+            <div class="text-4xl mb-4">😊</div>
+            <h3 class="text-xl font-semibold text-gray-800">Registro de Humor</h3>
+            <p class="mt-2 text-gray-600">Registre seu humor diário com emojis simples e acompanhe suas emoções ao longo do tempo.</p>
           </div>
-          <div class="text-center p-6 rounded-xl bg-indigo-50 hover:shadow-md transition">
-            <div class="text-4xl mb-4">🔒</div>
-            <h3 class="text-xl font-semibold">Seguro</h3>
-            <p class="mt-2 text-gray-600">Seus dados protegidos com criptografia de ponta a ponta.</p>
+          <!-- Sono e Energia -->
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-lavender-50 to-lavender-100 hover:shadow-lg transition border border-lavender-100">
+            <div class="text-4xl mb-4">😴</div>
+            <h3 class="text-xl font-semibold text-gray-800">Sono e Energia</h3>
+            <p class="mt-2 text-gray-600">Registre suas horas de sono e nível de energia para entender como afetam seu dia.</p>
           </div>
-          <div class="text-center p-6 rounded-xl bg-indigo-50 hover:shadow-md transition">
-            <div class="text-4xl mb-4">📱</div>
-            <h3 class="text-xl font-semibold">Responsivo</h3>
-            <p class="mt-2 text-gray-600">Funciona perfeitamente em qualquer dispositivo.</p>
+          <!-- Lembretes -->
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-peach-50 to-peach-100 hover:shadow-lg transition border border-peach-100">
+            <div class="text-4xl mb-4">⏰</div>
+            <h3 class="text-xl font-semibold text-gray-800">Lembretes Diários</h3>
+            <p class="mt-2 text-gray-600">Crie lembretes para hábitos importantes como beber água, tomar remédio e mais.</p>
+          </div>
+          <!-- Gráficos -->
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-sky-50 to-sky-100 hover:shadow-lg transition border border-sky-100">
+            <div class="text-4xl mb-4">📊</div>
+            <h3 class="text-xl font-semibold text-gray-800">Gráficos de Evolução</h3>
+            <p class="mt-2 text-gray-600">Visualize gráficos mensais que cruzam humor, sono e energia para identificar padrões.</p>
+          </div>
+          <!-- Sugestões -->
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-pink-50 to-pink-100 hover:shadow-lg transition border border-pink-100">
+            <div class="text-4xl mb-4">💡</div>
+            <h3 class="text-xl font-semibold text-gray-800">Sugestões Personalizadas</h3>
+            <p class="mt-2 text-gray-600">Receba dicas de autocuidado baseadas no seu humor e necessidades do momento.</p>
+          </div>
+          <!-- Notificações -->
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100 hover:shadow-lg transition border border-amber-100">
+            <div class="text-4xl mb-4">🔔</div>
+            <h3 class="text-xl font-semibold text-gray-800">Notificações Inteligentes</h3>
+            <p class="mt-2 text-gray-600">Badges discretos e notificações para chamar sua atenção sem pressão.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Formulário de Captura -->
-    <section id="formulario" class="py-16 px-4 bg-gray-50">
+    <!-- Para quem é -->
+    <section class="py-16 px-4 bg-gradient-to-br from-lavender-50 to-mint-50">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Feito para você</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-white p-8 rounded-2xl shadow-md border border-lavender-100">
+            <div class="text-3xl mb-4">🧩</div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Pessoas Neurodivergentes</h3>
+            <p class="text-gray-600">Se você tem TDAH, autismo ou outras condições, o DailyMind foi pensado para ajudar você a organizar sua rotina de forma simples e sem cobranças.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl shadow-md border border-mint-100">
+            <div class="text-3xl mb-4">💜</div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Cuidadores e Família</h3>
+            <p class="text-gray-600">Acompanhe a rotina de quem você ama,receba insights sobre humor e sono, e encontre formas práticas de apoiar no dia a dia.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">O que dizem sobre nós</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-mint-50 p-6 rounded-2xl border border-mint-100">
+            <p class="text-gray-600 italic">"Finalmente um app que entende minha dificuldade de manter rotina. Os lembretes são suaves e os gráficos me ajudam a ver meu progresso."</p>
+            <div class="mt-4 flex items-center gap-3">
+              <div class="w-10 h-10 bg-mint-200 rounded-full flex items-center justify-center text-lg">L</div>
+              <div>
+                <p class="font-semibold text-gray-800">Luana</p>
+                <p class="text-sm text-gray-500">Estudante universitária</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-lavender-50 p-6 rounded-2xl border border-lavender-100">
+            <p class="text-gray-600 italic">"Uso para acompanhar meu filho. As sugestões de autocuidado são muito úteis e o registro de humor me ajuda a entender melhor como ele está."</p>
+            <div class="mt-4 flex items-center gap-3">
+              <div class="w-10 h-10 bg-lavender-200 rounded-full flex items-center justify-center text-lg">M</div>
+              <div>
+                <p class="font-semibold text-gray-800">Marcos</p>
+                <p class="text-sm text-gray-500">Pai de estudante</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cadastro -->
+    <section id="cadastro" class="py-16 px-4 bg-gradient-to-br from-mint-50 to-lavender-50">
       <div class="max-w-xl mx-auto">
-        <h2 class="text-3xl font-bold text-center text-gray-900 mb-2">Fale conosco</h2>
-        <p class="text-center text-gray-600 mb-8">Preencha o formulário e entraremos em contato.</p>
-        <form id="formLead" class="bg-white p-8 rounded-2xl shadow-lg space-y-5" novalidate>
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-2">Comece sua jornada</h2>
+        <p class="text-center text-gray-600 mb-8">Crie sua conta gratuita e comece a cuidar de si mesmo hoje.</p>
+        <form id="formCadastro" class="bg-white p-8 rounded-2xl shadow-lg space-y-5 border border-gray-100" novalidate>
           <div>
             <label for="nome_completo" class="block text-sm font-medium text-gray-700 mb-1">Nome completo</label>
-            <input type="text" id="nome_completo" name="nome_completo" required minlength="3" maxlength="150" placeholder="Seu nome completo" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+            <input type="text" id="nome_completo" name="nome_completo" required minlength="3" maxlength="150" placeholder="Seu nome completo" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
           </div>
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-            <input type="email" id="email" name="email" required placeholder="seu@email.com" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+            <input type="email" id="email" name="email" required placeholder="seu@email.com" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
           </div>
           <div>
             <label for="telefone_whatsapp" class="block text-sm font-medium text-gray-700 mb-1">Telefone (WhatsApp)</label>
-            <input type="tel" id="telefone_whatsapp" name="telefone_whatsapp" required placeholder="(11) 99999-8888" maxlength="15" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+            <input type="tel" id="telefone_whatsapp" name="telefone_whatsapp" required placeholder="(11) 99999-8888" maxlength="15" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
           </div>
           <div>
-            <label for="mensagem" class="block text-sm font-medium text-gray-700 mb-1">Mensagem (opcional)</label>
-            <textarea id="mensagem" name="mensagem" rows="3" maxlength="500" placeholder="Sua mensagem..." class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"></textarea>
+            <label for="mensagem" class="block text-sm font-medium text-gray-700 mb-1">Por que você quer usar o DailyMind? (opcional)</label>
+            <textarea id="mensagem" name="mensagem" rows="3" maxlength="500" placeholder="Conte um pouco sobre suas necessidades..." class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition"></textarea>
           </div>
-          <button type="submit" id="btnEnviar" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
-            <span id="textoBtn">Enviar mensagem</span>
+          <button type="submit" id="btnEnviar" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md">
+            <span id="textoBtn">Criar minha conta</span>
             <span id="spinnerBtn" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
           </button>
+          <p class="text-center text-xs text-gray-400">Ao criar sua conta, você concorda com nossos termos de uso e política de privacidade.</p>
         </form>
         <!-- Toast de feedback -->
         <div id="toast" class="fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-lg text-white font-semibold hidden transition-all duration-300 z-50"></div>
@@ -100,7 +237,12 @@
 
   <!-- Footer -->
   <footer class="bg-gray-900 text-gray-400 text-center py-8 px-4">
-    <p class="text-sm">&copy; 2026 MinhaMarca. Todos os direitos reservados.</p>
+    <div class="flex items-center justify-center gap-2 mb-4">
+      <span class="text-xl">🧠</span>
+      <span class="text-lg font-bold text-white">DailyMind</span>
+    </div>
+    <p class="text-sm">&copy; 2026 DailyMind. Todos os direitos reservados.</p>
+    <p class="text-xs mt-2">Feito com 💜 para quem pensa diferente.</p>
   </footer>
 
   <script src="js/app.js"></script>

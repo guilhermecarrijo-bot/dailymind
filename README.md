@@ -1,39 +1,61 @@
-# Landing Page de Captura de Leads — Sistema Full Stack (Node.js + Express + SQLite)
+# DailyMind - Landing Page de Pré-Cadastro
 
-> **Projeto Acadêmico:** Aplicação Full Stack moderna para captura, validação e armazenamento de *leads* em tempo real.
-
----
-
-## 📋 Sobre o Projeto
-
-Este projeto consiste em uma **Landing Page de Alta Conversão** integrada a uma **API RESTful** desenvolvida com Node.js e Express, utilizando o banco de dados leve **SQLite** para persistência de dados.
-
-A aplicação foi desenvolvida seguindo boas práticas de arquitetura de software, validação e sanitização de dados, segurança HTTP com Helmet e navegação responsiva sem recarregamento de página (SPA-like via Fetch API).
+> **Projeto Acadêmico:** Aplicação Full Stack para captura de pré-cadastros do app DailyMind — uma plataforma de autocuidado para pessoas neurodivergentes.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Sobre o Projeto
 
-### **Backend (API RESTful)**
-- **Node.js** — Ambiente de execução JavaScript no servidor.
-- **Express.js** — Framework web minimalista e rápido para rotas e middlewares.
-- **better-sqlite3** — Driver síncrono e de alta performance para o banco SQLite.
-- **Helmet** — Middleware para configuração de cabeçalhos de segurança HTTP.
-- **CORS** — Habilitação de Cross-Origin Resource Sharing.
-- **Validator** — Lib para sanitização e validação avançada de e-mails e textos.
-- **Dotenv** — Gerenciamento de variáveis de ambiente.
+O **DailyMind** é um aplicativo de autocuidado pensado para pessoas com dificuldades de organização e divergências cognitivas, como TDAH, autismo ou outros perfis neurodivergentes. Esta landing page permite o pré-cadastro de interessados no aplicativo.
 
-### **Frontend (Interface do Usuário)**
-- **HTML5 Semântico** — Marcação acessível e estruturada.
-- **Tailwind CSS** — Framework CSS utilitário para design responsivo e moderno.
-- **JavaScript ES6+ (Vanilla)** — Lógica do cliente, manipulação do DOM, máscaras de formulário e chamadas assíncronas via `fetch`.
+### Problema Identificado
+
+Muitas pessoas neurodivergentes enfrentam desafios para manter em ordem sua rotina diária. Tarefas importantes como beber água, se alimentar, estudar e cumprir compromissos acabam sendo esquecidas, gerando desânimo e prejudicando o desempenho nos estudos e autocuidado.
+
+### Solução Proposta
+
+O DailyMind oferece uma solução simples que ajuda a organizar a rotina com lembretes leves, registro de humor, sono e nível de energia, permitindo que a pessoa perceba mudanças no próprio comportamento ao longo do tempo.
 
 ---
 
-## 📁 Estrutura do Projeto
+## Funcionalidades do Aplicativo
+
+- **Cadastro Simplificado** — Criação de conta com e-mail e senha rápidos
+- **Registro de Humor** — Escolha de emojis para registrar emoções diárias
+- **Horas de Sono** — Registro de qualidade e horas de sono
+- **Nível de Energia** — Acompanhamento do nível de energia diário
+- **Lembretes Diários** — Criação de lembretes para hábitos importantes
+- **Gráficos de Evolução** — Visualização mensal de humor e sono
+- **Sugestões Personalizadas** — Recomendações de autocuidado baseadas no humor
+- **Notificações Discretas** — Badges e alertas sem pressão
+
+---
+
+## Tecnologias Utilizadas
+
+### Backend (API RESTful)
+- **Node.js** — Ambiente de execução JavaScript no servidor
+- **Express.js** — Framework web minimalista para rotas e middlewares
+- **node:sqlite** — Driver síncrono nativo para banco SQLite
+- **Helmet** — Middleware para cabeçalhos de segurança HTTP
+- **CORS** — Habilitação de Cross-Origin Resource Sharing
+- **Validator** — Lib para sanitização e validação de entradas
+- **Dotenv** — Gerenciamento de variáveis de ambiente
+
+### Frontend (Interface do Usuário)
+- **HTML5 Semântico** — Marcação acessível e estruturada
+- **Tailwind CSS** — Framework CSS utilitário para design responsivo
+- **JavaScript ES6+ (Vanilla)** — Lógica do cliente e chamadas assíncronas via Fetch
+
+### Banco de Dados
+- **SQLite** — Banco de dados leve e local
+
+---
+
+## Estrutura do Projeto
 
 ```text
-testenodejs/
+dailymind/
 ├── api/                          # Servidor Backend em Node.js
 │   ├── db/                       # Banco de dados SQLite (criado em runtime)
 │   │   └── landing.db            # Arquivo da base de dados local
@@ -59,8 +81,8 @@ testenodejs/
 │   │   └── app.js                # Script client-side (máscaras e Fetch API)
 │   └── index.html                # Estrutura visual da Landing Page
 │
-├── doc/                          # Documentação técnica do projeto
-│   └── plano_landingpage_nodejs.md
+├── doc/                          # Documentação do projeto
+│   └── descricao_projeto/        # Documentos de descrição e requisitos
 │
 ├── .gitignore                    # Arquivos ignorados pelo Git
 └── README.md                     # Documentação oficial do repositório
@@ -68,11 +90,9 @@ testenodejs/
 
 ---
 
-## 🗄️ Modelagem do Banco de Dados (SQLite)
+## Modelagem do Banco de Dados (SQLite)
 
-O banco de dados SQLite é inicializado automaticamente na subida da aplicação através do script `iniciarBanco.js`.
-
-### **Tabela `leads`**
+### Tabela `leads`
 
 ```sql
 CREATE TABLE IF NOT EXISTS leads (
@@ -92,16 +112,16 @@ CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status_atendimento);
 
 ---
 
-## 🚀 Endpoints da API
+## Endpoints da API
 
 | Método | Endpoint | Descrição | Payload (Body) |
 |---|---|---|---|
 | `GET` | `/` | Servidor estático da Landing Page | — |
 | `GET` | `/api/health` | Health Check da API | — |
-| `POST` | `/api/leads` | Cadastra um novo lead | JSON (nome, email, telefone, mensagem) |
-| `GET` | `/api/leads` | Lista todos os leads cadastrados | — |
+| `POST` | `/api/leads` | Cadastra um novo pré-cadastro | JSON (nome, email, telefone, mensagem) |
+| `GET` | `/api/leads` | Lista todos os pré-cadastrados | — |
 
-### **Exemplo de Requisição `POST /api/leads`**
+### Exemplo de Requisição `POST /api/leads`
 
 **Body (JSON):**
 ```json
@@ -109,7 +129,7 @@ CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status_atendimento);
   "nome_completo": "Maria Silva",
   "email": "maria.silva@exemplo.com",
   "telefone_whatsapp": "(11) 98888-7777",
-  "mensagem": "Gostaria de agendar uma demonstração."
+  "mensagem": "Tenho TDAH e preciso de ajuda com organização."
 }
 ```
 
@@ -117,101 +137,61 @@ CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status_atendimento);
 ```json
 {
   "sucesso": true,
-  "mensagem": "Lead cadastrado com sucesso!"
-}
-```
-
-**Resposta de Erro de Validação (HTTP 422):**
-```json
-{
-  "sucesso": false,
-  "mensagem": "E-mail inválido.",
-  "erros": [
-    "Informe um endereço de e-mail válido."
-  ]
+  "mensagem": "Os dados do formulário foram enviados com sucesso!"
 }
 ```
 
 ---
 
-## 🔧 Como Executar o Projeto no VS Code (Windows & Linux Ubuntu)
+## Como Executar o Projeto
 
-### **Pré-requisitos**
-- **Node.js** (v18 ou superior) e **npm** instalados.
-- **Git** instalado.
+### Pré-requisitos
+- **Node.js** (v18 ou superior) e **npm** instalados
 
-> 🐧 **Dica para Linux (Ubuntu/Debian):** Caso precise instalar o Node.js e Git no Ubuntu antes de abrir no VS Code:
-> ```bash
-> sudo apt update
-> sudo apt install -y nodejs npm git
-> ```
+### Iniciar o Projeto
 
----
-
-### 🚀 **Como Iniciar o Projeto (via Terminal do VS Code)**
-
-1. **Abra a pasta do projeto no VS Code:**
-   - Acesse o menu **Arquivo > Abrir Pasta...** (ou `File > Open Folder...` no Linux) e selecione a pasta `testenodejs`.
-
-2. **Abra o Terminal Integrado do VS Code:**
-   - Pressione o atalho **`Ctrl` + `'`** (ou `Ctrl` + `J` / `Ctrl` + `~`).
-   - Ou acesse o menu superior **Terminal > Novo Terminal**.
-
-3. **Navegue até a pasta `api` e instale as dependências (necessário na primeira execução):**
+1. **Navegue até a pasta `api` e instale as dependências:**
    ```bash
    cd api
    npm install
    ```
 
-4. **Inicie o servidor de desenvolvimento:**
+2. **Inicie o servidor de desenvolvimento:**
    ```bash
    npm run dev
    ```
 
-5. **Acesse a aplicação no navegador:**
+3. **Acesse a aplicação no navegador:**
    - **Landing Page:** [http://localhost:3000/](http://localhost:3000/)
    - **Health Check da API:** [http://localhost:3000/api/health](http://localhost:3000/api/health)
 
----
-
-### 🛑 **Como Parar (Stop) o Servidor**
-
-1. **Método Padrão no VS Code (Windows & Linux Ubuntu):**
-   - Com a janela do terminal integrada focada no VS Code, pressione **`Ctrl` + `C`**.
-   - No Windows, se perguntado `Deseja fechar o arquivo em lote (S/N)?`, digite **`S`** e pressione **Enter**. No Linux, o processo será encerrado imediatamente.
-
-2. **Encerrar pelo Painel de Terminais do VS Code:**
-   - Clique no ícone de **Lixeira 🗑️** no canto superior direito do painel de terminais do VS Code.
-
-3. **Liberar Porta Ocupada (caso receba o erro `EADDRINUSE: address already in use :::3000`):**
-   - **No Linux (Ubuntu/Debian):**
-     ```bash
-     sudo fuser -k 3000/tcp
-     ```
-     *ou:*
-     ```bash
-     npx kill-port 3000
-     ```
-   - **No Windows (PowerShell):**
-     ```powershell
-     Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }
-     ```
-   - **No Windows (CMD / Git Bash):**
-     ```bash
-     npx kill-port 3000
-     ```
+### Parar o Servidor
+- Pressione **Ctrl + C** no terminal
 
 ---
 
-## 🛡️ Segurança e Boas Práticas
+## Segurança e Boas Práticas
 
-- **Prepared Statements:** Uso de consultas preparadas via `better-sqlite3` prevenindo ataques de **SQL Injection**.
-- **Sanitização de Entradas:** Limpeza de strings com a biblioteca `validator` para evitar inserção de conteúdos maliciosos (**XSS**).
-- **Proteção contra Payload Abusivo:** Middleware configurado com limite de `10kb` por requisição.
-- **Respostas Padronizadas:** Tratamento transparente de erros com códigos HTTP semânticos (200, 201, 400, 422, 500).
+- **Prepared Statements:** Uso de consultas preparadas para prevenir SQL Injection
+- **Sanitização de Entradas:** Limpeza de strings com a biblioteca `validator`
+- **Proteção contra Payload Abusivo:** Middleware com limite de `10kb` por requisição
+- **Respostas Padronizadas:** Tratamento de erros com códigos HTTP semânticos
 
 ---
 
-## 📜 Licença e Créditos
+## Público-Alvo
 
-Projeto desenvolvido para fins educacionais e acadêmicos. Sinta-se à vontade para utilizar como base para seus próprios aprendizados.
+- **Pessoas Neurodivergentes** — Pessoas com TDAH, autismo ou outras condições que dificultam a organização
+- **Cuidadores e Família** — Pessoas que convivem com neurodivergentes e buscam ferramentas de apoio
+
+---
+
+## Licença e Créditos
+
+Projeto desenvolvido para fins educacionais e acadêmicos.
+
+**Integrantes:** Ana Eduarda Sousa Silva Soares, Byank Chrystinny Santana Lima, Emanuele Oliveira Andrade, Guilherme dos Santos Carrijo e Maria Eduarda Pereira Sastre.
+
+**Disciplina:** Fábrica de Soluções Inteligentes
+
+**Professores:** André Lôbo

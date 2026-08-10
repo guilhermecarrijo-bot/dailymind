@@ -2,7 +2,7 @@
 const URL_API = 'http://localhost:3000/api'
 
 // Referências do DOM
-const formulario = document.getElementById('formLead')
+const formulario = document.getElementById('formCadastro')
 const btnEnviar = document.getElementById('btnEnviar')
 const textoBtn = document.getElementById('textoBtn')
 const spinnerBtn = document.getElementById('spinnerBtn')
@@ -20,7 +20,7 @@ inputTel.addEventListener('input', function () {
 // Exibe toast com mensagem e cor (sucesso/erro)
 function exibirToast(mensagem, tipo) {
   toast.textContent = mensagem
-  toast.className = `fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-lg text-white font-semibold transition-all duration-300 z-50 ${tipo === 'sucesso' ? 'bg-green-600' : 'bg-red-600'}`
+  toast.className = `fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-lg text-white font-semibold transition-all duration-300 z-50 ${tipo === 'sucesso' ? 'bg-mint-500' : 'bg-red-500'}`
   toast.classList.remove('hidden')
   setTimeout(() => toast.classList.add('hidden'), 4000)
 }
@@ -29,13 +29,13 @@ function exibirToast(mensagem, tipo) {
 function alternarCarregando(ativo) {
   btnEnviar.disabled = ativo
   spinnerBtn.classList.toggle('hidden', !ativo)
-  textoBtn.textContent = ativo ? 'Enviando...' : 'Enviar mensagem'
+  textoBtn.textContent = ativo ? 'Criando conta...' : 'Criar minha conta'
 }
 
 // Função genérica para chamadas Fetch à API
-async function api(método, corpo) {
+async function api(metodo, corpo) {
   const resposta = await fetch(`${URL_API}/leads`, {
-    method: método,
+    method: metodo,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(corpo)
   })
@@ -60,15 +60,23 @@ formulario.addEventListener('submit', async function (e) {
     const resultado = await api('POST', dados)
 
     if (resultado.sucesso) {
-      exibirToast(resultado.mensagem || 'Os dados do formulário foram enviados com sucesso!', 'sucesso')
+      exibirToast('Conta criada com sucesso! Bem-vindo ao DailyMind 🧠', 'sucesso')
       formulario.reset()
     } else {
       const msg = resultado.erros ? resultado.erros.join(' ') : resultado.mensagem
-      exibirToast(msg || 'Erro ao enviar. Tente novamente.', 'erro')
+      exibirToast(msg || 'Erro ao criar conta. Tente novamente.', 'erro')
     }
   } catch {
     exibirToast('Erro de conexão com o servidor.', 'erro')
   } finally {
     alternarCarregando(false)
   }
+})
+
+// Efeito de seleção nos emojis (mockup interativo)
+document.querySelectorAll('.emoji-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'))
+    this.classList.add('selected')
+  })
 })

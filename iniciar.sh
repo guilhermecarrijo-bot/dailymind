@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/ifmt-aluno/Downloads/dailymind/api
+cd /home/ifmt-aluno/Documentos/dailymind/api
 rm -f db/dailymind.db
 
 # Inicia o servidor em background

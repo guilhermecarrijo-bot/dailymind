@@ -3,359 +3,407 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DailyMind - Cuide da sua mente</title>
+  <title>DailyMind - Gerencie seu Bem-Estar</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            mint: { 50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a' },
-            lavender: { 50: '#faf5ff', 100: '#f3e8ff', 200: '#e9d5ff', 300: '#d8b4fe', 400: '#c084fc', 500: '#a855f7', 600: '#9333ea' },
-            peach: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316' },
-            sky: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' }
+            mint: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d'
+            }
           }
         }
       }
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="css/estilo.css">
 </head>
-<body class="font-sans antialiased bg-gradient-to-b from-mint-50 to-lavender-50 min-h-screen">
+<body class="bg-gray-50 min-h-screen font-sans">
 
-  <!-- App Container -->
-  <div id="app" class="min-h-screen">
-    
-    <!-- Tela de Login/Cadastro -->
-    <div id="tela-auth" class="min-h-screen flex items-center justify-center p-4">
-      <div class="w-full max-w-md">
-        <!-- Logo -->
-        <div class="text-center mb-8">
-          <div class="text-5xl mb-2">🧠</div>
-          <h1 class="text-3xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</h1>
-          <p class="text-gray-500 mt-1">Cuide da sua mente, um dia de cada vez</p>
-        </div>
+  <!-- Toast -->
+  <div id="toast" class="hidden"></div>
 
-        <!-- Formulário de Login -->
-        <div id="form-login" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Entrar</h2>
-          <form class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-              <input type="email" id="login-email" required placeholder="seu@email.com" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-              <input type="password" id="login-senha" required placeholder="Sua senha" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-            <button type="submit" id="btn-login" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
-              Entrar
-            </button>
-          </form>
-          <p class="text-center mt-6 text-gray-500">
-            Não tem conta? 
-            <button onclick="mostrarCadastro()" class="text-mint-600 font-semibold hover:underline">Criar conta</button>
-          </p>
-        </div>
+  <!-- ==================== TELA DE AUTENTICAÇÃO ==================== -->
+  <div id="tela-auth" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <!-- Logo -->
+      <div class="text-center mb-8">
+        <div class="text-6xl mb-3">🧠</div>
+        <h1 class="text-3xl font-bold text-gray-800">DailyMind</h1>
+        <p class="text-gray-500 mt-2">Cuide da sua mente todos os dias</p>
+      </div>
 
-        <!-- Formulário de Cadastro -->
-        <div id="form-cadastro" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hidden">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Criar Conta</h2>
-          <form class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Nome completo</label>
-              <input type="text" id="cadastro-nome" required minlength="3" placeholder="Seu nome" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+      <!-- Formulário de Login -->
+      <div id="form-login" class="bg-white rounded-2xl shadow-lg p-8">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6">Entrar</h2>
+        <form>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+            <input id="login-email" type="email" required
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition"
+              placeholder="seu@email.com">
+          </div>
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+            <input id="login-senha" type="password" required
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition"
+              placeholder="Sua senha">
+          </div>
+          <button type="submit"
+            class="w-full bg-mint-500 hover:bg-mint-600 text-white font-semibold py-3 rounded-xl transition">
+            Entrar
+          </button>
+        </form>
+        <p class="text-center text-gray-500 mt-6 text-sm">
+          Não tem conta?
+          <button onclick="mostrarCadastro()" class="text-mint-600 font-semibold hover:underline">Cadastre-se</button>
+        </p>
+      </div>
+
+      <!-- Formulário de Cadastro -->
+      <div id="form-cadastro" class="bg-white rounded-2xl shadow-lg p-8 hidden">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6">Criar Conta</h2>
+        <form>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+            <input id="cadastro-nome" type="text" required
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition"
+              placeholder="Seu nome">
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+            <input id="cadastro-email" type="email" required
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition"
+              placeholder="seu@email.com">
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+            <input id="cadastro-senha" type="password" required
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition"
+              placeholder="Crie uma senha">
+          </div>
+          <div class="flex gap-4 mb-4">
+            <div class="flex-1">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Idade</label>
+              <input id="cadastro-idade" type="number" min="1" max="120"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition"
+                placeholder="Opcional">
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-              <input type="email" id="cadastro-email" required placeholder="seu@email.com" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+            <div class="flex-1">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Ocupação</label>
+              <input id="cadastro-ocupacao" type="text"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition"
+                placeholder="Opcional">
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-              <input type="password" id="cadastro-senha" required minlength="6" placeholder="Mínimo 6 caracteres" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Idade (opcional)</label>
-                <input type="number" id="cadastro-idade" min="1" max="120" placeholder="Idade" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Ocupação (opcional)</label>
-                <input type="text" id="cadastro-ocupacao" placeholder="Ex: Estudante" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-              </div>
-            </div>
-            <button type="submit" id="btn-cadastro" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
-              Criar minha conta
-            </button>
-          </form>
-          <p class="text-center mt-6 text-gray-500">
-            Já tem conta? 
-            <button onclick="mostrarLogin()" class="text-mint-600 font-semibold hover:underline">Entrar</button>
-          </p>
-        </div>
+          </div>
+          <button type="submit"
+            class="w-full bg-mint-500 hover:bg-mint-600 text-white font-semibold py-3 rounded-xl transition">
+            Criar Conta
+          </button>
+        </form>
+        <p class="text-center text-gray-500 mt-6 text-sm">
+          Já tem conta?
+          <button onclick="mostrarLogin()" class="text-mint-600 font-semibold hover:underline">Entrar</button>
+        </p>
       </div>
     </div>
+  </div>
 
-    <!-- Dashboard Principal -->
-    <div id="tela-dashboard" class="hidden min-h-screen">
-      <!-- Navbar -->
-      <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-mint-100">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">🧠</span>
-            <span class="text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span>
-          </div>
-          <div class="flex items-center gap-4">
-            <!-- Badge de notificação -->
-            <button id="btn-notificacoes" class="relative p-2 text-gray-600 hover:text-mint-600 transition">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-              </svg>
-              <span id="badge-notificacoes" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center hidden">0</span>
-            </button>
-            <!-- Perfil -->
-            <button id="btn-perfil" class="w-10 h-10 bg-gradient-to-r from-mint-400 to-lavender-400 rounded-full flex items-center justify-center text-white font-bold" onclick="mostrarPerfil()">
-              <span id="inicial-usuario">U</span>
-            </button>
+  <!-- ==================== TELA PRINCIPAL (DASHBOARD) ==================== -->
+  <div id="tela-dashboard" class="hidden">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 border-b border-gray-100">
+      <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div id="inicial-usuario" class="w-10 h-10 rounded-full bg-gradient-to-br from-mint-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg"></div>
+          <div>
+            <p class="text-xs text-gray-400">Bem-vindo</p>
+            <h2 id="nome-usuario" class="font-semibold text-gray-800"></h2>
           </div>
         </div>
-      </header>
-
-      <!-- Conteúdo Principal -->
-      <main class="pt-20 pb-24 px-4 max-w-6xl mx-auto">
-        
-        <!-- Saudação -->
-        <div class="mb-8">
-          <h1 class="text-2xl font-bold text-gray-800">Bom dia, <span id="nome-usuario">Usuário</span>! ☀️</h1>
-          <p class="text-gray-500">Como você está hoje?</p>
-        </div>
-
-        <!-- Cards de Registro Rápido -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <!-- Humor -->
-          <div class="bg-white p-6 rounded-2xl shadow-md border border-mint-100 cursor-pointer hover:shadow-lg transition" onclick="abrirModalHumor()">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium text-gray-500">Humor de hoje</span>
-              <span class="text-2xl" id="humor-atual">😊</span>
-            </div>
-            <p class="text-gray-700 font-semibold" id="humor-texto">Toque para registrar</p>
-          </div>
-
-          <!-- Sono -->
-          <div class="bg-white p-6 rounded-2xl shadow-md border border-lavender-100 cursor-pointer hover:shadow-lg transition" onclick="abrirModalSono()">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium text-gray-500">Sono</span>
-              <span class="text-2xl">😴</span>
-            </div>
-            <p class="text-gray-700 font-semibold" id="sono-texto">Toque para registrar</p>
-          </div>
-
-          <!-- Energia -->
-          <div class="bg-white p-6 rounded-2xl shadow-md border border-peach-100 cursor-pointer hover:shadow-lg transition" onclick="abrirModalEnergia()">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium text-gray-500">Energia</span>
-              <span class="text-2xl">⚡</span>
-            </div>
-            <p class="text-gray-700 font-semibold" id="energia-texto">Toque para registrar</p>
-          </div>
-        </div>
-
-        <!-- Lembretes do Dia -->
-        <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 mb-8">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold text-gray-800">Lembretes de hoje</h2>
-            <button onclick="abrirModalLembrete()" class="text-mint-600 hover:text-mint-700 font-semibold text-sm">+ Novo</button>
-          </div>
-          <div id="lista-lembretes" class="space-y-3">
-            <p class="text-gray-400 text-center py-4">Nenhum lembrete ainda</p>
-          </div>
-        </div>
-
-        <!-- Sugestões de Autocuidado -->
-        <div class="bg-gradient-to-br from-mint-50 to-lavender-50 p-6 rounded-2xl border border-mint-100 mb-8">
-          <h2 class="text-lg font-bold text-gray-800 mb-4">💡 Sugestões para você</h2>
-          <div id="lista-sugestoes" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <p class="text-gray-400 text-center py-4 col-span-3">Registre seu humor para ver sugestões</p>
-          </div>
-        </div>
-
-      </main>
-
-      <!-- Menu Inferior -->
-      <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 z-50">
-        <div class="max-w-6xl mx-auto flex justify-around py-3">
-          <button onclick="mostrarTela('dashboard')" class="flex flex-col items-center text-mint-600">
+        <div class="flex items-center gap-3">
+          <button onclick="mostrarPerfil()" class="relative p-2 text-gray-500 hover:text-mint-600 transition">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
-            <span class="text-xs mt-1">Início</span>
           </button>
-          <button onclick="mostrarTela('graficos')" class="flex flex-col items-center text-gray-400 hover:text-lavender-600 transition">
+          <button onclick="fazerLogout()" class="p-2 text-gray-500 hover:text-red-500 transition" title="Sair">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
             </svg>
-            <span class="text-xs mt-1">Gráficos</span>
-          </button>
-          <button onclick="mostrarTela('lembretes')" class="flex flex-col items-center text-gray-400 hover:text-peach-600 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span class="text-xs mt-1">Lembretes</span>
-          </button>
-          <button onclick="mostrarTela('perfil')" class="flex flex-col items-center text-gray-400 hover:text-sky-600 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-            </svg>
-            <span class="text-xs mt-1">Perfil</span>
           </button>
         </div>
-      </nav>
-    </div>
-
-    <!-- Tela de Gráficos -->
-    <div id="tela-graficos" class="hidden min-h-screen pt-20 pb-24 px-4 max-w-6xl mx-auto">
-      <h1 class="text-2xl font-bold text-gray-800 mb-6">📊 Seus Gráficos</h1>
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 mb-6">
-        <h3 class="font-semibold text-gray-700 mb-4">Humor nos últimos 30 dias</h3>
-        <canvas id="grafico-humor" height="200"></canvas>
       </div>
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
-        <h3 class="font-semibold text-gray-700 mb-4">Sono nos últimos 30 dias</h3>
-        <canvas id="grafico-sono" height="200"></canvas>
-      </div>
-    </div>
+    </header>
 
-    <!-- Tela de Lembretes -->
-    <div id="tela-lembretes" class="hidden min-h-screen pt-20 pb-24 px-4 max-w-6xl mx-auto">
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">⏰ Todos os Lembretes</h1>
-        <button onclick="abrirModalLembrete()" class="bg-mint-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-mint-600 transition">+ Novo</button>
+    <!-- Conteúdo Principal -->
+    <main class="max-w-2xl mx-auto px-4 pt-20 pb-24">
+
+      <!-- Saudação -->
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Como vai hoje?</h1>
+        <p class="text-gray-500">Registre seu humor, sono e energia</p>
       </div>
+
+      <!-- Cards de Resumo -->
+      <div class="grid grid-cols-3 gap-3 mb-6">
+        <!-- Humor -->
+        <button onclick="abrirModalHumor()"
+          class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+          <div id="humor-atual" class="text-4xl mb-1">😐</div>
+          <p id="humor-texto" class="text-xs text-gray-500 font-medium">Toque para registrar</p>
+        </button>
+        <!-- Sono -->
+        <button onclick="abrirModalSono()"
+          class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+          <div class="text-4xl mb-1">😴</div>
+          <p id="sono-texto" class="text-xs text-gray-500 font-medium">Toque para registrar</p>
+        </button>
+        <!-- Energia -->
+        <button onclick="abrirModalEnergia()"
+          class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+          <div class="text-4xl mb-1">⚡</div>
+          <p id="energia-texto" class="text-xs text-gray-500 font-medium">Toque para registrar</p>
+        </button>
+      </div>
+
+      <!-- Sugestões de Autocuidado -->
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">Sugestões de Autocuidado</h3>
+        <div id="lista-sugestoes" class="grid grid-cols-2 gap-3">
+          <p class="text-gray-400 text-center py-4 col-span-2">Registre seu humor para ver sugestões</p>
+        </div>
+      </div>
+
+      <!-- Lembretes Rápidos -->
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-semibold text-gray-800">Lembretes</h3>
+          <button onclick="abrirModalLembrete()" class="text-mint-600 text-sm font-medium hover:underline">+ Novo</button>
+        </div>
+        <div id="lista-lembretes" class="space-y-2">
+          <p class="text-gray-400 text-center py-4">Nenhum lembrete ainda</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-40">
+      <div class="max-w-2xl mx-auto flex">
+        <button onclick="mostrarTela('dashboard')" class="flex-1 flex flex-col items-center py-3 text-mint-600">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+          <span class="text-xs mt-1">Início</span>
+        </button>
+        <button onclick="mostrarTela('graficos')" class="flex-1 flex flex-col items-center py-3 text-gray-400 hover:text-mint-600 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          <span class="text-xs mt-1">Gráficos</span>
+        </button>
+        <button onclick="mostrarTela('lembretes')" class="flex-1 flex flex-col items-center py-3 text-gray-400 hover:text-mint-600 transition relative">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+          </svg>
+          <span id="badge-notificacoes" class="hidden absolute -top-0.5 right-1/4 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"></span>
+          <span class="text-xs mt-1">Lembretes</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ==================== TELA DE GRÁFICOS ==================== -->
+  <div id="tela-graficos" class="hidden">
+    <header class="bg-white border-b border-gray-100 px-4 py-3">
+      <div class="max-w-2xl mx-auto flex items-center gap-3">
+        <button onclick="mostrarTela('dashboard')" class="text-gray-500 hover:text-gray-800">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <h1 class="text-xl font-semibold text-gray-800">Gráficos</h1>
+      </div>
+    </header>
+    <main class="max-w-2xl mx-auto px-4 py-6 space-y-6">
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+        <h3 class="font-semibold text-gray-800 mb-3">Humor ao longo do tempo</h3>
+        <canvas id="grafico-humor"></canvas>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+        <h3 class="font-semibold text-gray-800 mb-3">Horas de sono</h3>
+        <canvas id="grafico-sono"></canvas>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== TELA DE LEMBRETES ==================== -->
+  <div id="tela-lembretes" class="hidden">
+    <header class="bg-white border-b border-gray-100 px-4 py-3">
+      <div class="max-w-2xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button onclick="mostrarTela('dashboard')" class="text-gray-500 hover:text-gray-800">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <h1 class="text-xl font-semibold text-gray-800">Lembretes</h1>
+        </div>
+        <button onclick="abrirModalLembrete()" class="bg-mint-500 text-white px-4 py-2 rounded-xl font-medium text-sm hover:bg-mint-600 transition">+ Novo</button>
+      </div>
+    </header>
+    <main class="max-w-2xl mx-auto px-4 py-6">
       <div id="lista-lembretes-tela" class="space-y-3">
         <p class="text-gray-400 text-center py-8">Nenhum lembrete criado</p>
       </div>
-    </div>
+    </main>
+  </div>
 
-    <!-- Tela de Perfil -->
-    <div id="tela-perfil" class="hidden min-h-screen pt-20 pb-24 px-4 max-w-2xl mx-auto">
-      <h1 class="text-2xl font-bold text-gray-800 mb-6">👤 Meu Perfil</h1>
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
-        <form id="form-perfil" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
-            <input type="text" id="perfil-nome" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-            <input type="email" id="perfil-email" disabled class="w-full border border-gray-200 rounded-lg px-4 py-3 bg-gray-50 text-gray-500">
-          </div>
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Idade (opcional)</label>
-              <input type="number" id="perfil-idade" min="1" max="120" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Ocupação (opcional)</label>
-              <input type="text" id="perfil-ocupacao" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-          </div>
-          <button type="submit" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
-            Salvar alterações
-          </button>
-        </form>
-        <button onclick="fazerLogout()" class="w-full mt-4 border-2 border-red-300 text-red-600 font-bold py-3 rounded-lg hover:bg-red-50 transition">
-          Sair da conta
+  <!-- ==================== TELA DE PERFIL ==================== -->
+  <div id="tela-perfil" class="hidden">
+    <header class="bg-white border-b border-gray-100 px-4 py-3">
+      <div class="max-w-2xl mx-auto flex items-center gap-3">
+        <button onclick="mostrarTela('dashboard')" class="text-gray-500 hover:text-gray-800">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
         </button>
+        <h1 class="text-xl font-semibold text-gray-800">Meu Perfil</h1>
       </div>
-    </div>
-
-  </div>
-
-  <!-- Modais -->
-  <!-- Modal de Humor -->
-  <div id="modal-humor" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
-      <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Como você está?</h3>
-      <div class="grid grid-cols-5 gap-3 mb-6">
-        <button onclick="registrarHumor('😊')" class="emoji-btn text-3xl p-2 rounded-xl hover:bg-mint-50 transition">😊</button>
-        <button onclick="registrarHumor('😔')" class="emoji-btn text-3xl p-2 rounded-xl hover:bg-blue-50 transition">😔</button>
-        <button onclick="registrarHumor('😰')" class="emoji-btn text-3xl p-2 rounded-xl hover:bg-yellow-50 transition">😰</button>
-        <button onclick="registrarHumor('😫')" class="emoji-btn text-3xl p-2 rounded-xl hover:bg-orange-50 transition">😫</button>
-        <button onclick="registrarHumor('😤')" class="emoji-btn text-3xl p-2 rounded-xl hover:bg-red-50 transition">😤</button>
-      </div>
-      <button onclick="fecharModal('modal-humor')" class="w-full text-gray-500 font-semibold py-2">Cancelar</button>
-    </div>
-  </div>
-
-  <!-- Modal de Sono -->
-  <div id="modal-sono" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
-      <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Horas de sono</h3>
-      <div class="mb-6">
-        <input type="range" id="input-sono" min="0" max="12" step="0.5" value="7" class="w-full accent-lavender-500">
-        <div class="text-center mt-2">
-          <span id="sono-valor" class="text-3xl font-bold text-lavender-600">7</span>
-          <span class="text-gray-500"> horas</span>
-        </div>
-      </div>
-      <button onclick="registrarSono()" class="w-full bg-lavender-500 text-white font-bold py-3 rounded-lg hover:bg-lavender-600 transition mb-3">
-        Confirmar
-      </button>
-      <button onclick="fecharModal('modal-sono')" class="w-full text-gray-500 font-semibold py-2">Cancelar</button>
-    </div>
-  </div>
-
-  <!-- Modal de Energia -->
-  <div id="modal-energia" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
-      <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Nível de energia</h3>
-      <div class="mb-6">
-        <input type="range" id="input-energia" min="1" max="10" step="1" value="5" class="w-full accent-peach-500">
-        <div class="text-center mt-2">
-          <span id="energia-valor" class="text-3xl font-bold text-peach-600">5</span>
-          <span class="text-gray-500"> / 10</span>
-        </div>
-      </div>
-      <button onclick="registrarEnergia()" class="w-full bg-peach-500 text-white font-bold py-3 rounded-lg hover:bg-peach-600 transition mb-3">
-        Confirmar
-      </button>
-      <button onclick="fecharModal('modal-energia')" class="w-full text-gray-500 font-semibold py-2">Cancelar</button>
-    </div>
-  </div>
-
-  <!-- Modal de Lembrete -->
-  <div id="modal-lembrete" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
-      <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Novo Lembrete</h3>
-      <form id="form-lembrete" class="space-y-4">
+    </header>
+    <main class="max-w-2xl mx-auto px-4 py-6">
+      <form id="form-perfil" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-          <input type="text" id="lembrete-titulo" required placeholder="Ex: Beber água" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+          <input id="perfil-nome" type="text"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Ícone</label>
-          <div class="flex gap-2 flex-wrap">
-            <button type="button" onclick="selecionarIcone('💧')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">💧</button>
-            <button type="button" onclick="selecionarIcone('💊')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">💊</button>
-            <button type="button" onclick="selecionarIcone('🧘')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">🧘</button>
-            <button type="button" onclick="selecionarIcone('📚')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">📚</button>
-            <button type="button" onclick="selecionarIcone('🏃')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">🏃</button>
-            <button type="button" onclick="selecionarIcone('🍎')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">🍎</button>
-            <button type="button" onclick="selecionarIcone('😴')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">😴</button>
-            <button type="button" onclick="selecionarIcone('📌')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">📌</button>
+          <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+          <input id="perfil-email" type="email" disabled
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed">
+        </div>
+        <div class="flex gap-4">
+          <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Idade</label>
+            <input id="perfil-idade" type="number" min="1" max="120"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition">
+          </div>
+          <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ocupação</label>
+            <input id="perfil-ocupacao" type="text"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition">
           </div>
         </div>
-        <button type="submit" class="w-full bg-mint-500 text-white font-bold py-3 rounded-lg hover:bg-mint-600 transition">
-          Criar lembrete
+        <button type="submit"
+          class="w-full bg-mint-500 hover:bg-mint-600 text-white font-semibold py-3 rounded-xl transition">
+          Salvar Alterações
         </button>
       </form>
-      <button onclick="fecharModal('modal-lembrete')" class="w-full text-gray-500 font-semibold py-2 mt-2">Cancelar</button>
+    </main>
+  </div>
+
+  <!-- ==================== MODAIS ==================== -->
+
+  <!-- Modal Humor -->
+  <div id="modal-humor" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">Como você está?</h3>
+      <div class="flex justify-center gap-4 mb-6">
+        <button onclick="registrarHumor('😊')" class="emoji-btn text-4xl p-2 rounded-xl hover:bg-mint-50">😊</button>
+        <button onclick="registrarHumor('😔')" class="emoji-btn text-4xl p-2 rounded-xl hover:bg-blue-50">😔</button>
+        <button onclick="registrarHumor('😰')" class="emoji-btn text-4xl p-2 rounded-xl hover:bg-yellow-50">😰</button>
+        <button onclick="registrarHumor('😫')" class="emoji-btn text-4xl p-2 rounded-xl hover:bg-purple-50">😫</button>
+        <button onclick="registrarHumor('😤')" class="emoji-btn text-4xl p-2 rounded-xl hover:bg-red-50">😤</button>
+      </div>
+      <button onclick="fecharModal('modal-humor')" class="w-full text-gray-400 hover:text-gray-600 font-medium py-2 transition">Cancelar</button>
     </div>
   </div>
 
-  <!-- Toast de feedback -->
-  <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white font-semibold hidden transition-all duration-300 z-50"></div>
+  <!-- Modal Sono -->
+  <div id="modal-sono" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
+      <h3 class="text-lg font-semibold text-gray-800 mb-2 text-center">Horas de sono</h3>
+      <p class="text-center text-gray-500 mb-4">Arraste para ajustar</p>
+      <div class="text-center mb-4">
+        <span id="sono-valor" class="text-3xl font-bold text-purple-500">7</span>
+        <span class="text-gray-500">h</span>
+      </div>
+      <input id="input-sono" type="range" min="0" max="12" step="0.5" value="7"
+        class="w-full mb-6" style="background: linear-gradient(to right, #a855f7 58%, #e5e7eb 58%);">
+      <button onclick="registrarSono()"
+        class="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 rounded-xl transition mb-2">
+        Confirmar
+      </button>
+      <button onclick="fecharModal('modal-sono')" class="w-full text-gray-400 hover:text-gray-600 font-medium py-2 transition">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal Energia -->
+  <div id="modal-energia" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
+      <h3 class="text-lg font-semibold text-gray-800 mb-2 text-center">Nível de energia</h3>
+      <p class="text-center text-gray-500 mb-4">Arraste para ajustar</p>
+      <div class="text-center mb-4">
+        <span id="energia-valor" class="text-3xl font-bold text-yellow-500">5</span>
+        <span class="text-gray-500">/10</span>
+      </div>
+      <input id="input-energia" type="range" min="1" max="10" step="1" value="5"
+        class="w-full mb-6" style="background: linear-gradient(to right, #eab308 44%, #e5e7eb 44%);">
+      <button onclick="registrarEnergia()"
+        class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-xl transition mb-2">
+        Confirmar
+      </button>
+      <button onclick="fecharModal('modal-energia')" class="w-full text-gray-400 hover:text-gray-600 font-medium py-2 transition">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal Lembrete -->
+  <div id="modal-lembrete" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">Novo Lembrete</h3>
+      <form id="form-lembrete">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">O que deseja lembrar?</label>
+          <input id="lembrete-titulo" type="text" required
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mint-500 transition"
+            placeholder="Ex: Tomar remédio">
+        </div>
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Ícone</label>
+          <div class="flex gap-2 flex-wrap justify-center">
+            <button type="button" onclick="selecionarIcone('📌')" class="icone-btn text-2xl p-2 rounded-xl border-2 border-mint-500 bg-mint-50">📌</button>
+            <button type="button" onclick="selecionarIcone('💊')" class="icone-btn text-2xl p-2 rounded-xl border-2 border-gray-200">💊</button>
+            <button type="button" onclick="selecionarIcone('💧')" class="icone-btn text-2xl p-2 rounded-xl border-2 border-gray-200">💧</button>
+            <button type="button" onclick="selecionarIcone('🏃')" class="icone-btn text-2xl p-2 rounded-xl border-2 border-gray-200">🏃</button>
+            <button type="button" onclick="selecionarIcone('📚')" class="icone-btn text-2xl p-2 rounded-xl border-2 border-gray-200">📚</button>
+            <button type="button" onclick="selecionarIcone('🧘')" class="icone-btn text-2xl p-2 rounded-xl border-2 border-gray-200">🧘</button>
+            <button type="button" onclick="selecionarIcone('🍎')" class="icone-btn text-2xl p-2 rounded-xl border-2 border-gray-200">🍎</button>
+            <button type="button" onclick="selecionarIcone('🎯')" class="icone-btn text-2xl p-2 rounded-xl border-2 border-gray-200">🎯</button>
+          </div>
+        </div>
+        <button type="submit"
+          class="w-full bg-mint-500 hover:bg-mint-600 text-white font-semibold py-3 rounded-xl transition mb-2">
+          Criar Lembrete
+        </button>
+      </form>
+      <button onclick="fecharModal('modal-lembrete')" class="w-full text-gray-400 hover:text-gray-600 font-medium py-2 transition">Cancelar</button>
+    </div>
+  </div>
 
   <script src="js/app.js"></script>
 </body>

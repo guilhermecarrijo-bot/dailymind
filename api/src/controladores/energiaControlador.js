@@ -1,52 +1,49 @@
 const banco = require('../config/conexaoBanco')
 
-// Registrar nível de energia
 function registrarEnergia(req, res) {
-  const { usuario_id, nivel_energia } = req.body
+  const { id_usuario, nivel, observacao } = req.body
 
-  if (!usuario_id || nivel_energia === undefined) {
+  if (!id_usuario || nivel === undefined) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e nível de energia são obrigatórios.' })
   }
 
-  if (nivel_energia < 1 || nivel_energia > 10) {
-    return res.status(422).json({ sucesso: false, mensagem: 'Nível de energia deve ser entre 1 e 10.' })
+  if (nivel < 1 || nivel > 5) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Nível de energia deve ser entre 1 e 5.' })
   }
 
   const hoje = new Date().toISOString().split('T')[0]
   const existente = banco.prepare(
-    'SELECT id FROM energia WHERE usuario_id = ? AND data_registro = ?'
-  ).get(usuario_id, hoje)
+    'SELECT id_energia FROM ENERGIA WHERE id_usuario = ? AND data = ?'
+  ).get(id_usuario, hoje)
 
   if (existente) {
-    banco.prepare('UPDATE energia SET nivel_energia = ? WHERE id = ?')
-      .run(nivel_energia, existente.id)
+    banco.prepare('UPDATE ENERGIA SET nivel = ?, observacao = ? WHERE id_energia = ?')
+      .run(nivel, observacao || null, existente.id_energia)
     return res.json({ sucesso: true, mensagem: 'Energia atualizada!' })
   }
 
-  const inserir = banco.prepare('INSERT INTO energia (usuario_id, nivel_energia) VALUES (?, ?)')
-  const resultado = inserir.run(usuario_id, nivel_energia)
+  const inserir = banco.prepare('INSERT INTO ENERGIA (id_usuario, nivel, observacao) VALUES (?, ?, ?)')
+  const resultado = inserir.run(id_usuario, nivel, observacao || null)
 
-  res.status(201).json({ sucesso: true, mensagem: 'Energia registrada!', id: resultado.lastInsertRowid })
+  res.status(201).json({ sucesso: true, mensagem: 'Energia registrada!', id_energia: resultado.lastInsertRowid })
 }
 
-// Listar energia do usuário
 function listarEnergia(req, res) {
-  const usuario_id = req.params.usuario_id
+  const id_usuario = req.params.id_usuario
   const registros = banco.prepare(
-    'SELECT * FROM energia WHERE usuario_id = ? ORDER BY data_registro DESC LIMIT 30'
-  ).all(usuario_id)
+    'SELECT * FROM ENERGIA WHERE id_usuario = ? ORDER BY data DESC LIMIT 30'
+  ).all(id_usuario)
 
   res.json({ sucesso: true, dados: registros })
 }
 
-// Obter energia de hoje
 function obterEnergiaHoje(req, res) {
-  const usuario_id = req.params.usuario_id
+  const id_usuario = req.params.id_usuario
   const hoje = new Date().toISOString().split('T')[0]
 
   const registro = banco.prepare(
-    'SELECT * FROM energia WHERE usuario_id = ? AND data_registro = ?'
-  ).get(usuario_id, hoje)
+    'SELECT * FROM ENERGIA WHERE id_usuario = ? AND data = ?'
+  ).get(id_usuario, hoje)
 
   res.json({ sucesso: true, dado: registro || null })
 }

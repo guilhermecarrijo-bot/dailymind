@@ -3,8 +3,8 @@ const { cadastrarUsuario, loginUsuario, atualizarPerfil } = require('../controla
 const { registrarHumor, listarHumor, obterHumorHoje } = require('../controladores/humorControlador')
 const { registrarSono, listarSono, obterSonoHoje } = require('../controladores/sonoControlador')
 const { registrarEnergia, listarEnergia, obterEnergiaHoje } = require('../controladores/energiaControlador')
-const { criarLembrete, listarLembretes, alternarLembrete, removerLembrete, contarPendentes } = require('../controladores/lembreteControlador')
-const { obterSugestoes, listarTodasSugestoes } = require('../controladores/sugestaoControlador')
+const { criarTarefa, listarTarefas, alternarTarefa, removerTarefa, contarPendentes } = require('../controladores/tarefaControlador')
+const { criarMeta, listarMetas, alternarMeta, removerMeta } = require('../controladores/metaControlador')
 
 const rotas = Router()
 
@@ -15,28 +15,30 @@ rotas.put('/usuarios/perfil', atualizarPerfil)
 
 // Humor
 rotas.post('/humor', registrarHumor)
-rotas.get('/humor/:usuario_id', listarHumor)
-rotas.get('/humor/:usuario_id/hoje', obterHumorHoje)
+rotas.get('/humor/:id_usuario', listarHumor)
+rotas.get('/humor/:id_usuario/hoje', obterHumorHoje)
 
 // Sono
 rotas.post('/sono', registrarSono)
-rotas.get('/sono/:usuario_id', listarSono)
-rotas.get('/sono/:usuario_id/hoje', obterSonoHoje)
+rotas.get('/sono/:id_usuario', listarSono)
+rotas.get('/sono/:id_usuario/hoje', obterSonoHoje)
 
 // Energia
 rotas.post('/energia', registrarEnergia)
-rotas.get('/energia/:usuario_id', listarEnergia)
-rotas.get('/energia/:usuario_id/hoje', obterEnergiaHoje)
+rotas.get('/energia/:id_usuario', listarEnergia)
+rotas.get('/energia/:id_usuario/hoje', obterEnergiaHoje)
 
-// Lembretes
-rotas.post('/lembretes', criarLembrete)
-rotas.get('/lembretes/:usuario_id', listarLembretes)
-rotas.put('/lembretes/:id/toggle', alternarLembrete)
-rotas.delete('/lembretes/:id', removerLembrete)
-rotas.get('/lembretes/:usuario_id/pendentes', contarPendentes)
+// Tarefas
+rotas.post('/tarefas', criarTarefa)
+rotas.get('/tarefas/:id_usuario', listarTarefas)
+rotas.put('/tarefas/:id/toggle', alternarTarefa)
+rotas.delete('/tarefas/:id', removerTarefa)
+rotas.get('/tarefas/:id_usuario/pendentes', contarPendentes)
 
-// Sugestões
-rotas.get('/sugestoes/:usuario_id', obterSugestoes)
-rotas.get('/sugestoes', listarTodasSugestoes)
+// Metas
+rotas.post('/metas', criarMeta)
+rotas.get('/metas/:id_usuario', listarMetas)
+rotas.put('/metas/:id/toggle', alternarMeta)
+rotas.delete('/metas/:id', removerMeta)
 
 module.exports = rotas

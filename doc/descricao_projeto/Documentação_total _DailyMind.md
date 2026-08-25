@@ -1,7 +1,9 @@
 DailyMind
 ---------------------
 Integrantes: Ana Eduarda Sousa Silva Soares, Byank Chrystinny Santana Lima, Emanuele Oliveira Andrade, Guilherme dos Santos Carrijo e Maria Eduarda Pereira Sastre
+
 Disciplina: Fábrica de Soluções Inteligentes
+
 Professores: André Lôbo
  
 REQUISITOS DE USUÁRIO: 

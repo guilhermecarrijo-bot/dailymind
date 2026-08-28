@@ -37,6 +37,37 @@ function listarHumor(req, res) {
   res.json({ sucesso: true, dados: registros })
 }
 
+function editarHumor(req, res) {
+  const { id_usuario, humor, intensidade, observacao, data } = req.body
+  if (!id_usuario || !humor || intensidade === undefined) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Usuário, humor e intensidade são obrigatórios.' })
+  }
+  if (intensidade < 1 || intensidade > 5) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Intensidade deve ser entre 1 e 5.' })
+  }
+
+  const resultado = banco.prepare(`UPDATE HUMOR SET humor = ?, intensidade = ?, observacao = ?, data = COALESCE(?, data)
+    WHERE id_humor = ? AND id_usuario = ?`).run(
+    humor, intensidade, observacao ?? null, data ?? null, req.params.id, id_usuario
+  )
+  if (!resultado.changes) {
+    return res.status(404).json({ sucesso: false, mensagem: 'Registro de humor não encontrado.' })
+  }
+
+  const registro = banco.prepare('SELECT * FROM HUMOR WHERE id_humor = ?').get(req.params.id)
+  res.json({ sucesso: true, mensagem: 'Humor atualizado!', humor: registro })
+}
+
+function removerHumor(req, res) {
+  const id_usuario = req.body.id_usuario || req.query.id_usuario
+  const resultado = banco.prepare('DELETE FROM HUMOR WHERE id_humor = ? AND id_usuario = ?')
+    .run(req.params.id, id_usuario)
+  if (!resultado.changes) {
+    return res.status(404).json({ sucesso: false, mensagem: 'Registro de humor não encontrado.' })
+  }
+  res.json({ sucesso: true, mensagem: 'Humor removido!' })
+}
+
 function obterHumorHoje(req, res) {
   const id_usuario = req.params.id_usuario
   const hoje = new Date().toISOString().split('T')[0]
@@ -48,4 +79,4 @@ function obterHumorHoje(req, res) {
   res.json({ sucesso: true, dado: registro || null })
 }
 
-module.exports = { registrarHumor, listarHumor, obterHumorHoje }
+module.exports = { registrarHumor, listarHumor, obterHumorHoje, editarHumor, removerHumor }

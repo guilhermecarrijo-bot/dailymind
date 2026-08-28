@@ -55,11 +55,28 @@ function loginUsuario(req, res) {
   res.json({ sucesso: true, mensagem: 'Login realizado com sucesso!', usuario })
 }
 
+function consultarPerfil(req, res) {
+  const usuario = banco.prepare(
+    'SELECT id_usuario, nome, email, tipo_usuario FROM USUARIO WHERE id_usuario = ?'
+  ).get(req.params.id_usuario)
+
+  if (!usuario) {
+    return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' })
+  }
+
+  res.json({ sucesso: true, usuario })
+}
+
 function atualizarPerfil(req, res) {
   const { id_usuario, nome, tipo_usuario } = req.body
 
   if (!id_usuario) {
     return res.status(422).json({ sucesso: false, mensagem: 'ID do usuário é obrigatório.' })
+  }
+
+  const existente = banco.prepare('SELECT id_usuario FROM USUARIO WHERE id_usuario = ?').get(id_usuario)
+  if (!existente) {
+    return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' })
   }
 
   const atualizar = banco.prepare(
@@ -71,4 +88,4 @@ function atualizarPerfil(req, res) {
   res.json({ sucesso: true, mensagem: 'Perfil atualizado!', usuario })
 }
 
-module.exports = { cadastrarUsuario, loginUsuario, atualizarPerfil }
+module.exports = { cadastrarUsuario, loginUsuario, consultarPerfil, atualizarPerfil }

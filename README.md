@@ -201,29 +201,46 @@ O arquivo `iniciarBanco.js` cria índices para todas as tabelas e insere automat
 
 ## Endpoints da API
 
-| Método | Endpoint | Descrição | Payload (Body) |
+Todas as URLs abaixo usam o prefixo `/api`. As operações por ID exigem `id_usuario` no JSON do corpo ou na query string, garantindo que o usuário só acesse os próprios dados.
+
+| Método | Endpoint | Descrição | Dados enviados |
 |---|---|---|---|
-| `GET` | `/` | Servidor estático da aplicação (SPA) | — |
-| `GET` | `/api/health` | Health Check da API | — |
-| `POST` | `/api/usuarios/cadastro` | Cria uma nova conta | JSON (nome, email, senha, idade?, ocupacao?) |
-| `POST` | `/api/usuarios/login` | Autentica o usuário | JSON (email, senha) |
-| `PUT` | `/api/usuarios/perfil` | Atualiza dados do perfil | JSON (id, nome?, idade?, ocupacao?) |
-| `POST` | `/api/humor` | Registra/atualiza humor do dia | JSON (usuario_id, emoji) |
-| `GET` | `/api/humor/:usuario_id` | Lista últimos 30 registros de humor | — |
-| `GET` | `/api/humor/:usuario_id/hoje` | Obtém humor de hoje | — |
-| `POST` | `/api/sono` | Registra/atualiza sono do dia | JSON (usuario_id, horas_sono, qualidade?) |
-| `GET` | `/api/sono/:usuario_id` | Lista últimos 30 registros de sono | — |
-| `GET` | `/api/sono/:usuario_id/hoje` | Obtém sono de hoje | — |
-| `POST` | `/api/energia` | Registra/atualiza energia do dia | JSON (usuario_id, nivel_energia) |
-| `GET` | `/api/energia/:usuario_id` | Lista últimos 30 registros de energia | — |
-| `GET` | `/api/energia/:usuario_id/hoje` | Obtém energia de hoje | — |
-| `POST` | `/api/lembretes` | Cria um novo lembrete | JSON (usuario_id, titulo, icone?, horario?) |
-| `GET` | `/api/lembretes/:usuario_id` | Lista lembretes do usuário | — |
-| `PUT` | `/api/lembretes/:id/toggle` | Alterna lembrete entre concluído/pendente | — |
-| `DELETE` | `/api/lembretes/:id` | Remove um lembrete | — |
-| `GET` | `/api/lembretes/:usuario_id/pendentes` | Conta lembretes pendentes (badge) | — |
-| `GET` | `/api/sugestoes/:usuario_id` | Sugestões de autocuidado do humor de hoje | — |
-| `GET` | `/api/sugestoes` | Lista todas as sugestões cadastradas | — |
+| `GET` | `/` | Front-end servido pela API | — |
+| `GET` | `/api/health` | Verifica a API | — |
+| `POST` | `/api/usuarios/cadastro` | Cadastra usuário | `nome`, `email`, `senha`, `tipo_usuario?` |
+| `POST` | `/api/usuarios/login` | Realiza login | `email`, `senha` |
+| `GET` | `/api/usuarios/:id_usuario` | Consulta perfil | — |
+| `PUT` | `/api/usuarios/perfil` | Atualiza perfil | `id_usuario`, `nome?`, `tipo_usuario?` |
+| `POST` | `/api/tarefas` | Cria tarefa | `id_usuario`, `titulo`, `descricao?`, `data?`, `horario?`, `categoria?` |
+| `GET` | `/api/tarefas/:id_usuario` | Lista tarefas | — |
+| `GET` | `/api/tarefas/:id_usuario/:id` | Consulta tarefa | — |
+| `PUT` | `/api/tarefas/:id` | Edita tarefa | `id_usuario` e campos a alterar |
+| `PUT` | `/api/tarefas/:id/toggle` | Marca/reabre tarefa | `id_usuario` |
+| `DELETE` | `/api/tarefas/:id` | Exclui tarefa | `id_usuario` |
+| `GET` | `/api/tarefas/:id_usuario/pendentes` | Conta tarefas pendentes | — |
+| `POST` | `/api/humor` | Registra/atualiza humor do dia | `id_usuario`, `data?`, `humor`, `intensidade`, `observacao?` |
+| `GET` | `/api/humor/:id_usuario` | Lista humor | — |
+| `GET` | `/api/humor/:id_usuario/hoje` | Consulta humor de hoje | — |
+| `PUT` | `/api/humor/:id` | Edita humor | `id_usuario`, `humor`, `intensidade`, `observacao?`, `data?` |
+| `DELETE` | `/api/humor/:id` | Exclui humor | `id_usuario` |
+| `POST` | `/api/sono` | Registra/atualiza sono do dia | `id_usuario`, `horas_dormidas`, `qualidade?`, `observacao?` |
+| `GET` | `/api/sono/:id_usuario` | Lista sono | — |
+| `GET` | `/api/sono/:id_usuario/hoje` | Consulta sono de hoje | — |
+| `PUT` | `/api/sono/:id` | Edita sono | `id_usuario`, `horas_dormidas`, `qualidade?`, `observacao?`, `data?` |
+| `DELETE` | `/api/sono/:id` | Exclui sono | `id_usuario` |
+| `POST` | `/api/energia` | Registra/atualiza energia do dia | `id_usuario`, `nivel`, `observacao?` |
+| `GET` | `/api/energia/:id_usuario` | Lista energia | — |
+| `GET` | `/api/energia/:id_usuario/hoje` | Consulta energia de hoje | — |
+| `PUT` | `/api/energia/:id` | Edita energia | `id_usuario`, `nivel`, `observacao?`, `data?` |
+| `DELETE` | `/api/energia/:id` | Exclui energia | `id_usuario` |
+| `POST` | `/api/metas` | Cria meta | `id_usuario`, `titulo`, `descricao?`, `data_inicio?`, `data_fim?` |
+| `GET` | `/api/metas/:id_usuario` | Lista metas | — |
+| `GET` | `/api/metas/:id_usuario/:id` | Consulta meta | — |
+| `PUT` | `/api/metas/:id` | Edita meta | `id_usuario` e campos a alterar |
+| `PUT` | `/api/metas/:id/toggle` | Marca/reabre meta | `id_usuario` |
+| `DELETE` | `/api/metas/:id` | Exclui meta | `id_usuario` |
+
+Respostas de sucesso usam `{ "sucesso": true, ... }`. Erros usam HTTP `422` para dados inválidos, `401` para login inválido, `404` para registro inexistente e `409` para e-mail duplicado.
 
 ### Exemplo de Requisição `POST /api/usuarios/cadastro`
 
@@ -233,8 +250,7 @@ O arquivo `iniciarBanco.js` cria índices para todas as tabelas e insere automat
   "nome": "Maria Silva",
   "email": "maria.silva@exemplo.com",
   "senha": "123456",
-  "idade": 25,
-  "ocupacao": "Estudante"
+  "tipo_usuario": "usuário"
 }
 ```
 
@@ -243,7 +259,7 @@ O arquivo `iniciarBanco.js` cria índices para todas as tabelas e insere automat
 {
   "sucesso": true,
   "mensagem": "Conta criada com sucesso!",
-  "usuario": { "id": 1, "nome": "Maria Silva", "email": "maria.silva@exemplo.com" }
+  "usuario": { "id_usuario": 1, "nome": "Maria Silva", "email": "maria.silva@exemplo.com", "tipo_usuario": "usuário" }
 }
 ```
 
@@ -252,8 +268,10 @@ O arquivo `iniciarBanco.js` cria índices para todas as tabelas e insere automat
 **Body (JSON):**
 ```json
 {
-  "usuario_id": 1,
-  "emoji": "😊"
+  "id_usuario": 1,
+  "humor": "feliz",
+  "intensidade": 5,
+  "observacao": "Bom dia"
 }
 ```
 
@@ -262,7 +280,7 @@ O arquivo `iniciarBanco.js` cria índices para todas as tabelas e insere automat
 {
   "sucesso": true,
   "mensagem": "Humor registrado!",
-  "id": 1
+  "id_humor": 1
 }
 ```
 

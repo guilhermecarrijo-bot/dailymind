@@ -1,4 +1,4 @@
-# DailyMind - App de Autocuidado para Neurodivergentes
+# DailyMind - App de Autocuidado
 
 > **Projeto Acadêmico:** Aplicação Full Stack de autocuidado para pessoas neurodivergentes, com registro de humor, sono, energia, lembretes diários e sugestões personalizadas.
 

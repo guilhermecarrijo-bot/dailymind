@@ -1,12 +1,11 @@
 #!/bin/bash
-cd /home/ifmt-aluno/Downloads/dailymind/api
+cd /home/ifmt-aluno/Documentos/dailymind/api
 rm -f db/dailymind.db
 
-# Inicia o servidor em background
 nohup node -e "
 const app = require('./src/app');
-const PORTA = 3000;
 require('./iniciarBanco');
+const PORTA = 3000;
 app.listen(PORTA, () => {
   console.log('Servidor rodando na porta ' + PORTA);
   console.log('Acesse: http://localhost:' + PORTA);

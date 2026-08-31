@@ -4,3 +4,4 @@ api/db/
 *.db
 *.log
 *.err
+dailymind/

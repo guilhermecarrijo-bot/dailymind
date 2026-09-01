@@ -48,6 +48,8 @@ banco.exec(`
     titulo          TEXT    NOT NULL,
     icone           TEXT    DEFAULT '📌',
     horario         TEXT    DEFAULT NULL,
+    objeto_deixado  TEXT    DEFAULT NULL,
+    hora_deixado    TEXT    DEFAULT NULL,
     concluido       INTEGER DEFAULT 0,
     data_criacao    TEXT    DEFAULT (datetime('now','localtime')),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE

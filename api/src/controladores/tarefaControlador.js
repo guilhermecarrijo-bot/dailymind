@@ -1,103 +1,166 @@
 const banco = require('../config/conexaoBanco')
 
+// Criar tarefa
 function criarTarefa(req, res) {
-  const { id_usuario, titulo, descricao, data, horario, categoria } = req.body
+  const { usuario_id, titulo, descricao, icone } = req.body
 
-  if (!id_usuario || !titulo) {
+  if (!usuario_id || !titulo) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e título são obrigatórios.' })
   }
 
   const inserir = banco.prepare(
-    'INSERT INTO TAREFA (id_usuario, titulo, descricao, data, horario, categoria) VALUES (?, ?, ?, ?, ?, ?)'
+    'INSERT INTO tarefas (usuario_id, titulo, descricao, icone) VALUES (?, ?, ?, ?)'
   )
-  const resultado = inserir.run(id_usuario, titulo, descricao || null, data || null, horario || null, categoria || null)
+  const resultado = inserir.run(usuario_id, titulo, descricao || null, icone || '✓')
 
   res.status(201).json({
     sucesso: true,
-    mensagem: 'Tarefa criada!',
-    tarefa: { id_tarefa: resultado.lastInsertRowid, titulo, descricao, data, horario, categoria, concluida: 0 }
+    mensagem: 'Tarefa criada com sucesso!',
+    tarefa: {
+      id: resultado.lastInsertRowid,
+      usuario_id,
+      titulo,
+      descricao: descricao || null,
+      icone: icone || '✓',
+      concluido: 0,
+      data_criacao: new Date().toISOString(),
+      data_conclusao: null
+    }
   })
 }
 
+// Listar tarefas do usuário
 function listarTarefas(req, res) {
-  const id_usuario = req.params.id_usuario
-  const tarefas = banco.prepare(
-    'SELECT * FROM TAREFA WHERE id_usuario = ? ORDER BY data ASC, horario ASC'
-  ).all(id_usuario)
+  const usuario_id = req.params.usuario_id
+  const { filtro } = req.query // 'todas', 'pendentes', 'concluidas'
 
-  res.json({ sucesso: true, dados: tarefas })
+  let sql = 'SELECT * FROM tarefas WHERE usuario_id = ?'
+  const parametros = [usuario_id]
+
+  if (filtro === 'pendentes') {
+    sql += ' AND concluido = 0'
+  } else if (filtro === 'concluidas') {
+    sql += ' AND concluido = 1'
+  }
+
+  sql += ' ORDER BY data_criacao DESC'
+
+  const tarefas = banco.prepare(sql).all(...parametros)
+
+  res.json({ sucesso: true, dados: tarefas, total: tarefas.length })
 }
 
-function consultarTarefa(req, res) {
-  const tarefa = banco.prepare('SELECT * FROM TAREFA WHERE id_tarefa = ? AND id_usuario = ?')
-    .get(req.params.id, req.params.id_usuario)
+// Obter tarefa por ID
+function obterTarefa(req, res) {
+  const { id } = req.params
 
+  const tarefa = banco.prepare('SELECT * FROM tarefas WHERE id = ?').get(id)
   if (!tarefa) {
     return res.status(404).json({ sucesso: false, mensagem: 'Tarefa não encontrada.' })
   }
 
-  res.json({ sucesso: true, tarefa })
+  res.json({ sucesso: true, dados: tarefa })
 }
 
-function editarTarefa(req, res) {
-  const { id_usuario, titulo, descricao, data, horario, categoria, concluida } = req.body
-  if (!id_usuario) {
-    return res.status(422).json({ sucesso: false, mensagem: 'ID do usuário é obrigatório.' })
-  }
-
-  const tarefa = banco.prepare('SELECT id_tarefa FROM TAREFA WHERE id_tarefa = ? AND id_usuario = ?')
-    .get(req.params.id, id_usuario)
-  if (!tarefa) {
-    return res.status(404).json({ sucesso: false, mensagem: 'Tarefa não encontrada.' })
-  }
-
-  banco.prepare(`UPDATE TAREFA SET
-    titulo = COALESCE(?, titulo), descricao = COALESCE(?, descricao), data = COALESCE(?, data),
-    horario = COALESCE(?, horario), categoria = COALESCE(?, categoria), concluida = COALESCE(?, concluida)
-    WHERE id_tarefa = ? AND id_usuario = ?`).run(
-    titulo || null, descricao ?? null, data ?? null, horario ?? null, categoria ?? null,
-    concluida === undefined ? null : (concluida ? 1 : 0), req.params.id, id_usuario
-  )
-
-  const atualizada = banco.prepare('SELECT * FROM TAREFA WHERE id_tarefa = ?').get(req.params.id)
-  res.json({ sucesso: true, mensagem: 'Tarefa atualizada!', tarefa: atualizada })
-}
-
+// Marcar tarefa como concluída/pendente (toggle checkbox)
 function alternarTarefa(req, res) {
   const { id } = req.params
-  const id_usuario = req.body.id_usuario || req.query.id_usuario
 
-  const tarefa = banco.prepare('SELECT * FROM TAREFA WHERE id_tarefa = ? AND id_usuario = ?').get(id, id_usuario)
+  const tarefa = banco.prepare('SELECT * FROM tarefas WHERE id = ?').get(id)
   if (!tarefa) {
     return res.status(404).json({ sucesso: false, mensagem: 'Tarefa não encontrada.' })
   }
 
-  const novoStatus = tarefa.concluida ? 0 : 1
-  banco.prepare('UPDATE TAREFA SET concluida = ? WHERE id_tarefa = ?').run(novoStatus, id)
+  const novoStatus = tarefa.concluido ? 0 : 1
+  const dataConclusao = novoStatus ? new Date().toISOString() : null
 
-  res.json({ sucesso: true, mensagem: novoStatus ? 'Tarefa concluída!' : 'Tarefa reaberta!' })
+  banco.prepare('UPDATE tarefas SET concluido = ?, data_conclusao = ? WHERE id = ?')
+    .run(novoStatus, dataConclusao, id)
+
+  res.json({
+    sucesso: true,
+    mensagem: novoStatus ? 'Tarefa concluída!' : 'Tarefa reaberida!',
+    tarefa: {
+      id,
+      concluido: novoStatus,
+      data_conclusao: dataConclusao
+    }
+  })
 }
 
+// Atualizar tarefa
+function atualizarTarefa(req, res) {
+  const { id } = req.params
+  const { titulo, descricao, icone } = req.body
+
+  const tarefa = banco.prepare('SELECT * FROM tarefas WHERE id = ?').get(id)
+  if (!tarefa) {
+    return res.status(404).json({ sucesso: false, mensagem: 'Tarefa não encontrada.' })
+  }
+
+  banco.prepare('UPDATE tarefas SET titulo = ?, descricao = ?, icone = ? WHERE id = ?')
+    .run(titulo || tarefa.titulo, descricao !== undefined ? descricao : tarefa.descricao, icone || tarefa.icone, id)
+
+  res.json({
+    sucesso: true,
+    mensagem: 'Tarefa atualizada com sucesso!',
+    tarefa: { id, titulo: titulo || tarefa.titulo, descricao: descricao !== undefined ? descricao : tarefa.descricao, icone: icone || tarefa.icone }
+  })
+}
+
+// Remover tarefa
 function removerTarefa(req, res) {
   const { id } = req.params
-  const id_usuario = req.body.id_usuario || req.query.id_usuario
 
-  const tarefa = banco.prepare('SELECT * FROM TAREFA WHERE id_tarefa = ? AND id_usuario = ?').get(id, id_usuario)
+  const tarefa = banco.prepare('SELECT * FROM tarefas WHERE id = ?').get(id)
   if (!tarefa) {
     return res.status(404).json({ sucesso: false, mensagem: 'Tarefa não encontrada.' })
   }
 
-  banco.prepare('DELETE FROM TAREFA WHERE id_tarefa = ?').run(id)
-  res.json({ sucesso: true, mensagem: 'Tarefa removida!' })
+  banco.prepare('DELETE FROM tarefas WHERE id = ?').run(id)
+  res.json({ sucesso: true, mensagem: 'Tarefa removida com sucesso!' })
 }
 
+// Contar tarefas pendentes
 function contarPendentes(req, res) {
-  const id_usuario = req.params.id_usuario
+  const usuario_id = req.params.usuario_id
   const resultado = banco.prepare(
-    'SELECT COUNT(*) AS total FROM TAREFA WHERE id_usuario = ? AND concluida = 0'
-  ).get(id_usuario)
+    'SELECT COUNT(*) AS total FROM tarefas WHERE usuario_id = ? AND concluido = 0'
+  ).get(usuario_id)
 
   res.json({ sucesso: true, total: resultado.total })
 }
 
-module.exports = { criarTarefa, listarTarefas, consultarTarefa, editarTarefa, alternarTarefa, removerTarefa, contarPendentes }
+// Obter tarefas de hoje
+function obterTarefasHoje(req, res) {
+  const usuario_id = req.params.usuario_id
+  const hoje = new Date().toISOString().split('T')[0]
+
+  const tarefas = banco.prepare(
+    `SELECT * FROM tarefas 
+     WHERE usuario_id = ? 
+     AND DATE(data_criacao) = ? 
+     ORDER BY concluido ASC, data_criacao DESC`
+  ).all(usuario_id, hoje)
+
+  res.json({
+    sucesso: true,
+    dados: tarefas,
+    resumo: {
+      total: tarefas.length,
+      concluidas: tarefas.filter(t => t.concluido === 1).length,
+      pendentes: tarefas.filter(t => t.concluido === 0).length
+    }
+  })
+}
+
+module.exports = {
+  criarTarefa,
+  listarTarefas,
+  obterTarefa,
+  alternarTarefa,
+  atualizarTarefa,
+  removerTarefa,
+  contarPendentes,
+  obterTarefasHoje
+}

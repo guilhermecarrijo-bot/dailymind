@@ -163,8 +163,21 @@ async function registrarHumor(emoji) {
 
 // ==================== SONO ====================
 
+function atualizarBarraSono(horas) {
+  const valor = Math.min(Math.max((horas / 12) * 100, 0), 100)
+  const barra = document.getElementById('sono-bar')
+  if (barra) barra.style.width = `${valor}%`
+}
+
+function atualizarBarraEnergia(nivel) {
+  const valor = Math.min(Math.max((nivel / 10) * 100, 0), 100)
+  const barra = document.getElementById('energia-bar')
+  if (barra) barra.style.width = `${valor}%`
+}
+
 document.getElementById('input-sono').addEventListener('input', (e) => {
   document.getElementById('sono-valor').textContent = e.target.value
+  atualizarBarraSono(parseFloat(e.target.value))
 })
 
 async function registrarSono() {
@@ -174,6 +187,7 @@ async function registrarSono() {
     exibirToast('Sono registrado! 😴')
     fecharModal('modal-sono')
     document.getElementById('sono-texto').textContent = `${horas}h de sono`
+    atualizarBarraSono(horas)
   }
 }
 
@@ -181,6 +195,7 @@ async function registrarSono() {
 
 document.getElementById('input-energia').addEventListener('input', (e) => {
   document.getElementById('energia-valor').textContent = e.target.value
+  atualizarBarraEnergia(parseInt(e.target.value))
 })
 
 async function registrarEnergia() {
@@ -190,6 +205,7 @@ async function registrarEnergia() {
     exibirToast('Energia registrada! ⚡')
     fecharModal('modal-energia')
     document.getElementById('energia-texto').textContent = `${nivel}/10 de energia`
+    atualizarBarraEnergia(nivel)
   }
 }
 
@@ -586,12 +602,14 @@ async function carregarDados() {
     document.getElementById('sono-texto').textContent = `${sono.dado.horas_sono}h de sono`
     document.getElementById('input-sono').value = sono.dado.horas_sono
     document.getElementById('sono-valor').textContent = sono.dado.horas_sono
+    atualizarBarraSono(sono.dado.horas_sono)
   }
 
   if (energia.dado) {
     document.getElementById('energia-texto').textContent = `${energia.dado.nivel_energia}/10 de energia`
     document.getElementById('input-energia').value = energia.dado.nivel_energia
     document.getElementById('energia-valor').textContent = energia.dado.nivel_energia
+    atualizarBarraEnergia(energia.dado.nivel_energia)
   }
 }
 

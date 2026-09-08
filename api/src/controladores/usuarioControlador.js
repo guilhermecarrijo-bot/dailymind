@@ -6,7 +6,7 @@ function hashSenha(senha) {
 }
 
 function cadastrarUsuario(req, res) {
-  const { nome, email, senha, tipo_usuario } = req.body
+  const { nome, email, senha, idade, ocupacao } = req.body
 
   if (!nome || nome.length < 3) {
     return res.status(422).json({ sucesso: false, mensagem: 'Nome deve ter pelo menos 3 caracteres.' })
@@ -18,23 +18,30 @@ function cadastrarUsuario(req, res) {
     return res.status(422).json({ sucesso: false, mensagem: 'Senha deve ter pelo menos 6 caracteres.' })
   }
 
-  const tipo = tipo_usuario || 'usuário'
-
-  const existente = banco.prepare('SELECT id_usuario FROM USUARIO WHERE email = ?').get(email)
+  const existente = banco.prepare('SELECT id FROM usuarios WHERE email = ?').get(email)
   if (existente) {
     return res.status(409).json({ sucesso: false, mensagem: 'E-mail já cadastrado.' })
   }
 
   const senhaHash = hashSenha(senha)
   const inserir = banco.prepare(
-    'INSERT INTO USUARIO (nome, email, senha, tipo_usuario) VALUES (?, ?, ?, ?)'
+    'INSERT INTO usuarios (nome, email, senha, idade, ocupacao) VALUES (?, ?, ?, ?, ?)'
   )
-  const resultado = inserir.run(nome, email, senhaHash, tipo)
+  const resultado = inserir.run(nome, email, senhaHash, idade || null, ocupacao || null)
 
   res.status(201).json({
     sucesso: true,
     mensagem: 'Conta criada com sucesso!',
-    usuario: { id_usuario: resultado.lastInsertRowid, nome, email, tipo_usuario: tipo }
+    usuario: {
+      id: Number(resultado.lastInsertRowid),
+      nome,
+      email,
+      idade: idade || null,
+      ocupacao: ocupacao || null,
+      bio: null,
+      foto_perfil: null,
+      banner_perfil: null
+    }
   })
 }
 
@@ -46,7 +53,9 @@ function loginUsuario(req, res) {
   }
 
   const senhaHash = hashSenha(senha)
-  const usuario = banco.prepare('SELECT id_usuario, nome, email, tipo_usuario FROM USUARIO WHERE email = ? AND senha = ?').get(email, senhaHash)
+  const usuario = banco.prepare(
+    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil FROM usuarios WHERE email = ? AND senha = ?'
+  ).get(email, senhaHash)
 
   if (!usuario) {
     return res.status(401).json({ sucesso: false, mensagem: 'E-mail ou senha incorretos.' })
@@ -56,9 +65,10 @@ function loginUsuario(req, res) {
 }
 
 function consultarPerfil(req, res) {
+  const usuarioId = req.params.id_usuario || req.params.id
   const usuario = banco.prepare(
-    'SELECT id_usuario, nome, email, tipo_usuario FROM USUARIO WHERE id_usuario = ?'
-  ).get(req.params.id_usuario)
+    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil FROM usuarios WHERE id = ?'
+  ).get(usuarioId)
 
   if (!usuario) {
     return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' })
@@ -68,23 +78,40 @@ function consultarPerfil(req, res) {
 }
 
 function atualizarPerfil(req, res) {
-  const { id_usuario, nome, tipo_usuario } = req.body
+  const idUsuario = req.body.id_usuario || req.body.id
+  const { nome, idade, ocupacao, bio, foto_perfil, banner_perfil } = req.body
 
-  if (!id_usuario) {
+  if (!idUsuario) {
     return res.status(422).json({ sucesso: false, mensagem: 'ID do usuário é obrigatório.' })
   }
 
-  const existente = banco.prepare('SELECT id_usuario FROM USUARIO WHERE id_usuario = ?').get(id_usuario)
+  const existente = banco.prepare('SELECT id FROM usuarios WHERE id = ?').get(idUsuario)
   if (!existente) {
     return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' })
   }
 
-  const atualizar = banco.prepare(
-    'UPDATE USUARIO SET nome = COALESCE(?, nome), tipo_usuario = COALESCE(?, tipo_usuario) WHERE id_usuario = ?'
+  banco.prepare(
+    `UPDATE usuarios SET
+      nome = COALESCE(?, nome),
+      idade = ?,
+      ocupacao = ?,
+      bio = ?,
+      foto_perfil = ?,
+      banner_perfil = ?
+    WHERE id = ?`
+  ).run(
+    nome || null,
+    idade || null,
+    ocupacao || null,
+    bio || null,
+    foto_perfil || null,
+    banner_perfil || null,
+    idUsuario
   )
-  atualizar.run(nome || null, tipo_usuario || null, id_usuario)
 
-  const usuario = banco.prepare('SELECT id_usuario, nome, email, tipo_usuario FROM USUARIO WHERE id_usuario = ?').get(id_usuario)
+  const usuario = banco.prepare(
+    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil FROM usuarios WHERE id = ?'
+  ).get(idUsuario)
   res.json({ sucesso: true, mensagem: 'Perfil atualizado!', usuario })
 }
 

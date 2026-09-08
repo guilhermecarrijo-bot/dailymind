@@ -108,12 +108,21 @@
           </div>
           <div class="flex items-center gap-4">
             <!-- Badge de notificação -->
-            <button id="btn-notificacoes" class="relative p-2 text-gray-600 hover:text-mint-600 transition">
+            <button id="btn-notificacoes" type="button" aria-label="Abrir notificações" aria-expanded="false" class="relative p-2 text-gray-600 hover:text-mint-600 transition">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
               </svg>
               <span id="badge-notificacoes" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center hidden">0</span>
             </button>
+            <div id="painel-notificacoes" class="notification-panel hidden" role="status" aria-live="polite">
+              <div class="flex items-center justify-between gap-4 mb-3">
+                <h2 class="font-bold text-gray-800">Notificações</h2>
+                <button type="button" onclick="fecharNotificacoes()" class="text-gray-400 hover:text-gray-700 text-xl" aria-label="Fechar notificações">&times;</button>
+              </div>
+              <div id="lista-notificacoes">
+                <p class="text-sm text-gray-400 py-3">Nenhuma notificação pendente.</p>
+              </div>
+            </div>
             <!-- Perfil -->
             <button id="btn-perfil" class="w-10 h-10 bg-gradient-to-r from-mint-400 to-lavender-400 rounded-full flex items-center justify-center text-white font-bold" onclick="mostrarPerfil()">
               <span id="inicial-usuario">U</span>
@@ -288,6 +297,25 @@
         </div>
       </header>
       <h1 class="text-2xl font-bold text-gray-800 mb-6">👤 Meu Perfil</h1>
+      <div class="profile-card bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden mb-6">
+        <div id="perfil-banner-preview" class="profile-banner">
+          <label for="perfil-banner" class="profile-media-button" title="Alterar banner">📷 Alterar banner</label>
+          <input type="file" id="perfil-banner" accept="image/*" class="sr-only">
+        </div>
+        <div class="profile-summary">
+          <div class="profile-avatar-wrap">
+            <div id="perfil-avatar-preview" class="profile-avatar">U</div>
+            <label for="perfil-foto" class="profile-avatar-button" title="Alterar foto">+</label>
+            <input type="file" id="perfil-foto" accept="image/*" class="sr-only">
+          </div>
+          <div class="profile-summary-copy">
+            <h2 id="perfil-nome-preview">Usuário</h2>
+            <p id="perfil-idade-preview">Seu perfil, do seu jeito</p>
+            <span id="perfil-ocupacao-preview" class="profile-tag">DailyMind</span>
+            <p id="perfil-bio-preview" class="profile-bio-preview"></p>
+          </div>
+        </div>
+      </div>
       <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
         <form id="form-perfil" class="space-y-4">
           <div>
@@ -308,11 +336,16 @@
               <input type="text" id="perfil-ocupacao" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
             </div>
           </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Biografia</label>
+            <textarea id="perfil-bio" rows="4" maxlength="280" placeholder="Conte um pouco sobre você..." class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition resize-y"></textarea>
+            <p class="text-xs text-gray-400 mt-1">Até 280 caracteres</p>
+          </div>
           <button type="submit" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
             Salvar alterações
           </button>
         </form>
-        <button onclick="fazerLogout()" class="w-full mt-4 border-2 border-red-300 text-red-600 font-bold py-3 rounded-lg hover:bg-red-50 transition">
+          <button type="button" id="btn-logout" class="w-full mt-4 border-2 border-red-300 text-red-600 font-bold py-3 rounded-lg hover:bg-red-50 transition">
           Sair da conta
         </button>
       </div>
@@ -413,6 +446,6 @@
   <!-- Toast de feedback -->
   <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white font-semibold hidden transition-all duration-300 z-50"></div>
 
-  <script src="js/app.js"></script>
+  <script src="js/app.js?v=20260908-profile-logout"></script>
 </body>
 </html>

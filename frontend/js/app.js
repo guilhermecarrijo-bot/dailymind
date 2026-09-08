@@ -1,9 +1,10 @@
 // URL base da API
-const URL_API = '/api'
+const URL_API = window.location.port === '8000' ? 'http://localhost:3000/api' : '/api'
 
 // Estado do aplicativo
 let usuarioAtual = null
 let iconeSelecionado = '📌'
+let notificacoesAbertas = false
 
 // ==================== UTILITÁRIOS ====================
 
@@ -21,8 +22,14 @@ async function api(metodo, endpoint, dados = null) {
     headers: { 'Content-Type': 'application/json' }
   }
   if (dados) opcoes.body = JSON.stringify(dados)
-  const resposta = await fetch(`${URL_API}${endpoint}`, opcoes)
-  return resposta.json()
+  try {
+    const resposta = await fetch(`${URL_API}${endpoint}`, opcoes)
+    const resultado = await resposta.json()
+    if (!resposta.ok) return { sucesso: false, mensagem: resultado.mensagem || 'Não foi possível concluir a ação.' }
+    return resultado
+  } catch (erro) {
+    return { sucesso: false, mensagem: 'Não foi possível conectar ao DailyMind.' }
+  }
 }
 
 // ==================== AUTENTICAÇÃO ====================
@@ -83,8 +90,12 @@ document.getElementById('form-cadastro').querySelector('form').addEventListener(
 function fazerLogout() {
   usuarioAtual = null
   localStorage.removeItem('dailymind_usuario')
-  document.getElementById('tela-dashboard').classList.add('hidden')
+  fecharNotificacoes()
+  ;['tela-dashboard', 'tela-graficos', 'tela-lembretes', 'tela-perfil'].forEach((id) => {
+    document.getElementById(id).classList.add('hidden')
+  })
   document.getElementById('tela-auth').classList.remove('hidden')
+  document.getElementById('form-login').querySelector('form').reset()
   mostrarLogin()
 }
 
@@ -293,15 +304,71 @@ async function removerLembrete(id) {
 }
 
 async function atualizarBadge() {
+  if (!usuarioAtual) return
   const resultado = await api('GET', `/lembretes/${usuarioAtual.id}/pendentes`)
   const badge = document.getElementById('badge-notificacoes')
+  if (!resultado.sucesso) return
   if (resultado.total > 0) {
     badge.textContent = resultado.total
     badge.classList.remove('hidden')
   } else {
     badge.classList.add('hidden')
   }
+  if (notificacoesAbertas) carregarNotificacoes()
 }
+
+async function carregarNotificacoes() {
+  if (!usuarioAtual) return
+  const lista = document.getElementById('lista-notificacoes')
+  const resultado = await api('GET', `/lembretes/${usuarioAtual.id}`)
+  if (!resultado.sucesso) {
+    lista.innerHTML = '<p class="text-sm text-red-500 py-3">Não foi possível carregar as notificações.</p>'
+    return
+  }
+
+  const pendentes = resultado.dados.filter(lembrete => !lembrete.concluido)
+  if (pendentes.length === 0) {
+    lista.innerHTML = '<p class="text-sm text-gray-400 py-3">Tudo em dia. Nenhuma notificação pendente.</p>'
+    return
+  }
+
+  lista.innerHTML = pendentes.map(lembrete => `
+    <button type="button" onclick="abrirLembretesAPartirDaNotificacao()" class="notification-item">
+      <span class="text-xl">${lembrete.icone || '📌'}</span>
+      <span class="min-w-0 text-left">
+        <strong class="block truncate text-gray-700">${lembrete.titulo}</strong>
+        <small class="block text-gray-500">${lembrete.hora_deixado ? `Horário: ${lembrete.hora_deixado}` : 'Lembrete pendente'}</small>
+      </span>
+    </button>
+  `).join('')
+}
+
+function alternarNotificacoes() {
+  notificacoesAbertas = !notificacoesAbertas
+  const painel = document.getElementById('painel-notificacoes')
+  const botao = document.getElementById('btn-notificacoes')
+  painel.classList.toggle('hidden', !notificacoesAbertas)
+  botao.setAttribute('aria-expanded', String(notificacoesAbertas))
+  if (notificacoesAbertas) carregarNotificacoes()
+}
+
+function fecharNotificacoes() {
+  notificacoesAbertas = false
+  document.getElementById('painel-notificacoes').classList.add('hidden')
+  document.getElementById('btn-notificacoes').setAttribute('aria-expanded', 'false')
+}
+
+function abrirLembretesAPartirDaNotificacao() {
+  fecharNotificacoes()
+  mostrarTela('lembretes')
+}
+
+document.getElementById('btn-notificacoes').addEventListener('click', alternarNotificacoes)
+document.addEventListener('click', (evento) => {
+  const painel = document.getElementById('painel-notificacoes')
+  const botao = document.getElementById('btn-notificacoes')
+  if (notificacoesAbertas && !painel.contains(evento.target) && !botao.contains(evento.target)) fecharNotificacoes()
+})
 
 // ==================== SUGESTÕES ====================
 
@@ -395,27 +462,103 @@ function carregarPerfil() {
   document.getElementById('perfil-email').value = usuarioAtual.email
   document.getElementById('perfil-idade').value = usuarioAtual.idade || ''
   document.getElementById('perfil-ocupacao').value = usuarioAtual.ocupacao || ''
+  document.getElementById('perfil-bio').value = usuarioAtual.bio || ''
+  atualizarPreviaPerfil()
 }
+
+function atualizarPreviaPerfil() {
+  const nome = document.getElementById('perfil-nome').value.trim() || 'Usuário'
+  const idade = document.getElementById('perfil-idade').value
+  const ocupacao = document.getElementById('perfil-ocupacao').value.trim()
+  const bio = document.getElementById('perfil-bio').value.trim()
+  const avatar = document.getElementById('perfil-avatar-preview')
+  const banner = document.getElementById('perfil-banner-preview')
+
+  document.getElementById('perfil-nome-preview').textContent = nome
+  document.getElementById('perfil-idade-preview').textContent = idade ? `${idade} anos` : 'Seu perfil, do seu jeito'
+  document.getElementById('perfil-ocupacao-preview').textContent = ocupacao || 'DailyMind'
+  document.getElementById('perfil-bio-preview').textContent = bio
+  avatar.textContent = nome.charAt(0).toUpperCase()
+
+  if (usuarioAtual.foto_perfil) {
+    avatar.style.backgroundImage = `url(${usuarioAtual.foto_perfil})`
+    avatar.classList.add('has-image')
+  } else {
+    avatar.style.backgroundImage = ''
+    avatar.classList.remove('has-image')
+  }
+
+  const botaoPerfil = document.getElementById('btn-perfil')
+  botaoPerfil.style.backgroundImage = usuarioAtual.foto_perfil
+    ? `url(${usuarioAtual.foto_perfil})`
+    : ''
+  botaoPerfil.style.backgroundPosition = 'center'
+  botaoPerfil.style.backgroundSize = 'cover'
+
+  banner.style.backgroundImage = usuarioAtual.banner_perfil
+    ? `url(${usuarioAtual.banner_perfil})`
+    : ''
+}
+
+function carregarImagemPerfil(input, campo) {
+  const arquivo = input.files[0]
+  if (!arquivo) return
+  const leitor = new FileReader()
+  leitor.onload = () => {
+    usuarioAtual[campo] = leitor.result
+    atualizarPreviaPerfil()
+  }
+  leitor.readAsDataURL(arquivo)
+}
+
+document.getElementById('perfil-foto').addEventListener('change', (e) => carregarImagemPerfil(e.target, 'foto_perfil'))
+document.getElementById('perfil-banner').addEventListener('change', (e) => carregarImagemPerfil(e.target, 'banner_perfil'))
+document.getElementById('perfil-nome').addEventListener('input', atualizarPreviaPerfil)
+document.getElementById('perfil-idade').addEventListener('input', atualizarPreviaPerfil)
+document.getElementById('perfil-ocupacao').addEventListener('input', atualizarPreviaPerfil)
+document.getElementById('perfil-bio').addEventListener('input', atualizarPreviaPerfil)
+document.getElementById('btn-logout').addEventListener('click', fazerLogout)
 
 document.getElementById('form-perfil').addEventListener('submit', async (e) => {
   e.preventDefault()
   const nome = document.getElementById('perfil-nome').value.trim()
   const idade = document.getElementById('perfil-idade').value
   const ocupacao = document.getElementById('perfil-ocupacao').value.trim()
+  const bio = document.getElementById('perfil-bio').value.trim()
+  const botaoSalvar = e.submitter
 
-  const resultado = await api('PUT', '/usuarios/perfil', {
-    id: usuarioAtual.id,
-    nome,
-    idade: idade ? parseInt(idade) : null,
-    ocupacao: ocupacao || null
-  })
+  if (!nome) {
+    exibirToast('Informe seu nome para salvar o perfil.', 'erro')
+    return
+  }
 
-  if (resultado.sucesso) {
-    usuarioAtual = resultado.usuario
-    localStorage.setItem('dailymind_usuario', JSON.stringify(usuarioAtual))
-    document.getElementById('nome-usuario').textContent = usuarioAtual.nome
-    document.getElementById('inicial-usuario').textContent = usuarioAtual.nome.charAt(0).toUpperCase()
-    exibirToast('Perfil atualizado!')
+  botaoSalvar.disabled = true
+  botaoSalvar.textContent = 'Salvando...'
+
+  try {
+    const resultado = await api('PUT', '/usuarios/perfil', {
+      id: usuarioAtual.id,
+      nome,
+      idade: idade ? parseInt(idade) : null,
+      ocupacao: ocupacao || null,
+      bio: bio || null,
+      foto_perfil: usuarioAtual.foto_perfil || null,
+      banner_perfil: usuarioAtual.banner_perfil || null
+    })
+
+    if (resultado.sucesso) {
+      usuarioAtual = resultado.usuario
+      localStorage.setItem('dailymind_usuario', JSON.stringify(usuarioAtual))
+      document.getElementById('nome-usuario').textContent = usuarioAtual.nome
+      document.getElementById('inicial-usuario').textContent = usuarioAtual.nome.charAt(0).toUpperCase()
+      atualizarPreviaPerfil()
+      exibirToast('Perfil atualizado!')
+    } else {
+      exibirToast(resultado.mensagem || 'Não foi possível salvar o perfil.', 'erro')
+    }
+  } finally {
+    botaoSalvar.disabled = false
+    botaoSalvar.textContent = 'Salvar alterações'
   }
 })
 

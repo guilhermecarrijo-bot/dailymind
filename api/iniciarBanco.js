@@ -93,6 +93,19 @@ banco.exec(`
   );
 `);
 
+// Campos opcionais adicionados depois da primeira versão do perfil.
+for (const coluna of [
+  ['bio', 'TEXT DEFAULT NULL'],
+  ['foto_perfil', 'TEXT DEFAULT NULL'],
+  ['banner_perfil', 'TEXT DEFAULT NULL']
+]) {
+  try {
+    banco.exec(`ALTER TABLE usuarios ADD COLUMN ${coluna[0]} ${coluna[1]}`)
+  } catch (erro) {
+    if (!erro.message.includes('duplicate column name')) throw erro
+  }
+}
+
 // Cria índices
 banco.exec(`
   CREATE INDEX IF NOT EXISTS idx_humor_usuario ON humor(usuario_id);

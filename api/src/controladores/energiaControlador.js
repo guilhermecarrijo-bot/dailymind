@@ -1,67 +1,62 @@
 const banco = require('../config/conexaoBanco')
 
 function registrarEnergia(req, res) {
-  const { id_usuario, nivel, observacao } = req.body
+  const usuarioId = req.body.usuario_id || req.body.id_usuario
+  const nivel = req.body.nivel_energia ?? req.body.nivel
 
-  if (!id_usuario || nivel === undefined) {
+  if (!usuarioId || nivel === undefined) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e nível de energia são obrigatórios.' })
   }
 
-  if (nivel < 1 || nivel > 5) {
-    return res.status(422).json({ sucesso: false, mensagem: 'Nível de energia deve ser entre 1 e 5.' })
+  if (nivel < 1 || nivel > 10) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Nível de energia deve ser entre 1 e 10.' })
   }
 
   const hoje = new Date().toISOString().split('T')[0]
   const existente = banco.prepare(
-    'SELECT id_energia FROM ENERGIA WHERE id_usuario = ? AND data = ?'
-  ).get(id_usuario, hoje)
+    'SELECT id FROM energia WHERE usuario_id = ? AND data_registro = ?'
+  ).get(usuarioId, hoje)
 
   if (existente) {
-    banco.prepare('UPDATE ENERGIA SET nivel = ?, observacao = ? WHERE id_energia = ?')
-      .run(nivel, observacao || null, existente.id_energia)
+    banco.prepare('UPDATE energia SET nivel_energia = ? WHERE id = ?').run(nivel, existente.id)
     return res.json({ sucesso: true, mensagem: 'Energia atualizada!' })
   }
 
-  const inserir = banco.prepare('INSERT INTO ENERGIA (id_usuario, nivel, observacao) VALUES (?, ?, ?)')
-  const resultado = inserir.run(id_usuario, nivel, observacao || null)
+  const inserir = banco.prepare('INSERT INTO energia (usuario_id, nivel_energia, data_registro) VALUES (?, ?, ?)')
+  const resultado = inserir.run(usuarioId, nivel, hoje)
 
   res.status(201).json({ sucesso: true, mensagem: 'Energia registrada!', id_energia: resultado.lastInsertRowid })
 }
 
 function listarEnergia(req, res) {
-  const id_usuario = req.params.id_usuario
+  const usuarioId = req.params.usuario_id || req.params.id_usuario
   const registros = banco.prepare(
-    'SELECT * FROM ENERGIA WHERE id_usuario = ? ORDER BY data DESC LIMIT 30'
-  ).all(id_usuario)
+    'SELECT * FROM energia WHERE usuario_id = ? ORDER BY data_registro DESC LIMIT 30'
+  ).all(usuarioId)
 
   res.json({ sucesso: true, dados: registros })
 }
 
 function editarEnergia(req, res) {
-  const { id_usuario, nivel, observacao, data } = req.body
-  if (!id_usuario || nivel === undefined) {
+  const usuarioId = req.body.usuario_id || req.body.id_usuario
+  const nivel = req.body.nivel_energia ?? req.body.nivel
+
+  if (!usuarioId || nivel === undefined) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e nível de energia são obrigatórios.' })
   }
-  if (nivel < 1 || nivel > 5) {
-    return res.status(422).json({ sucesso: false, mensagem: 'Nível de energia deve ser entre 1 e 5.' })
-  }
 
-  const resultado = banco.prepare(`UPDATE ENERGIA SET nivel = ?, observacao = ?, data = COALESCE(?, data)
-    WHERE id_energia = ? AND id_usuario = ?`).run(
-    nivel, observacao ?? null, data ?? null, req.params.id, id_usuario
-  )
+  const resultado = banco.prepare('UPDATE energia SET nivel_energia = ? WHERE id = ? AND usuario_id = ?').run(nivel, req.params.id, usuarioId)
   if (!resultado.changes) {
     return res.status(404).json({ sucesso: false, mensagem: 'Registro de energia não encontrado.' })
   }
 
-  const registro = banco.prepare('SELECT * FROM ENERGIA WHERE id_energia = ?').get(req.params.id)
+  const registro = banco.prepare('SELECT * FROM energia WHERE id = ?').get(req.params.id)
   res.json({ sucesso: true, mensagem: 'Energia atualizada!', energia: registro })
 }
 
 function removerEnergia(req, res) {
-  const id_usuario = req.body.id_usuario || req.query.id_usuario
-  const resultado = banco.prepare('DELETE FROM ENERGIA WHERE id_energia = ? AND id_usuario = ?')
-    .run(req.params.id, id_usuario)
+  const usuarioId = req.body.usuario_id || req.body.id_usuario || req.query.usuario_id || req.query.id_usuario
+  const resultado = banco.prepare('DELETE FROM energia WHERE id = ? AND usuario_id = ?').run(req.params.id, usuarioId)
   if (!resultado.changes) {
     return res.status(404).json({ sucesso: false, mensagem: 'Registro de energia não encontrado.' })
   }
@@ -69,12 +64,12 @@ function removerEnergia(req, res) {
 }
 
 function obterEnergiaHoje(req, res) {
-  const id_usuario = req.params.id_usuario
+  const usuarioId = req.params.usuario_id || req.params.id_usuario
   const hoje = new Date().toISOString().split('T')[0]
 
   const registro = banco.prepare(
-    'SELECT * FROM ENERGIA WHERE id_usuario = ? AND data = ?'
-  ).get(id_usuario, hoje)
+    'SELECT * FROM energia WHERE usuario_id = ? AND data_registro = ?'
+  ).get(usuarioId, hoje)
 
   res.json({ sucesso: true, dado: registro || null })
 }

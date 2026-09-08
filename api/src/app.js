@@ -13,7 +13,7 @@ app.use(helmet({
   contentSecurityPolicy: false
 }))
 app.use(cors({ origin: process.env.ORIGEM_PERMITIDA || '*' }))
-app.use(express.json({ limit: '10kb' }))
+app.use(express.json({ limit: '5mb' }))
 
 // Servir arquivos estáticos do frontend
 const caminhoFrontend = path.resolve(__dirname, '../../frontend')

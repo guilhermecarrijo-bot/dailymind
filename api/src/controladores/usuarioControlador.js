@@ -8,13 +8,13 @@ function hashSenha(senha) {
 function cadastrarUsuario(req, res) {
   const { nome, email, senha, idade, ocupacao } = req.body
 
-  if (!nome || nome.length < 3) {
+  if (typeof nome !== 'string' || nome.trim().length < 3) {
     return res.status(422).json({ sucesso: false, mensagem: 'Nome deve ter pelo menos 3 caracteres.' })
   }
-  if (!email || !email.includes('@')) {
+  if (typeof email !== 'string' || !email.includes('@')) {
     return res.status(422).json({ sucesso: false, mensagem: 'E-mail inválido.' })
   }
-  if (!senha || senha.length < 6) {
+  if (typeof senha !== 'string' || senha.length < 6) {
     return res.status(422).json({ sucesso: false, mensagem: 'Senha deve ter pelo menos 6 caracteres.' })
   }
 
@@ -83,6 +83,22 @@ function atualizarPerfil(req, res) {
 
   if (!idUsuario) {
     return res.status(422).json({ sucesso: false, mensagem: 'ID do usuário é obrigatório.' })
+  }
+
+  if (typeof nome !== 'string' || nome.trim().length < 3 || nome.trim().length > 100) {
+    return res.status(422).json({ sucesso: false, mensagem: 'O nome deve ter entre 3 e 100 caracteres.' })
+  }
+
+  if (idade !== null && idade !== undefined && (!Number.isInteger(idade) || idade < 1 || idade > 150)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A idade deve estar entre 1 e 150 anos.' })
+  }
+
+  if (ocupacao !== null && ocupacao !== undefined && (typeof ocupacao !== 'string' || ocupacao.trim().length > 100)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A ocupação pode ter no máximo 100 caracteres.' })
+  }
+
+  if (bio !== null && bio !== undefined && (typeof bio !== 'string' || bio.trim().length > 280)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A biografia pode ter no máximo 280 caracteres.' })
   }
 
   const existente = banco.prepare('SELECT id FROM usuarios WHERE id = ?').get(idUsuario)

@@ -12,22 +12,31 @@ function obterSugestoes(req, res) {
   ).get(usuario_id)
 
   if (!humor || !humor.emoji) {
-    return res.json({ sucesso: true, dados: [] })
+    const sugestoesGerais = banco.prepare(
+      'SELECT * FROM sugestoes ORDER BY RANDOM() LIMIT 3'
+    ).all()
+    return res.json({ sucesso: true, dados: sugestoesGerais })
   }
 
   const mapaHumor = {
     '😊': 'feliz',
+    feliz: 'feliz',
     '😔': 'triste',
+    triste: 'triste',
     '😰': 'ansioso',
+    ansioso: 'ansioso',
     '😫': 'cansado',
+    cansado: 'cansado',
     '😤': 'irritado',
-    '😐': 'neutro'
+    irritado: 'irritado',
+    '😐': 'neutro',
+    neutro: 'neutro'
   }
 
   const tipo = mapaHumor[humor.emoji] || 'neutro'
 
   const sugestoes = banco.prepare(
-    'SELECT * FROM sugestoes WHERE humor_tipo = ? ORDER BY id ASC LIMIT 3'
+    'SELECT * FROM sugestoes WHERE humor_tipo = ? ORDER BY RANDOM() LIMIT 3'
   ).all(tipo)
 
   return res.json({ sucesso: true, dados: sugestoes })

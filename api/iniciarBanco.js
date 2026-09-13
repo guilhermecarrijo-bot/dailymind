@@ -154,4 +154,33 @@ if (sugestoesExistentes.total === 0) {
   console.log('Sugestões de autocuidado inseridas com sucesso.')
 }
 
+// Acrescenta variedade sem duplicar sugestões em bancos já existentes.
+const sugestoesAdicionais = [
+  ['feliz', 'Guardar um momento bom', 'Anote uma coisa simples que fez seu dia melhor para lembrar depois.', '🌱'],
+  ['feliz', 'Fazer algo que dá prazer', 'Reserve alguns minutos para uma atividade que você gosta.', '🎨'],
+  ['triste', 'Mandar uma mensagem simples', 'Escreva para alguém de confiança apenas dizendo como você está.', '💬'],
+  ['triste', 'Escolher um cuidado possível', 'Escolha uma coisa pequena e gentil para fazer por você agora.', '🫖'],
+  ['ansioso', 'Reduzir os estímulos por alguns minutos', 'Se puder, escolha um lugar mais silencioso ou com uma luz mais confortável.', '🎧'],
+  ['ansioso', 'Escolher um ponto de conforto', 'Ajuste uma coisa ao seu redor que possa deixar este momento mais suportável.', '🪟'],
+  ['ansioso', 'Usar um apoio sensorial conhecido', 'Se você já sabe que algo ajuda, experimente esse recurso no seu ritmo.', '🧸'],
+  ['ansioso', 'Dividir o próximo passo', 'Escolha apenas uma ação pequena para fazer agora. O restante pode esperar.', '🪜'],
+  ['cansado', 'Escolher uma tarefa essencial', 'Defina só uma prioridade possível e deixe o restante para depois.', '✅'],
+  ['cansado', 'Descansar sem culpa', 'Faça uma pausa real, mesmo que sejam apenas alguns minutos.', '🛋️'],
+  ['irritado', 'Afastar-se do estímulo', 'Se puder, mude de ambiente por alguns minutos antes de decidir o que fazer.', '🚪'],
+  ['irritado', 'Escrever o que precisa mudar', 'Coloque no papel o que incomodou e escolha apenas o próximo passo.', '✍️'],
+  ['neutro', 'Escolher uma prioridade pequena', 'Selecione uma tarefa curta para dar direção ao restante do dia.', '🧭'],
+  ['neutro', 'Observar como seu corpo está', 'Perceba sua respiração, tensão e energia sem precisar mudar nada agora.', '👀']
+]
+
+const verificarSugestao = banco.prepare('SELECT id FROM sugestoes WHERE titulo = ? LIMIT 1')
+const inserirSugestaoAdicional = banco.prepare(
+  'INSERT INTO sugestoes (humor_tipo, titulo, descricao, icone) VALUES (?, ?, ?, ?)'
+)
+const inserirAdicionaisEmLote = banco.transaction((items) => {
+  for (const item of items) {
+    if (!verificarSugestao.get(item[1])) inserirSugestaoAdicional.run(...item)
+  }
+})
+inserirAdicionaisEmLote(sugestoesAdicionais)
+
 console.log('Banco de dados do DailyMind inicializado com sucesso.')

@@ -7,6 +7,9 @@ function registrarHumor(req, res) {
   if (!usuarioId || !emoji) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e humor são obrigatórios.' })
   }
+  if (!['😊', '😔', '😰', '😫', '😤', '😐', 'feliz', 'triste', 'ansioso', 'cansado', 'irritado', 'neutro'].includes(emoji)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Humor inválido.' })
+  }
 
   const hoje = new Date().toISOString().split('T')[0]
   const existente = banco.prepare(

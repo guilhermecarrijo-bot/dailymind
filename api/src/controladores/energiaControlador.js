@@ -8,7 +8,7 @@ function registrarEnergia(req, res) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e nível de energia são obrigatórios.' })
   }
 
-  if (nivel < 1 || nivel > 10) {
+  if (typeof nivel !== 'number' || !Number.isInteger(nivel) || nivel < 1 || nivel > 10) {
     return res.status(422).json({ sucesso: false, mensagem: 'Nível de energia deve ser entre 1 e 10.' })
   }
 
@@ -43,6 +43,10 @@ function editarEnergia(req, res) {
 
   if (!usuarioId || nivel === undefined) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e nível de energia são obrigatórios.' })
+  }
+
+  if (typeof nivel !== 'number' || !Number.isInteger(nivel) || nivel < 1 || nivel > 10) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Nível de energia deve ser entre 1 e 10.' })
   }
 
   const resultado = banco.prepare('UPDATE energia SET nivel_energia = ? WHERE id = ? AND usuario_id = ?').run(nivel, req.params.id, usuarioId)

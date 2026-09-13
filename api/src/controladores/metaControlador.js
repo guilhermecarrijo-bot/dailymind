@@ -55,7 +55,7 @@ function criarMeta(req, res) {
   // Validar se data_fim é posterior a data_inicio
   const inicio = new Date(data_inicio)
   const fim = new Date(data_fim)
-  if (fim <= inicio) {
+  if (Number.isNaN(inicio.getTime()) || Number.isNaN(fim.getTime()) || fim <= inicio) {
     return res.status(422).json({
       sucesso: false,
       mensagem: 'A data de término deve ser posterior à data de início.'
@@ -158,7 +158,7 @@ function atualizarMeta(req, res) {
   if (data_inicio && data_fim) {
     const inicio = new Date(data_inicio)
     const fim = new Date(data_fim)
-    if (fim <= inicio) {
+    if (Number.isNaN(inicio.getTime()) || Number.isNaN(fim.getTime()) || fim <= inicio) {
       return res.status(422).json({
         sucesso: false,
         mensagem: 'A data de término deve ser posterior à data de início.'

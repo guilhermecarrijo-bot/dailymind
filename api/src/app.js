@@ -13,7 +13,7 @@ app.use(helmet({
   contentSecurityPolicy: false
 }))
 app.use(cors({ origin: process.env.ORIGEM_PERMITIDA || '*' }))
-app.use(express.json({ limit: '5mb' }))
+app.use(express.json({ limit: '12mb' }))
 
 // Servir arquivos estáticos do frontend
 const caminhoFrontend = path.resolve(__dirname, '../../frontend')
@@ -29,6 +29,12 @@ app.get('/api/health', (_, res) => res.json({ sucesso: true, mensagem: 'DailyMin
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api')) return next()
   res.sendFile(path.join(caminhoFrontend, 'index.html'))
+})
+
+app.use((erro, req, res, next) => {
+  if (res.headersSent) return next(erro)
+  console.error(erro)
+  res.status(500).json({ sucesso: false, mensagem: 'Erro interno do servidor.' })
 })
 
 module.exports = app

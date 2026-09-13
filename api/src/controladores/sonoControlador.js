@@ -9,11 +9,11 @@ function registrarSono(req, res) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e horas de sono são obrigatórios.' })
   }
 
-  if (horasSono < 0 || horasSono > 24) {
+  if (typeof horasSono !== 'number' || !Number.isFinite(horasSono) || horasSono < 0 || horasSono > 24) {
     return res.status(422).json({ sucesso: false, mensagem: 'Horas de sono devem ser entre 0 e 24.' })
   }
 
-  if (qualidade < 1 || qualidade > 5) {
+  if (typeof qualidade !== 'number' || !Number.isInteger(qualidade) || qualidade < 1 || qualidade > 5) {
     return res.status(422).json({ sucesso: false, mensagem: 'Qualidade deve ser entre 1 e 5.' })
   }
 
@@ -49,6 +49,14 @@ function editarSono(req, res) {
 
   if (!usuarioId || horasSono === undefined) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e horas de sono são obrigatórios.' })
+  }
+
+  if (typeof horasSono !== 'number' || !Number.isFinite(horasSono) || horasSono < 0 || horasSono > 24) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Horas de sono devem ser entre 0 e 24.' })
+  }
+
+  if (typeof qualidade !== 'number' || !Number.isInteger(qualidade) || qualidade < 1 || qualidade > 5) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Qualidade deve ser entre 1 e 5.' })
   }
 
   const resultado = banco.prepare('UPDATE sono SET horas_sono = ?, qualidade = ? WHERE id = ? AND usuario_id = ?')

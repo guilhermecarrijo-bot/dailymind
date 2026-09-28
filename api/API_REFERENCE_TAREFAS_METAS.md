@@ -1,5 +1,30 @@
 # API Reference - Tasks and Goals
 
+## Authentication and Sessions
+
+Create an account or sign in. On success, the API sets an `HttpOnly` session cookie; browsers must send credentials on subsequent requests. The session expires after seven days and is revoked on logout.
+
+```http
+POST /usuarios/cadastro
+Content-Type: application/json
+
+{ "nome": "Nome", "email": "pessoa@example.com", "senha": "senha-com-pelo-menos-8-caracteres" }
+```
+
+```http
+POST /usuarios/login
+Content-Type: application/json
+
+{ "email": "pessoa@example.com", "senha": "senha-com-pelo-menos-8-caracteres" }
+```
+
+```http
+GET /usuarios/sessao
+POST /usuarios/logout
+```
+
+All user-specific endpoints require the session cookie. The user ID in the URL or request body is not an authorization credential; access is restricted to the account represented by the session. Global `GET /sugestoes` remains public.
+
 ## Tasks (Tarefas) - Checklist Implementation
 
 ### Create Task

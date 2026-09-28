@@ -22,7 +22,7 @@ O DailyMind oferece uma solução simples que ajuda a organizar a rotina com **l
 
 ### Autenticação e Perfil
 - **Cadastro de conta** — Criação de conta com nome, e-mail, senha, idade e ocupação
-- **Login / Logout** — Sessão persistida no `localStorage`
+- **Login / Logout** — Sessão HttpOnly validada e revogada pelo backend
 - **Edição de perfil** — Atualização de nome, idade e ocupação
 
 ### Registro Diário
@@ -53,7 +53,7 @@ O DailyMind oferece uma solução simples que ajuda a organizar a rotina com **l
 - **CORS** — Habilitação de Cross-Origin Resource Sharing
 - **Validator** — Lib para sanitização e validação de entradas
 - **Dotenv** — Gerenciamento de variáveis de ambiente
-- **crypto** — Hash de senhas (SHA-256, para fins de demonstração)
+- **crypto** — Hash adaptativo de senhas (scrypt), geração de tokens e HMAC de sessão
 
 ### Frontend (Interface do Usuário)
 - **HTML5 Semântico** — Marcação acessível e estruturada
@@ -289,7 +289,7 @@ Respostas de sucesso usam `{ "sucesso": true, ... }`. Erros usam HTTP `422` para
 ## Como Executar o Projeto
 
 ### Pré-requisitos
-- **Node.js** (v18 ou superior) e **npm** instalados
+- **Node.js** (v22 ou superior) e **npm** instalados
 
 ### Iniciar o Projeto
 
@@ -298,6 +298,8 @@ Respostas de sucesso usam `{ "sucesso": true, ... }`. Erros usam HTTP `422` para
    cd api
    npm install
    ```
+
+  Copie `.env.example` para `.env` e configure `CHAVE_SESSAO` com uma chave aleatória de pelo menos 32 bytes. Gere uma com `node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"`; mantenha o valor apenas no `.env` local ou no gerenciador de segredos do ambiente, nunca no GitHub.
 
 2. **Inicie o servidor de desenvolvimento:**
    ```bash
@@ -318,7 +320,10 @@ Respostas de sucesso usam `{ "sucesso": true, ... }`. Erros usam HTTP `422` para
 ## Segurança e Boas Práticas
 
 - **Prepared Statements:** Uso de consultas preparadas para prevenir SQL Injection
-- **Hash de Senhas:** Senhas armazenadas com hash SHA-256 (crypto)
+- **Hash de Senhas:** Senhas protegidas com scrypt e salt individual; hashes legados são atualizados no login
+- **Sessões:** Token opaco em cookie HttpOnly, revogável e com expiração de sete dias
+- **Segredo do Backend:** `CHAVE_SESSAO` configurada fora do código; obrigatória em produção e ignorada pelo Git
+- **Autorização:** Rotas privadas restringem consultas e alterações ao usuário da sessão
 - **Sanitização de Entradas:** Limpeza de strings com a biblioteca `validator` (módulo de leads)
 - **Proteção contra Payload Abusivo:** Middleware com limite de `10kb` por requisição
 - **Cabeçalhos de Segurança:** Middleware `helmet` habilitado

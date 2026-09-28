@@ -41,11 +41,11 @@ O presente documento formaliza os **Requisitos de Sistema (SR)** do DailyMind, d
 - **RU Origem:** RU01
 - **Ator(es):** A1 → S1 → S2
 - **Prioridade:** P0
-- **Descrição:** O sistema deve disponibilizar um endpoint `POST /api/usuarios/cadastro` que receba os dados do novo usuário (nome, e-mail, senha, idade, ocupação), valide-os, verifique a unicidade do e-mail, armazene a senha como hash SHA-256 e persista os dados na tabela `usuarios`.
+- **Descrição:** O sistema deve disponibilizar um endpoint `POST /api/usuarios/cadastro` que receba os dados do novo usuário (nome, e-mail, senha, idade, ocupação), valide-os, verifique a unicidade do e-mail, armazene a senha com scrypt e salt individual e persista os dados na tabela `usuarios`.
 - **Entradas:**
   - `nome` (string, obrigatório, máx. 100 caracteres)
   - `email` (string, obrigatório, formato válido, único)
-  - `senha` (string, obrigatório, mín. 6 caracteres)
+  - `senha` (string, obrigatório, entre 8 e 128 caracteres)
   - `idade` (inteiro, obrigatório, > 0 e ≤ 150)
   - `ocupacao` (string, obrigatório, máx. 100 caracteres)
 - **Saídas:**
@@ -383,17 +383,22 @@ O presente documento formaliza os **Requisitos de Sistema (SR)** do DailyMind, d
 - **RU Origem:** RU01, RU02, RU11
 - **Ator(es):** S1
 - **Prioridade:** P0
-- **Descrição:** O sistema deve aplicar mecanismos de segurança em todas as camadas, incluindo cabeçalhos HTTP (Helmet), controle de origens (CORS), hash de senhas (SHA-256) e limitação de payload.
+- **Descrição:** O sistema deve aplicar mecanismos de segurança em todas as camadas, incluindo cabeçalhos HTTP (Helmet), controle de origens (CORS), hash adaptativo de senhas (scrypt), sessões opacas revogáveis e limitação de payload.
 - **Regras de Implementação:**
   1. Aplicar middleware Helmet em todas as rotas.
   2. Configurar CORS para aceitar apenas origens autorizadas.
-  3. Nunca armazenar senhas em texto plano.
-  4. Utilizar consultas preparadas para prevenir SQL Injection.
-  5. Retornar códigos HTTP apropriados para cada cenário de erro.
+  3. Nunca armazenar senhas em texto plano; migrar hashes legados após autenticação bem-sucedida.
+  4. Armazenar `CHAVE_SESSAO` somente no ambiente/gerenciador de segredos do backend e exigir chave com pelo menos 32 bytes em produção.
+  5. Transportar sessões em cookie HttpOnly, Secure em produção e SameSite=Lax; não persistir tokens no frontend.
+  6. Exigir sessão autenticada e validar propriedade do usuário em cada rota que acesse dados pessoais.
+  7. Utilizar consultas preparadas para prevenir SQL Injection.
+  8. Retornar códigos HTTP apropriados sem expor segredos, hashes ou detalhes internos.
 - **Critérios de Aceitação:**
   - Requisição com payload malicioso → Sistema rejeita.
   - Senhas armazenadas → Apenas em formato hash.
   - Cabeçalhos de segurança → Presentes em todas as respostas.
+  - Requisição privada sem sessão ou com ID de outro usuário → Acesso negado.
+  - Segredo de sessão ausente em produção → Backend não inicia.
 
 ---
 

@@ -427,7 +427,7 @@ Legenda de Multiplicidade:
       │                  │                   │◀───────────────────│
       │                  │                   │                    │
       │                  │                   │ 5. Compara hash    │
-      │                  │                   │ (crypto SHA-256)   │
+       │                  │                   │ (crypto scrypt)    │
       │                  │                   │                    │
       │                  │ 6. Retorna dados  │                    │
       │                  │ {id, nome, email} │                    │
@@ -476,9 +476,9 @@ Legenda de Multiplicidade:
 #### 4.1.2 Regras de Negócio
 
 - RN01.01: O email deve ser único — rejeição com HTTP 409 se duplicado
-- RN01.02: Senhas armazenadas exclusivamente como hash SHA-256 (nunca texto plano)
+- RN01.02: Senhas armazenadas com scrypt e salt individual; hashes SHA-256 legados são atualizados após login válido
 - RN01.03: Mensagens de erro de login devem ser genéricas (não revelar se email ou senha está errado)
-- RN01.04: Sessão mantida via estado no frontend (localStorage); logout limpa o estado
+- RN01.04: Sessão mantida por cookie HttpOnly validado pelo backend; logout revoga o registro no banco
 - RN01.05: Campos nome e email são obrigatórios; idade e ocupação são obrigatórios no cadastro
 - RN01.06: Validação de payload limitada a tamanhos razoáveis (max 1KB por requisição)
 
@@ -772,10 +772,20 @@ dailymind/
 | `id` | INTEGER | PRIMARY KEY, AUTOINCREMENT | Identificador único do usuário |
 | `nome` | TEXT | NOT NULL, MAX 100 | Nome completo do usuário |
 | `email` | TEXT | NOT NULL, UNIQUE | Endereço de e-mail (chave de login) |
-| `senha` | TEXT | NOT NULL | Hash SHA-256 da senha (nunca texto plano) |
+| `senha` | TEXT | NOT NULL | Hash scrypt com salt individual; nunca texto puro |
 | `idade` | INTEGER | NOT NULL, > 0 AND <= 150 | Idade do usuário |
 | `ocupacao` | TEXT | NOT NULL, MAX 100 | Ocupação profissional/acadêmica |
 | `data_cadastro` | TEXT | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Data/hora do cadastro (ISO 8601) |
+
+### 6.1.1 Tabela `sessoes`
+
+| Campo | Tipo | Constraints | Descrição |
+|-------|------|-------------|-----------|
+| `id` | TEXT | PRIMARY KEY | Identificador opaco da sessão |
+| `usuario_id` | INTEGER | NOT NULL, FOREIGN KEY → usuarios(id) ON DELETE CASCADE | Dono da sessão |
+| `token_hash` | TEXT | NOT NULL | HMAC do token; o token original não é armazenado |
+| `expira_em` | TEXT | NOT NULL | Expiração da sessão em ISO 8601 |
+| `criada_em` | TEXT | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Data/hora de criação |
 
 ### 6.2 Tabela `humor`
 
@@ -863,14 +873,14 @@ dailymind/
 
 | Tecnologia | Versão | Finalidade |
 |-----------|--------|------------|
-| Node.js | 18+ LTS | Ambiente de execução |
+| Node.js | 22+ LTS | Ambiente de execução |
 | Express.js | 4.x | Framework HTTP/routing |
 | better-sqlite3 | 9.x+ | Driver SQLite síncrono |
 | Helmet | 7.x+ | Cabeçalhos de segurança HTTP |
 | CORS | 2.x | Controle de origens |
 | validator | 13.x+ | Validação/sanitização de dados |
 | dotenv | 16.x | Variáveis de ambiente |
-| Crypto (内置) | — | Hash SHA-256 de senhas |
+| Crypto (内置) | — | Hash de senha scrypt, tokens aleatórios e HMAC de sessão |
 
 ### 7.3 Banco de Dados
 
@@ -1079,12 +1089,36 @@ dailymind/
 | Critério | Métrica | Nível Aceitável |
 |----------|---------|-----------------|
 | Tempo de resposta | Latência da API | < 500ms |
-| Segurança de senhas | Armazenamento | Hash SHA-256 |
+| Segurança de senhas | Armazenamento | Hash adaptativo scrypt com salt individual; nunca armazenar senha em texto puro ou SHA-256 simples |
 | Validação de entrada | SQL Injection/XSS | 0 vulnerabilidades |
 | Acessibilidade | WCAG 2.2 | Nível AA |
 | Design anti-sobrecarga | Avaliação visual | Sem alertas punitivos |
 | Compatibilidade | Navegadores | Chrome, Firefox, Safari, Edge (2 últimos estáveis) |
 | Responsividade | Layout | Desktop (mín. 1024px) |
+
+### 11.3 Segurança de Dados, Segredos e Tokens
+
+Os registros de humor, sono, energia e rotina são dados pessoais e potencialmente sensíveis. O sistema deve limitar o acesso a esses dados ao próprio usuário autenticado e às operações necessárias para cada funcionalidade.
+
+**Banco de dados SQLite:**
+- O SQLite utilizado neste projeto é um arquivo local (`api/db/dailymind.db`) e não possui usuário, senha ou token de conexão próprios. A proteção de acesso deve ser feita pelo sistema operacional e pelo servidor: restringir permissões do arquivo e da pasta `api/db` à conta que executa o backend e não servir nem publicar esse diretório.
+- Proteger também os arquivos auxiliares do modo WAL (`-wal` e `-shm`) e os backups; mantê-los fora do controle de versão e de diretórios públicos. Backups devem ter acesso restrito, armazenamento protegido e política de retenção definida.
+- Usar consultas parametrizadas, validar entradas e garantir que cada leitura ou alteração de dados esteja vinculada ao usuário autenticado. Não confiar em identificadores de usuário enviados pelo cliente como prova de autorização.
+
+**Segredos do backend:**
+- Segredos, credenciais e configurações privadas devem ser fornecidos por variáveis de ambiente (`.env` somente em desenvolvimento, excluído do Git) ou por um gerenciador de segredos no ambiente implantado. O arquivo de exemplo pode conter apenas valores fictícios.
+- Nunca incluir segredos em código-fonte, frontend, respostas da API, logs ou repositório. Em caso de exposição, revogar e substituir o segredo afetado.
+- Restringir CORS às origens autorizadas em produção e usar HTTPS em todas as comunicações entre navegador e API.
+
+**Autenticação e tokens:**
+- O backend emite tokens opacos aleatórios após cadastro ou login, guarda somente o HMAC do token no SQLite e valida a sessão em cada rota privada. As sessões expiram após sete dias, podem ser revogadas no logout e são vinculadas ao usuário autenticado; IDs enviados pelo cliente não concedem acesso a dados de outra conta.
+- A chave `CHAVE_SESSAO` deve conter pelo menos 32 bytes aleatórios, existir somente nas variáveis de ambiente/gerenciador de segredos do backend e nunca ser enviada ao navegador ou versionada no Git. Em produção, a aplicação não inicia sem essa chave; em desenvolvimento, a chave efêmera é regenerada a cada inicialização.
+- O token é transportado em cookie `HttpOnly`, `SameSite=Lax` e `Secure` em produção. CORS aceita apenas origens configuradas, as requisições do navegador incluem credenciais e o frontend não persiste identidade nem token em `localStorage`.
+
+**Senhas, privacidade e operação:**
+- Armazenar senhas exclusivamente com scrypt e salt exclusivo; SHA-256 simples não é adequado para senhas. Hashes legados são substituídos por scrypt no próximo login válido. Nunca retornar hashes pela API.
+- Minimizar os dados pessoais coletados, não registrar conteúdo pessoal desnecessário e apresentar mensagens de erro sem detalhes internos. Aplicar controle de acesso, atualizações de dependências e procedimento de resposta a incidentes.
+- Quando houver dados reais em ambiente de produção, avaliar criptografia em repouso para o volume/arquivo e para backups, além de requisitos legais de privacidade aplicáveis.
 
 ---
 
@@ -1096,7 +1130,7 @@ dailymind/
 | R01 | Vulnerabilidades de segurança | Alto | Média | Helmet, validação rigorosa, consultas preparadas |
 | R03 | Sobrecarga visual para o público-alvo | Alto | Média | Design iterativo com foco em anti-sobrecarga; testes com usuários |
 | R04 | Escalabilidade limitada (SQLite) | Médio | Alta | Aceitável para escala acadêmica; migração possível se necessário |
-| R05 | Perda de dados de sessão no frontend | Médio | Baixa | Persistência em localStorage; tratamento de erros |
+| R05 | Sessão expirada ou revogada | Médio | Baixa | Cookie HttpOnly com expiração; validação no backend e novo login |
 
 ---
 

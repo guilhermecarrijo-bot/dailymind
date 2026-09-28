@@ -1,67 +1,110 @@
 const banco = require('../config/conexaoBanco')
 const crypto = require('crypto')
+const { promisify } = require('util')
+const validator = require('validator')
+const { criarSessao, encerrarSessao } = require('../seguranca/sessoes')
 
-function hashSenha(senha) {
-  return crypto.createHash('sha256').update(senha).digest('hex')
+const scrypt = promisify(crypto.scrypt)
+const PARAMETROS_SCRYPT = { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 }
+
+async function hashSenha(senha) {
+  const salt = crypto.randomBytes(16)
+  const hash = await scrypt(senha, salt, 64, PARAMETROS_SCRYPT)
+  return `scrypt$${PARAMETROS_SCRYPT.N}$${PARAMETROS_SCRYPT.r}$${PARAMETROS_SCRYPT.p}$${salt.toString('hex')}$${hash.toString('hex')}`
 }
 
-function cadastrarUsuario(req, res) {
+async function verificarSenha(senha, armazenada) {
+  if (armazenada.startsWith('scrypt$')) {
+    const [algoritmo, custo, blocos, paralelismo, saltHex, hashHex] = armazenada.split('$')
+    if (algoritmo !== 'scrypt' || Number(custo) !== PARAMETROS_SCRYPT.N || Number(blocos) !== PARAMETROS_SCRYPT.r || Number(paralelismo) !== PARAMETROS_SCRYPT.p) {
+      return { valida: false, legado: false }
+    }
+    const hashArmazenado = Buffer.from(hashHex, 'hex')
+    const hashRecebido = await scrypt(senha, Buffer.from(saltHex, 'hex'), hashArmazenado.length, PARAMETROS_SCRYPT)
+    return {
+      valida: hashArmazenado.length === hashRecebido.length && crypto.timingSafeEqual(hashArmazenado, hashRecebido),
+      legado: false
+    }
+  }
+
+  const hashLegado = crypto.createHash('sha256').update(senha).digest()
+  const hashArmazenado = Buffer.from(armazenada, 'hex')
+  return {
+    valida: hashArmazenado.length === hashLegado.length && crypto.timingSafeEqual(hashArmazenado, hashLegado),
+    legado: true
+  }
+}
+
+function selecionarUsuario(id) {
+  return banco.prepare(
+    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil FROM usuarios WHERE id = ?'
+  ).get(id)
+}
+
+async function cadastrarUsuario(req, res) {
   const { nome, email, senha, idade, ocupacao } = req.body
+  const emailNormalizado = typeof email === 'string' ? email.trim().toLowerCase() : ''
 
   if (typeof nome !== 'string' || nome.trim().length < 3) {
     return res.status(422).json({ sucesso: false, mensagem: 'Nome deve ter pelo menos 3 caracteres.' })
   }
-  if (typeof email !== 'string' || !email.includes('@')) {
+  if (!validator.isEmail(emailNormalizado)) {
     return res.status(422).json({ sucesso: false, mensagem: 'E-mail inválido.' })
   }
-  if (typeof senha !== 'string' || senha.length < 6) {
-    return res.status(422).json({ sucesso: false, mensagem: 'Senha deve ter pelo menos 6 caracteres.' })
+  if (typeof senha !== 'string' || senha.length < 8 || senha.length > 128) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A senha deve ter entre 8 e 128 caracteres.' })
   }
 
-  const existente = banco.prepare('SELECT id FROM usuarios WHERE email = ?').get(email)
+  const existente = banco.prepare('SELECT id FROM usuarios WHERE email = ?').get(emailNormalizado)
   if (existente) {
     return res.status(409).json({ sucesso: false, mensagem: 'E-mail já cadastrado.' })
   }
 
-  const senhaHash = hashSenha(senha)
+  const senhaHash = await hashSenha(senha)
   const inserir = banco.prepare(
     'INSERT INTO usuarios (nome, email, senha, idade, ocupacao) VALUES (?, ?, ?, ?, ?)'
   )
-  const resultado = inserir.run(nome, email, senhaHash, idade || null, ocupacao || null)
+  const resultado = inserir.run(nome.trim(), emailNormalizado, senhaHash, idade || null, ocupacao || null)
+  criarSessao(Number(resultado.lastInsertRowid), res)
+  const usuario = selecionarUsuario(Number(resultado.lastInsertRowid))
 
   res.status(201).json({
     sucesso: true,
     mensagem: 'Conta criada com sucesso!',
-    usuario: {
-      id: Number(resultado.lastInsertRowid),
-      nome,
-      email,
-      idade: idade || null,
-      ocupacao: ocupacao || null,
-      bio: null,
-      foto_perfil: null,
-      banner_perfil: null
-    }
+    usuario
   })
 }
 
-function loginUsuario(req, res) {
+async function loginUsuario(req, res) {
   const { email, senha } = req.body
+  const emailNormalizado = typeof email === 'string' ? email.trim().toLowerCase() : ''
 
-  if (!email || !senha) {
+  if (!emailNormalizado || typeof senha !== 'string') {
     return res.status(422).json({ sucesso: false, mensagem: 'E-mail e senha são obrigatórios.' })
   }
 
-  const senhaHash = hashSenha(senha)
-  const usuario = banco.prepare(
-    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil FROM usuarios WHERE email = ? AND senha = ?'
-  ).get(email, senhaHash)
+  const conta = banco.prepare('SELECT id, senha FROM usuarios WHERE email = ?').get(emailNormalizado)
+  const resultadoSenha = conta ? await verificarSenha(senha, conta.senha) : { valida: false, legado: false }
 
-  if (!usuario) {
+  if (!conta || !resultadoSenha.valida) {
     return res.status(401).json({ sucesso: false, mensagem: 'E-mail ou senha incorretos.' })
   }
 
-  res.json({ sucesso: true, mensagem: 'Login realizado com sucesso!', usuario })
+  if (resultadoSenha.legado) {
+    banco.prepare('UPDATE usuarios SET senha = ? WHERE id = ?').run(await hashSenha(senha), conta.id)
+  }
+
+  criarSessao(conta.id, res)
+  res.json({ sucesso: true, mensagem: 'Login realizado com sucesso!', usuario: selecionarUsuario(conta.id) })
+}
+
+function consultarSessao(req, res) {
+  res.json({ sucesso: true, usuario: req.usuario })
+}
+
+function logoutUsuario(req, res) {
+  encerrarSessao(req, res)
+  res.json({ sucesso: true, mensagem: 'Sessão encerrada.' })
 }
 
 function consultarPerfil(req, res) {
@@ -131,4 +174,4 @@ function atualizarPerfil(req, res) {
   res.json({ sucesso: true, mensagem: 'Perfil atualizado!', usuario })
 }
 
-module.exports = { cadastrarUsuario, loginUsuario, consultarPerfil, atualizarPerfil }
+module.exports = { cadastrarUsuario, loginUsuario, consultarPerfil, atualizarPerfil, consultarSessao, logoutUsuario }

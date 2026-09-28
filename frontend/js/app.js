@@ -208,7 +208,8 @@ function exibirToast(mensagem, tipo = 'sucesso') {
 async function api(metodo, endpoint, dados = null) {
   const opcoes = {
     method: metodo,
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
   }
   if (dados) opcoes.body = JSON.stringify(dados)
   try {
@@ -252,7 +253,6 @@ document.getElementById('form-login').querySelector('form').addEventListener('su
   if (resultado.sucesso) {
     sessaoPerfil += 1
     usuarioAtual = resultado.usuario
-    localStorage.setItem('dailymind_usuario', JSON.stringify(usuarioAtual))
     exibirToast(`${t('bemVindo')}, ${usuarioAtual.nome}! 🧠`)
     entrarApp()
   } else {
@@ -278,7 +278,6 @@ document.getElementById('form-cadastro').querySelector('form').addEventListener(
   if (resultado.sucesso) {
     sessaoPerfil += 1
     usuarioAtual = resultado.usuario
-    localStorage.setItem('dailymind_usuario', JSON.stringify(usuarioAtual))
     exibirToast(`${t('contaCriada')} 🎉`)
     entrarApp()
   } else {
@@ -286,14 +285,14 @@ document.getElementById('form-cadastro').querySelector('form').addEventListener(
   }
 })
 
-function fazerLogout() {
+async function fazerLogout() {
+  await api('POST', '/usuarios/logout')
   sessaoPerfil += 1
   usuarioAtual = null
   perfilAlteradoLocalmente = false
   imagensPerfilCarregando = 0
   limparImagensPerfil()
   pararAtualizacaoSugestoes()
-  localStorage.removeItem('dailymind_usuario')
   fecharNotificacoes()
   ;['tela-dashboard', 'tela-graficos', 'tela-lembretes', 'tela-perfil', 'tela-configuracoes'].forEach((id) => {
     document.getElementById(id).classList.add('hidden')
@@ -1021,7 +1020,6 @@ async function carregarPerfil() {
   }
 
   usuarioAtual = resultado.usuario
-  salvarUsuarioLocalmente(usuarioAtual)
 
   document.getElementById('perfil-nome').value = usuarioAtual.nome || ''
   document.getElementById('perfil-email').value = usuarioAtual.email || ''
@@ -1070,21 +1068,6 @@ function atualizarPreviaPerfil() {
     bannerImagem.removeAttribute('src')
     bannerImagem.hidden = true
     banner.classList.remove('has-image')
-  }
-}
-
-function salvarUsuarioLocalmente(usuario) {
-  try {
-    localStorage.setItem('dailymind_usuario', JSON.stringify(usuario))
-  } catch (erro) {
-    try {
-      localStorage.setItem('dailymind_usuario', JSON.stringify({
-        ...usuario,
-        foto_perfil: null,
-        banner_perfil: null
-      }))
-    } catch (erroFallback) {
-    }
   }
 }
 
@@ -1227,7 +1210,6 @@ document.getElementById('form-perfil').addEventListener('submit', async (e) => {
     if (resultado.sucesso) {
       usuarioAtual = resultado.usuario
       perfilAlteradoLocalmente = false
-      salvarUsuarioLocalmente(usuarioAtual)
       document.getElementById('nome-usuario').textContent = usuarioAtual.nome
       document.getElementById('inicial-usuario').textContent = usuarioAtual.nome.charAt(0).toUpperCase()
       atualizarPreviaPerfil()
@@ -1285,17 +1267,14 @@ async function carregarDados() {
 }
 
 // Verificar se já está logado
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   configuracoes = lerConfiguracoes()
   aplicarConfiguracoes()
 
-  const salvo = localStorage.getItem('dailymind_usuario')
-  if (salvo) {
-    try {
-      usuarioAtual = JSON.parse(salvo)
-      if (usuarioAtual && usuarioAtual.id && usuarioAtual.nome) entrarApp()
-    } catch (erro) {
-      localStorage.removeItem('dailymind_usuario')
-    }
+  localStorage.removeItem('dailymind_usuario')
+  const resultado = await api('GET', '/usuarios/sessao')
+  if (resultado.sucesso && resultado.usuario?.id && resultado.usuario?.nome) {
+    usuarioAtual = resultado.usuario
+    entrarApp()
   }
 })

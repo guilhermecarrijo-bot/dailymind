@@ -1,5 +1,7 @@
 const { Router } = require('express')
-const { cadastrarUsuario, loginUsuario, consultarPerfil, atualizarPerfil } = require('../controladores/usuarioControlador')
+const { cadastrarUsuario, loginUsuario, consultarPerfil, atualizarPerfil, consultarSessao, logoutUsuario } = require('../controladores/usuarioControlador')
+const { exigirAutenticacao } = require('../seguranca/sessoes')
+const autorizarAcesso = require('../seguranca/autorizarAcesso')
 const { registrarHumor, listarHumor, obterHumorHoje, editarHumor, removerHumor } = require('../controladores/humorControlador')
 const { registrarSono, listarSono, obterSonoHoje, editarSono, removerSono } = require('../controladores/sonoControlador')
 const { registrarEnergia, listarEnergia, obterEnergiaHoje, editarEnergia, removerEnergia } = require('../controladores/energiaControlador')
@@ -27,10 +29,19 @@ const {
 } = require('../controladores/metaControlador')
 
 const rotas = Router()
+const lidarComErroAssincrono = controlador => (req, res, next) => {
+  Promise.resolve(controlador(req, res, next)).catch(next)
+}
 
 // Usuários
-rotas.post('/usuarios/cadastro', cadastrarUsuario)
-rotas.post('/usuarios/login', loginUsuario)
+rotas.post('/usuarios/cadastro', lidarComErroAssincrono(cadastrarUsuario))
+rotas.post('/usuarios/login', lidarComErroAssincrono(loginUsuario))
+rotas.get('/sugestoes', listarTodasSugestoes)
+
+rotas.use(exigirAutenticacao, autorizarAcesso)
+
+rotas.get('/usuarios/sessao', consultarSessao)
+rotas.post('/usuarios/logout', logoutUsuario)
 rotas.get('/usuarios/:id', consultarPerfil)
 rotas.put('/usuarios/perfil', atualizarPerfil)
 
@@ -84,6 +95,5 @@ rotas.delete('/metas/:id', removerMeta)
 
 // Sugestões
 rotas.get('/sugestoes/:usuario_id', obterSugestoes)
-rotas.get('/sugestoes', listarTodasSugestoes)
 
 module.exports = rotas

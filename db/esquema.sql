@@ -14,6 +14,17 @@ CREATE TABLE IF NOT EXISTS usuarios (
   data_cadastro TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
 );
 
+CREATE TABLE IF NOT EXISTS sessoes (
+  id              TEXT PRIMARY KEY,
+  usuario_id      INTEGER NOT NULL,
+  token_hash      TEXT    NOT NULL,
+  expira_em       TEXT    NOT NULL,
+  criada_em       TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_sessoes_usuario ON sessoes(usuario_id);
+
 CREATE TABLE IF NOT EXISTS humor (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   usuario_id INTEGER NOT NULL,

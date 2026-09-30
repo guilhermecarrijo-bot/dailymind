@@ -2,7 +2,8 @@
 
 **Projeto:** DailyMind  
 **Disciplina:** Fábrica de Soluções Inteligentes  
-**Professores:** André Lôbo  
+**Professores:** André Lôbo e Carlos Eduardo.  
+**Integrantes:** Ana Eduarda Sousa Silva Soares, Byank Chrystinny Santana Lima, Emanuele Oliveira Andrade, Guilherme dos Santos Carrijo e Maria Eduarda Pereira Sastre.
 **Versão do Modelo:** UML 2.6.1 (2026)  
 **Data de Elaboração:** 31/08/2026  
 **Documentos Base:** Documentação Total DailyMind, Requisitos de Usuário, Requisitos de Sistema

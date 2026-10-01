@@ -15,6 +15,7 @@ let sugestoesCarregando = false
 let proximaSugestaoEm = 120
 let sessaoPerfil = 0
 let perfilAlteradoLocalmente = false
+let filtroTarefas = 'todas'
 let configuracoes = {
   tema: 'claro',
   idioma: 'pt-BR',
@@ -33,6 +34,7 @@ const traducoes = {
     altoContraste: 'Alto contraste', altoContrasteDescricao: 'Reforça a leitura de textos e bordas.', reduzirMovimento: 'Reduzir movimento', reduzirMovimentoDescricao: 'Diminui transições e animações.', salvoConfiguracoes: 'Preferências salvas.',
     tagline: 'Cuide da sua mente, um dia de cada vez', bomDia: 'Bom dia,', atualizar: 'Atualizar →', entrar: 'Entrar', criarConta: 'Criar Conta', email: 'E-mail', senha: 'Senha', nomeCompleto: 'Nome completo', idadeOpcional: 'Idade (opcional)', ocupacaoOpcional: 'Ocupação (opcional)', criarMinhaConta: 'Criar minha conta', naoTemConta: 'Não tem conta?', jaTemConta: 'Já tem conta?',
     comoVoceEsta: 'Como você está hoje?', humorHoje: 'Humor de hoje', sono: 'Sono', energia: 'Energia', editar: 'Editar', registrar: 'Toque para registrar', lembretesHoje: 'Lembretes de hoje', novo: '+ Novo', sugestoes: 'Sugestões para você', sugestoesDescricao: 'Ideias pequenas para cuidar de você no seu ritmo.', atualizarAgora: 'Atualizar agora', atualizarSugestoes: 'Atualizar sugestões', atualizando: 'Atualizando...', proximaEm: 'Próxima em', graficosTitulo: 'Seus Gráficos', humor30: 'Humor nos últimos 30 dias', sono30: 'Sono nos últimos 30 dias', energia30: 'Energia nos últimos 30 dias', todosLembretes: 'Todos os Lembretes', nenhumLembrete: 'Nenhum lembrete criado',
+    erroGraficos: 'Não foi possível carregar os gráficos agora.',
     meuPerfil: 'Meu Perfil', perfilDescricao: 'Suas informações ficam salvas na sua conta.', salvarAlteracoes: 'Salvar alterações', sair: 'Sair da conta', biografia: 'Biografia', ate280: 'Até 280 caracteres', fechar: 'Fechar', confirmar: 'Confirmar', cancelar: 'Cancelar', qualidadePercebida: 'Qualidade percebida', nivelEnergia: 'Nível de energia', horasSono: 'Horas de sono', novoLembrete: 'Novo Lembrete', titulo: 'Título', objetoDeixado: 'Objeto deixado (opcional)', horarioDeixado: 'Que horas deixou? (opcional)', icone: 'Ícone', criarLembrete: 'Criar lembrete',
     nenhumaNotificacao: 'Nenhuma notificação pendente.', notificacoes: 'Notificações', voltarDashboard: 'Voltar', objeto: 'Objeto', horario: 'Horário', lembretePendente: 'Lembrete pendente', tudoEmDia: 'Tudo em dia. Nenhuma notificação pendente.', removerLembrete: 'Remover este lembrete?',
     ritmoDescanso: 'Ritmo de descanso', historicoSono: 'Histórico de sono', ajustarRegistro: 'Ajuste qualquer registro quando precisar.', disposicaoDiaria: 'Disposição diária', historicoEnergia: 'Histórico de energia', verEvolucao: 'Veja a evolução e altere o que foi anotado.', qualidade: 'Qualidade', nenhumSono: 'Nenhum registro de sono ainda.', nenhumaEnergia: 'Nenhum registro de energia ainda.', paraVoce: 'Para você', carregarSugestoes: 'Registre seu humor para ver sugestões', erroSugestoes: 'Não foi possível carregar sugestões agora.', unidadeHoras: 'horas', anos: 'anos', bemVindo: 'Bem-vindo', contaCriada: 'Conta criada com sucesso!', humorAtualizado: 'Humor atualizado', erroHumor: 'Não foi possível registrar seu humor.', sonoAtualizado: 'Registro de sono atualizado!', sonoRegistrado: 'Sono registrado!', energiaAtualizada: 'Registro de energia atualizado!', energiaRegistrada: 'Energia registrada!', lembreteCriado: 'Lembrete criado!', lembreteRemovido: 'Lembrete removido', salvando: 'Salvando...',
@@ -46,7 +48,8 @@ const traducoes = {
     acessibilidadeTitulo: 'Accessibility', acessibilidadeDescricao: 'Adjust the experience for more comfort.', fonteMaior: 'Larger text', fonteMaiorDescricao: 'Increase text size.',
     altoContraste: 'High contrast', altoContrasteDescricao: 'Strengthen text and border contrast.', reduzirMovimento: 'Reduce motion', reduzirMovimentoDescricao: 'Reduce transitions and animations.', salvoConfiguracoes: 'Preferences saved.',
     tagline: 'Care for your mind, one day at a time', bomDia: 'Good morning,', atualizar: 'Update →', entrar: 'Sign in', criarConta: 'Create account', email: 'Email', senha: 'Password', nomeCompleto: 'Full name', idadeOpcional: 'Age (optional)', ocupacaoOpcional: 'Occupation (optional)', criarMinhaConta: 'Create my account', naoTemConta: 'Do not have an account?', jaTemConta: 'Already have an account?',
-    comoVoceEsta: 'How are you feeling today?', humorHoje: "Today's mood", sono: 'Sleep', energia: 'Energy', editar: 'Edit', registrar: 'Tap to record', lembretesHoje: "Today's reminders", novo: '+ New', sugestoes: 'Suggestions for you', sugestoesDescricao: 'Small ideas to care for yourself at your own pace.', atualizarAgora: 'Refresh now', atualizarSugestoes: 'Refresh suggestions', atualizando: 'Refreshing...', proximaEm: 'Next in', graficosTitulo: 'Your charts', humor30: 'Mood in the last 30 days', sono30: 'Sleep in the last 30 days', energia30: 'Energy in the last 30 days', todosLembretes: 'All reminders', nenhumLembrete: 'No reminders created',
+    comoVoceEsta: 'How are you feeling today?', humorHoje: 'Today\'s mood', sono: 'Sleep', energia: 'Energy', editar: 'Edit', registrar: 'Tap to record', lembretesHoje: 'Today\'s reminders', novo: '+ New', sugestoes: 'Suggestions for you', sugestoesDescricao: 'Small ideas to care for yourself at your own pace.', atualizarAgora: 'Refresh now', atualizarSugestoes: 'Refresh suggestions', atualizando: 'Refreshing...', proximaEm: 'Next in', graficosTitulo: 'Your charts', humor30: 'Mood in the last 30 days', sono30: 'Sleep in the last 30 days', energia30: 'Energy in the last 30 days', todosLembretes: 'All reminders', nenhumLembrete: 'No reminders created',
+    erroGraficos: 'Charts could not be loaded right now.',
     meuPerfil: 'My profile', perfilDescricao: 'Your information is saved to your account.', salvarAlteracoes: 'Save changes', sair: 'Sign out', biografia: 'Bio', ate280: 'Up to 280 characters', fechar: 'Close', confirmar: 'Confirm', cancelar: 'Cancel', qualidadePercebida: 'Perceived quality', nivelEnergia: 'Energy level', horasSono: 'Sleep hours', novoLembrete: 'New reminder', titulo: 'Title', objetoDeixado: 'Object left (optional)', horarioDeixado: 'What time did you leave it? (optional)', icone: 'Icon', criarLembrete: 'Create reminder',
     nenhumaNotificacao: 'No pending notifications.', notificacoes: 'Notifications', voltarDashboard: 'Back', objeto: 'Object', horario: 'Time', lembretePendente: 'Pending reminder', tudoEmDia: 'All clear. No pending notifications.', removerLembrete: 'Remove this reminder?',
     ritmoDescanso: 'Rest rhythm', historicoSono: 'Sleep history', ajustarRegistro: 'Adjust any record whenever you need.', disposicaoDiaria: 'Daily energy', historicoEnergia: 'Energy history', verEvolucao: 'See your progress and update past entries.', qualidade: 'Quality', nenhumSono: 'No sleep records yet.', nenhumaEnergia: 'No energy records yet.', paraVoce: 'For you', carregarSugestoes: 'Record your mood to see suggestions', erroSugestoes: 'Suggestions could not be loaded.', unidadeHoras: 'hours', anos: 'years', bemVindo: 'Welcome', contaCriada: 'Account created successfully!', humorAtualizado: 'Mood updated', erroHumor: 'Your mood could not be saved.', sonoAtualizado: 'Sleep record updated!', sonoRegistrado: 'Sleep recorded!', energiaAtualizada: 'Energy record updated!', energiaRegistrada: 'Energy recorded!', lembreteCriado: 'Reminder created!', lembreteRemovido: 'Reminder removed', salvando: 'Saving...', carregando: 'Loading records...', semLembretes: 'No reminders yet', naoFoiPossivel: 'Notifications could not be loaded.', erroSessao: 'Your session expired. Sign in again to edit your profile.', salvoAgora: 'Saved now', prontoSalvar: 'Ready to save', imagemGrande: 'Each image must be at most 900 KB.', aguardeImagem: 'Wait for the image to finish loading.', naoSalvo: 'Not saved', semRegistros: 'No sleep records yet.', registradoHoje: 'Recorded today', aindaNaoRegistrado: 'Not recorded yet', sincronizado: 'Synced', alterarBanner: 'Change banner', alterarFoto: 'Change photo', humorCheckin: 'A quick check-in to listen to yourself.', humorMuda: 'Your record can change throughout the day.'
@@ -60,9 +63,10 @@ const traducoes = {
     altoContraste: 'Alto contraste', altoContrasteDescricao: 'Refuerza el contraste de textos y bordes.', reduzirMovimento: 'Reducir movimiento', reduzirMovimentoDescricao: 'Reduce transiciones y animaciones.', salvoConfiguracoes: 'Preferencias guardadas.',
     tagline: 'Cuida tu mente, un día a la vez', bomDia: 'Buenos días,', atualizar: 'Actualizar →', entrar: 'Entrar', criarConta: 'Crear cuenta', email: 'Correo electrónico', senha: 'Contraseña', nomeCompleto: 'Nombre completo', idadeOpcional: 'Edad (opcional)', ocupacaoOpcional: 'Ocupación (opcional)', criarMinhaConta: 'Crear mi cuenta', naoTemConta: '¿No tienes una cuenta?', jaTemConta: '¿Ya tienes una cuenta?',
     comoVoceEsta: '¿Cómo te sientes hoy?', humorHoje: 'Estado de ánimo de hoy', sono: 'Sueño', energia: 'Energía', editar: 'Editar', registrar: 'Toca para registrar', lembretesHoje: 'Recordatorios de hoy', novo: '+ Nuevo', sugestoes: 'Sugerencias para ti', sugestoesDescricao: 'Ideas pequeñas para cuidarte a tu ritmo.', atualizarAgora: 'Actualizar ahora', atualizarSugestoes: 'Actualizar sugerencias', atualizando: 'Actualizando...', proximaEm: 'Siguiente en', graficosTitulo: 'Tus gráficos', humor30: 'Ánimo en los últimos 30 días', sono30: 'Sueño en los últimos 30 días', energia30: 'Energía en los últimos 30 días', todosLembretes: 'Todos los recordatorios', nenhumLembrete: 'No hay recordatorios creados',
+    erroGraficos: 'No se pudieron cargar los gráficos ahora.',
     meuPerfil: 'Mi perfil', perfilDescricao: 'Tu información se guarda en tu cuenta.', salvarAlteracoes: 'Guardar cambios', sair: 'Cerrar sesión', biografia: 'Biografía', ate280: 'Hasta 280 caracteres', fechar: 'Cerrar', confirmar: 'Confirmar', cancelar: 'Cancelar', qualidadePercebida: 'Calidad percibida', nivelEnergia: 'Nivel de energía', horasSono: 'Horas de sueño', novoLembrete: 'Nuevo recordatorio', titulo: 'Título', objetoDeixado: 'Objeto dejado (opcional)', horarioDeixado: '¿A qué hora lo dejaste? (opcional)', icone: 'Icono', criarLembrete: 'Crear recordatorio',
     nenhumaNotificacao: 'No hay notificaciones pendientes.', notificacoes: 'Notificaciones', voltarDashboard: 'Volver', objeto: 'Objeto', horario: 'Horario', lembretePendente: 'Recordatorio pendiente', tudoEmDia: 'Todo al día. No hay notificaciones pendientes.', removerLembrete: '¿Eliminar este recordatorio?',
-    ritmoDescanso: 'Ritmo de descanso', historicoSono: 'Historial de sueño', ajustarRegistro: 'Ajusta cualquier registro cuando lo necesites.', disposicaoDiaria: 'Disposición diaria', historicoEnergia: 'Historial de energía', verEvolucao: 'Mira tu evolución y actualiza tus registros.', qualidade: 'Calidad', nenhumSono: 'Aún no hay registros de sueño.', nenhumaEnergia: 'Aún no hay registros de energía.', paraVoce: 'Para ti', carregarSugestoes: 'Registra tu ánimo para ver sugerencias', erroSugestoes: 'No se pudieron cargar las sugerencias.', unidadeHoras: 'horas', anos: 'años', bemVindo: 'Bienvenido', contaCriada: '¡Cuenta creada!', humorAtualizado: 'Ánimo actualizado', erroHumor: 'No se pudo guardar tu ánimo.', sonoAtualizado: '¡Registro de sueño actualizado!', sonoRegistrado: '¡Sueño registrado!', energiaAtualizada: '¡Registro de energía actualizado!', energiaRegistrada: '¡Energía registrada!', lembreteCriado: '¡Recordatorio creado!', lembreteRemovido: 'Recordatorio eliminado', salvando: 'Guardando...', carregando: 'Cargando registros...', semLembretes: 'Aún no hay recordatorios', naoFoiPossivel: 'No se pudieron cargar las notificaciones.', erroSessao: 'Tu sesión expiró. Entra de nuevo para editar tu perfil.', salvoAgora: 'Guardado ahora', prontoSalvar: 'Listo para guardar', imagemGrande: 'Cada imagen debe pesar como máximo 900 KB.', aguardeImagem: 'Espera a que la imagen termine de cargar.', naoSalvo: 'No guardado', semRegistros: 'Aún no hay registros de sueño.', registradoHoje: 'Registrado hoy', aindaNaoRegistrado: 'Aún no registrado', sincronizado: 'Sincronizado', alterarBanner: 'Cambiar banner', alterarFoto: 'Cambiar foto', humorCheckin: 'Un check-in rápido para escucharte.', humorMuda: 'Tu registro puede cambiar durante el día.'
+    ritmoDescanso: 'Ritmo de descanso', historicoSono: 'Historial de sueño', ajustarRegistro: 'Ajusta cualquier registro cuando lo necesites.', disposicaoDiaria: 'Disposición diaria', historicoEnergia: 'Historial de energía', verEvolucao: 'Mira tu evolución y actualiza tus registros.', qualidade: 'Calidad', nenhumSono: 'Aún no hay registros de sueño.', nenhumaEnergia: 'Aún no hay registros de energia.', paraVoce: 'Para ti', carregarSugestoes: 'Registra tu ánimo para ver sugerencias', erroSugestoes: 'No se pudieron cargar las sugerencias.', unidadeHoras: 'horas', anos: 'años', bemVindo: 'Bienvenido', contaCriada: '¡Cuenta creada!', humorAtualizado: 'Ánimo actualizado', erroHumor: 'No se pudo guardar tu ánimo.', sonoAtualizado: '¡Registro de sueño actualizado!', sonoRegistrado: '¡Sueño registrado!', energiaAtualizada: '¡Registro de energia actualizado!', energiaRegistrada: '¡Energía registrada!', lembreteCriado: '¡Recordatorio creado!', lembreteRemovido: 'Recordatorio eliminado', salvando: 'Guardando...', carregando: 'Cargando registros...', semLembretes: 'Aún no hay recordatorios', naoFoiPossivel: 'No se pudieron cargar las notificaciones.', erroSessao: 'Tu sesión expiró. Entra de nuevo para editar tu perfil.', salvoAgora: 'Guardado ahora', prontoSalvar: 'Listo para guardar', imagemGrande: 'Cada imagen debe pesar como máximo 900 KB.', aguardeImagem: 'Espera a que la imagen termine de cargar.', naoSalvo: 'No guardado', semRegistros: 'Aún no hay registros de sueño.', registradoHoje: 'Registrado hoy', aindaNaoRegistrado: 'Aún no registrado', sincronizado: 'Sincronizado', alterarBanner: 'Cambiar banner', alterarFoto: 'Cambiar foto', humorCheckin: 'Un check-in rápido para escucharte.', humorMuda: 'Tu registro puede cambiar durante el día.'
   }
 }
 
@@ -101,7 +105,7 @@ const traducoesSugestoes = {
   },
   'Praticar respiração 4-7-8': {
     en: ['Try 4-7-8 breathing', 'Inhale for 4 seconds, hold for 7 and exhale for 8.'],
-    es: ['Practica la respiración 4-7-8', 'Inhala 4 segundos, mantén 7 y exhala 8.']
+    es: ['Practica la respiración 4-7-8', 'Inhala 4 segundos, mantén 7 y exhale 8.']
   },
   'Fazer uma pausa': {
     en: ['Take a break', 'Get some fresh air or take a short walk.'],
@@ -205,6 +209,16 @@ function exibirToast(mensagem, tipo = 'sucesso') {
   setTimeout(() => toast.classList.add('hidden'), 3000)
 }
 
+function escaparHtml(valor) {
+  return String(valor ?? '').replace(/[&<>"']/g, caractere => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[caractere])
+}
+
 async function api(metodo, endpoint, dados = null) {
   const opcoes = {
     method: metodo,
@@ -222,7 +236,11 @@ async function api(metodo, endpoint, dados = null) {
       resultado = {}
     }
     if (!resposta.ok) {
-      return { sucesso: false, mensagem: resultado.mensagem || `Não foi possível concluir a ação (${resposta.status}).` }
+      if (resposta.status === 401 && usuarioAtual && !['/usuarios/login', '/usuarios/cadastro', '/usuarios/sessao', '/usuarios/logout'].includes(endpoint)) {
+        limparSessaoLocal()
+        exibirToast(t('erroSessao'), 'erro')
+      }
+      return { sucesso: false, status: resposta.status, mensagem: resultado.mensagem || `Não foi possível concluir a ação (${resposta.status}).` }
     }
     return resultado
   } catch (erro) {
@@ -285,8 +303,7 @@ document.getElementById('form-cadastro').querySelector('form').addEventListener(
   }
 })
 
-async function fazerLogout() {
-  await api('POST', '/usuarios/logout')
+function limparSessaoLocal() {
   sessaoPerfil += 1
   usuarioAtual = null
   perfilAlteradoLocalmente = false
@@ -300,6 +317,11 @@ async function fazerLogout() {
   document.getElementById('tela-auth').classList.remove('hidden')
   document.getElementById('form-login').querySelector('form').reset()
   mostrarLogin()
+}
+
+async function fazerLogout() {
+  await api('POST', '/usuarios/logout')
+  limparSessaoLocal()
 }
 
 function entrarApp() {
@@ -674,11 +696,11 @@ async function carregarLembretes() {
       <button onclick="alternarLembrete(${l.id})" class="w-6 h-6 rounded-full border-2 ${l.concluido ? 'bg-mint-500 border-mint-500' : 'border-mint-400'} flex items-center justify-center flex-shrink-0">
         ${l.concluido ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : ''}
       </button>
-      <span class="text-xl flex-shrink-0">${l.icone}</span>
+      <span class="text-xl flex-shrink-0">${escaparHtml(l.icone)}</span>
       <div class="flex-1 min-w-0">
-        <span class="${l.concluido ? 'line-through text-gray-400' : 'text-gray-700'} block">${l.titulo}</span>
-        ${l.objeto_deixado ? `<span class="text-xs text-gray-500">📦 ${t('objeto')}: ${l.objeto_deixado}</span>` : ''}
-        ${l.hora_deixado ? `<span class="text-xs text-gray-500">⏰ ${t('horario')}: ${l.hora_deixado}</span>` : ''}
+        <span class="${l.concluido ? 'line-through text-gray-400' : 'text-gray-700'} block">${escaparHtml(l.titulo)}</span>
+        ${l.objeto_deixado ? `<span class="text-xs text-gray-500">📦 ${t('objeto')}: ${escaparHtml(l.objeto_deixado)}</span>` : ''}
+        ${l.hora_deixado ? `<span class="text-xs text-gray-500">⏰ ${t('horario')}: ${escaparHtml(l.hora_deixado)}</span>` : ''}
       </div>
       <button onclick="removerLembrete(${l.id})" class="text-gray-400 hover:text-red-500 transition flex-shrink-0">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -702,12 +724,12 @@ async function carregarTodosLembretes() {
         <button onclick="alternarLembrete(${l.id})" class="w-6 h-6 rounded-full border-2 ${l.concluido ? 'bg-mint-500 border-mint-500' : 'border-mint-400'} flex items-center justify-center flex-shrink-0">
           ${l.concluido ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : ''}
         </button>
-        <span class="text-2xl flex-shrink-0">${l.icone}</span>
+        <span class="text-2xl flex-shrink-0">${escaparHtml(l.icone)}</span>
       </div>
       <div class="flex-1 min-w-0">
-        <span class="${l.concluido ? 'line-through text-gray-400' : 'text-gray-700'} font-medium block">${l.titulo}</span>
-        ${l.objeto_deixado ? `<span class="text-sm text-gray-600 mt-1 block">📦 ${t('objeto')}: <strong>${l.objeto_deixado}</strong></span>` : ''}
-        ${l.hora_deixado ? `<span class="text-sm text-gray-600 block">⏰ ${t('horario')}: <strong>${l.hora_deixado}</strong></span>` : ''}
+        <span class="${l.concluido ? 'line-through text-gray-400' : 'text-gray-700'} font-medium block">${escaparHtml(l.titulo)}</span>
+        ${l.objeto_deixado ? `<span class="text-sm text-gray-600 mt-1 block">📦 ${t('objeto')}: <strong>${escaparHtml(l.objeto_deixado)}</strong></span>` : ''}
+        ${l.hora_deixado ? `<span class="text-sm text-gray-600 block">⏰ ${t('horario')}: <strong>${escaparHtml(l.hora_deixado)}</strong></span>` : ''}
       </div>
       <button onclick="removerLembrete(${l.id})" class="text-gray-400 hover:text-red-500 transition p-2 flex-shrink-0">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
@@ -717,7 +739,11 @@ async function carregarTodosLembretes() {
 }
 
 async function alternarLembrete(id) {
-  await api('PUT', `/lembretes/${id}/toggle`)
+  const resultado = await api('PUT', `/lembretes/${id}/toggle`)
+  if (!resultado.sucesso) {
+    exibirToast(resultado.mensagem || t('naoFoiPossivel'), 'erro')
+    return
+  }
   carregarLembretes()
   carregarTodosLembretes()
   atualizarBadge()
@@ -725,7 +751,11 @@ async function alternarLembrete(id) {
 
 async function removerLembrete(id) {
   if (confirm(t('removerLembrete'))) {
-    await api('DELETE', `/lembretes/${id}`)
+    const resultado = await api('DELETE', `/lembretes/${id}`)
+    if (!resultado.sucesso) {
+      exibirToast(resultado.mensagem || t('naoFoiPossivel'), 'erro')
+      return
+    }
     exibirToast(t('lembreteRemovido'))
     carregarLembretes()
     carregarTodosLembretes()
@@ -764,10 +794,10 @@ async function carregarNotificacoes() {
 
   lista.innerHTML = pendentes.map(lembrete => `
     <button type="button" onclick="abrirLembretesAPartirDaNotificacao()" class="notification-item">
-      <span class="text-xl">${lembrete.icone || '📌'}</span>
+      <span class="text-xl">${escaparHtml(lembrete.icone || '📌')}</span>
       <span class="min-w-0 text-left">
-        <strong class="block truncate text-gray-700">${lembrete.titulo}</strong>
-        <small class="block text-gray-500">${lembrete.hora_deixado ? `${t('horario')}: ${lembrete.hora_deixado}` : t('lembretePendente')}</small>
+        <strong class="block truncate text-gray-700">${escaparHtml(lembrete.titulo)}</strong>
+        <small class="block text-gray-500">${lembrete.hora_deixado ? `${t('horario')}: ${escaparHtml(lembrete.hora_deixado)}` : t('lembretePendente')}</small>
       </span>
     </button>
   `).join('')
@@ -919,9 +949,18 @@ async function carregarHistoricoBemEstar() {
 }
 
 async function carregarGraficos() {
-  const dadosHumor = await api('GET', `/humor/${usuarioAtual.id}`)
-  const dadosSono = await api('GET', `/sono/${usuarioAtual.id}`)
-  const dadosEnergia = await api('GET', `/energia/${usuarioAtual.id}`)
+  if (!usuarioAtual) return
+  const usuarioId = usuarioAtual.id
+  const [dadosHumor, dadosSono, dadosEnergia] = await Promise.all([
+    api('GET', `/humor/${usuarioId}`),
+    api('GET', `/sono/${usuarioId}`),
+    api('GET', `/energia/${usuarioId}`)
+  ])
+  if (!usuarioAtual || usuarioAtual.id !== usuarioId) return
+  if (![dadosHumor, dadosSono, dadosEnergia].every(resultado => resultado.sucesso && Array.isArray(resultado.dados))) {
+    exibirToast(t('erroGraficos'), 'erro')
+    return
+  }
 
   // Mapear emojis para números
   const mapaEmoji = { '😊': 5, '😔': 2, '😰': 3, '😫': 2, '😤': 1, '😐': 3 }

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nome TEXT NOT NULL CHECK (length(trim(nome)) BETWEEN 1 AND 100),
   email TEXT NOT NULL UNIQUE COLLATE NOCASE,
-  senha TEXT NOT NULL CHECK (length(senha) = 64),
+  senha TEXT NOT NULL,
   idade INTEGER CHECK (idade IS NULL OR idade BETWEEN 1 AND 150),
   ocupacao TEXT CHECK (ocupacao IS NULL OR length(trim(ocupacao)) <= 100),
   bio TEXT,
@@ -28,7 +28,7 @@ CREATE INDEX IF NOT EXISTS idx_sessoes_usuario ON sessoes(usuario_id);
 CREATE TABLE IF NOT EXISTS humor (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   usuario_id INTEGER NOT NULL,
-  emoji TEXT NOT NULL CHECK (emoji IN ('feliz', 'triste', 'ansioso', 'cansado', 'irritado', 'neutro')),
+  emoji TEXT NOT NULL CHECK (emoji IN ('😊', '😔', '😰', '😫', '😤', '😐', 'feliz', 'triste', 'ansioso', 'cansado', 'irritado', 'neutro')),
   data_registro TEXT NOT NULL DEFAULT (date('now', 'localtime')),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
   UNIQUE (usuario_id, data_registro)
@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS metas (
   data_inicio TEXT NOT NULL,
   data_fim TEXT NOT NULL,
   progresso INTEGER NOT NULL DEFAULT 0 CHECK (progresso BETWEEN 0 AND 100),
+  progresso_manual INTEGER NOT NULL DEFAULT 0 CHECK (progresso_manual IN (0, 1)),
   status TEXT NOT NULL DEFAULT 'não_iniciada' CHECK (status IN ('não_iniciada', 'em_andamento', 'concluida')),
   data_criacao TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,

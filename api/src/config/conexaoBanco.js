@@ -1,13 +1,11 @@
 const Database = require('better-sqlite3')
 const path = require('path')
 const fs = require('fs')
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
+const configuracao = require('./ambiente')
 
 // Define o arquivo SQLite e garante que sua pasta existe
 const pastaDb = path.resolve(__dirname, '../../db')
-const caminhoBanco = process.env.DAILYMIND_DB_PATH
-	? path.resolve(process.env.DAILYMIND_DB_PATH)
-	: path.join(pastaDb, 'dailymind.db')
+const caminhoBanco = configuracao.caminhoBanco || path.join(pastaDb, 'dailymind.db')
 const pastaBanco = path.dirname(caminhoBanco)
 if (!fs.existsSync(pastaBanco)) fs.mkdirSync(pastaBanco, { recursive: true })
 

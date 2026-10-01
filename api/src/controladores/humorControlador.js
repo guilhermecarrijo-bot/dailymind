@@ -1,4 +1,5 @@
 const banco = require('../config/conexaoBanco')
+const HUMORES_VALIDOS = ['😊', '😔', '😰', '😫', '😤', '😐', 'feliz', 'triste', 'ansioso', 'cansado', 'irritado', 'neutro']
 
 function registrarHumor(req, res) {
   const usuarioId = req.body.usuario_id || req.body.id_usuario
@@ -7,7 +8,7 @@ function registrarHumor(req, res) {
   if (!usuarioId || !emoji) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e humor são obrigatórios.' })
   }
-  if (!['😊', '😔', '😰', '😫', '😤', '😐', 'feliz', 'triste', 'ansioso', 'cansado', 'irritado', 'neutro'].includes(emoji)) {
+  if (!HUMORES_VALIDOS.includes(emoji)) {
     return res.status(422).json({ sucesso: false, mensagem: 'Humor inválido.' })
   }
 
@@ -42,6 +43,9 @@ function editarHumor(req, res) {
 
   if (!usuarioId || !emoji) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e humor são obrigatórios.' })
+  }
+  if (!HUMORES_VALIDOS.includes(emoji)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Humor inválido.' })
   }
 
   const resultado = banco.prepare('UPDATE humor SET emoji = ? WHERE id = ? AND usuario_id = ?').run(emoji, req.params.id, usuarioId)

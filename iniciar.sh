@@ -1,18 +1,5 @@
-#!/bin/bash
-cd /home/ifmt-aluno/Documentos/dailymind/api
-rm -f db/dailymind.db
+#!/usr/bin/env bash
+set -e
 
-nohup node -e "
-const app = require('./src/app');
-require('./iniciarBanco');
-const PORTA = 3000;
-app.listen(PORTA, () => {
-  console.log('Servidor rodando na porta ' + PORTA);
-  console.log('Acesse: http://localhost:' + PORTA);
-});
-" > /tmp/dailymind.log 2>&1 &
-
-echo "Servidor iniciado com PID: $!"
-echo "Logs em: /tmp/dailymind.log"
-sleep 2
-cat /tmp/dailymind.log
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+exec bash "$SCRIPT_DIR/api/iniciar-dailymind.sh" "$@"

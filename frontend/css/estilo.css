@@ -487,6 +487,12 @@ body[data-tema='escuro'] .settings-select {
   color: #e5e7eb !important;
   border-color: #4b5563 !important;
 }
+body[data-tema='escuro'] .bg-gray-100,
+body[data-tema='escuro'] .bg-gray-200,
+body[data-tema='escuro'] .bg-gray-300 {
+  background-color: #1f2937 !important;
+  color: #e5e7eb;
+}
 body[data-tema='escuro'] .text-gray-800,
 body[data-tema='escuro'] .text-gray-700 {
   color: #f3f4f6 !important;
@@ -552,8 +558,12 @@ body[data-tema='escuro'] .text-violet-500,
 body[data-tema='escuro'] .text-violet-600,
 body[data-tema='escuro'] .text-orange-500,
 body[data-tema='escuro'] .text-orange-600,
-body[data-tema='escuro'] .text-mint-600 {
+body[data-tema='escuro'] .text-mint-600,
+body[data-tema='escuro'] .text-mint-700 {
   color: #86efac !important;
+}
+body[data-tema='escuro'] .hover\:bg-red-50:hover {
+  background-color: #3a2228 !important;
 }
 body[data-tema='escuro'] ::-webkit-scrollbar-track {
   background: #111827;

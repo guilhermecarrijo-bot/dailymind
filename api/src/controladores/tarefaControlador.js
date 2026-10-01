@@ -4,14 +4,20 @@ const banco = require('../config/conexaoBanco')
 function criarTarefa(req, res) {
   const { usuario_id, titulo, descricao, icone } = req.body
 
-  if (!usuario_id || !titulo) {
+  if (!usuario_id || typeof titulo !== 'string' || !titulo.trim() || titulo.trim().length > 200) {
     return res.status(422).json({ sucesso: false, mensagem: 'Usuário e título são obrigatórios.' })
+  }
+  if (descricao !== undefined && descricao !== null && typeof descricao !== 'string') {
+    return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ser um texto.' })
+  }
+  if (icone !== undefined && (typeof icone !== 'string' || icone.length > 10)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Ícone inválido.' })
   }
 
   const inserir = banco.prepare(
     'INSERT INTO tarefas (usuario_id, titulo, descricao, icone) VALUES (?, ?, ?, ?)'
   )
-  const resultado = inserir.run(usuario_id, titulo, descricao || null, icone || '✓')
+  const resultado = inserir.run(usuario_id, titulo.trim(), descricao || null, icone || '✓')
 
   res.status(201).json({
     sucesso: true,
@@ -19,7 +25,7 @@ function criarTarefa(req, res) {
     tarefa: {
       id: resultado.lastInsertRowid,
       usuario_id,
-      titulo,
+      titulo: titulo.trim(),
       descricao: descricao || null,
       icone: icone || '✓',
       concluido: 0,
@@ -93,18 +99,28 @@ function atualizarTarefa(req, res) {
   const { id } = req.params
   const { titulo, descricao, icone } = req.body
 
+  if (titulo !== undefined && (typeof titulo !== 'string' || !titulo.trim() || titulo.trim().length > 200)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'O título deve ter entre 1 e 200 caracteres.' })
+  }
+  if (descricao !== undefined && descricao !== null && typeof descricao !== 'string') {
+    return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ser um texto.' })
+  }
+  if (icone !== undefined && (typeof icone !== 'string' || icone.length > 10)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Ícone inválido.' })
+  }
+
   const tarefa = banco.prepare('SELECT * FROM tarefas WHERE id = ?').get(id)
   if (!tarefa) {
     return res.status(404).json({ sucesso: false, mensagem: 'Tarefa não encontrada.' })
   }
 
   banco.prepare('UPDATE tarefas SET titulo = ?, descricao = ?, icone = ? WHERE id = ?')
-    .run(titulo || tarefa.titulo, descricao !== undefined ? descricao : tarefa.descricao, icone || tarefa.icone, id)
+    .run(titulo?.trim() || tarefa.titulo, descricao !== undefined ? descricao : tarefa.descricao, icone || tarefa.icone, id)
 
   res.json({
     sucesso: true,
     mensagem: 'Tarefa atualizada com sucesso!',
-    tarefa: { id, titulo: titulo || tarefa.titulo, descricao: descricao !== undefined ? descricao : tarefa.descricao, icone: icone || tarefa.icone }
+    tarefa: { id, titulo: titulo?.trim() || tarefa.titulo, descricao: descricao !== undefined ? descricao : tarefa.descricao, icone: icone || tarefa.icone }
   })
 }
 

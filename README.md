@@ -34,7 +34,7 @@ O DailyMind oferece uma solução simples que ajuda a organizar a rotina com **l
 - **Criação** — Lembrete com título e ícone (📌 ⏰ 💧 🍎 📖 ...)
 - **Concluir / Reabrir** — Marcação de lembretes como concluídos
 - **Remoção** — Exclusão de lembretes
-- **Badge de pendentes** — Contador de tarefas em aberto na barra de navegação
+- **Badge de pendentes** — Contador de lembretes em aberto na barra de navegação
 
 ### Inteligência e Visualização
 - **Sugestões personalizadas** — Recomendações de autocuidado baseadas no humor do dia
@@ -99,8 +99,9 @@ dailymind/
 │   ├── css/
 │   │   └── estilo.css              # Estilos CSS adicionais
 │   ├── js/
-│   │   └── app.js                  # Lógica da aplicação (auth, APIs e gráficos)
-│   └── index.html                  # Telas da aplicação (login, dashboard, etc.)
+│   ├── js/
+│   │   └── app.js                  # Lógica da aplicação (auth, registros, lembretes e gráficos)
+│   ├── index.html                  # Telas da aplicação (login, dashboard, gráficos, lembretes e perfil)
 │
 ├── doc/                            # Documentação do projeto
 │   └── descricao_projeto/          # Documentos de descrição e requisitos
@@ -201,88 +202,23 @@ O arquivo `iniciarBanco.js` cria índices para todas as tabelas e insere automat
 
 ## Endpoints da API
 
-Todas as URLs abaixo usam o prefixo `/api`. As operações por ID exigem `id_usuario` no JSON do corpo ou na query string, garantindo que o usuário só acesse os próprios dados.
+Todas as rotas usam o prefixo `/api`. Cadastro, login, health check e `GET /sugestoes` são públicos; as demais exigem o cookie de sessão `HttpOnly`. O usuário é identificado pela sessão: enviar um ID no caminho ou no corpo não concede acesso a outra conta.
 
-| Método | Endpoint | Descrição | Dados enviados |
-|---|---|---|---|
-| `GET` | `/` | Front-end servido pela API | — |
-| `GET` | `/api/health` | Verifica a API | — |
-| `POST` | `/api/usuarios/cadastro` | Cadastra usuário | `nome`, `email`, `senha`, `tipo_usuario?` |
-| `POST` | `/api/usuarios/login` | Realiza login | `email`, `senha` |
-| `GET` | `/api/usuarios/:id_usuario` | Consulta perfil | — |
-| `PUT` | `/api/usuarios/perfil` | Atualiza perfil | `id_usuario`, `nome?`, `tipo_usuario?` |
-| `POST` | `/api/tarefas` | Cria tarefa | `id_usuario`, `titulo`, `descricao?`, `data?`, `horario?`, `categoria?` |
-| `GET` | `/api/tarefas/:id_usuario` | Lista tarefas | — |
-| `GET` | `/api/tarefas/:id_usuario/:id` | Consulta tarefa | — |
-| `PUT` | `/api/tarefas/:id` | Edita tarefa | `id_usuario` e campos a alterar |
-| `PUT` | `/api/tarefas/:id/toggle` | Marca/reabre tarefa | `id_usuario` |
-| `DELETE` | `/api/tarefas/:id` | Exclui tarefa | `id_usuario` |
-| `GET` | `/api/tarefas/:id_usuario/pendentes` | Conta tarefas pendentes | — |
-| `POST` | `/api/humor` | Registra/atualiza humor do dia | `id_usuario`, `data?`, `humor`, `intensidade`, `observacao?` |
-| `GET` | `/api/humor/:id_usuario` | Lista humor | — |
-| `GET` | `/api/humor/:id_usuario/hoje` | Consulta humor de hoje | — |
-| `PUT` | `/api/humor/:id` | Edita humor | `id_usuario`, `humor`, `intensidade`, `observacao?`, `data?` |
-| `DELETE` | `/api/humor/:id` | Exclui humor | `id_usuario` |
-| `POST` | `/api/sono` | Registra/atualiza sono do dia | `id_usuario`, `horas_dormidas`, `qualidade?`, `observacao?` |
-| `GET` | `/api/sono/:id_usuario` | Lista sono | — |
-| `GET` | `/api/sono/:id_usuario/hoje` | Consulta sono de hoje | — |
-| `PUT` | `/api/sono/:id` | Edita sono | `id_usuario`, `horas_dormidas`, `qualidade?`, `observacao?`, `data?` |
-| `DELETE` | `/api/sono/:id` | Exclui sono | `id_usuario` |
-| `POST` | `/api/energia` | Registra/atualiza energia do dia | `id_usuario`, `nivel`, `observacao?` |
-| `GET` | `/api/energia/:id_usuario` | Lista energia | — |
-| `GET` | `/api/energia/:id_usuario/hoje` | Consulta energia de hoje | — |
-| `PUT` | `/api/energia/:id` | Edita energia | `id_usuario`, `nivel`, `observacao?`, `data?` |
-| `DELETE` | `/api/energia/:id` | Exclui energia | `id_usuario` |
-| `POST` | `/api/metas` | Cria meta | `id_usuario`, `titulo`, `descricao?`, `data_inicio?`, `data_fim?` |
-| `GET` | `/api/metas/:id_usuario` | Lista metas | — |
-| `GET` | `/api/metas/:id_usuario/:id` | Consulta meta | — |
-| `PUT` | `/api/metas/:id` | Edita meta | `id_usuario` e campos a alterar |
-| `PUT` | `/api/metas/:id/toggle` | Marca/reabre meta | `id_usuario` |
-| `DELETE` | `/api/metas/:id` | Exclui meta | `id_usuario` |
+| Recurso | Rotas principais |
+|---|---|
+| Saúde e autenticação | `GET /health`, `POST /usuarios/cadastro`, `POST /usuarios/login`, `GET /usuarios/sessao`, `POST /usuarios/logout` |
+| Perfil | `GET /usuarios/:id`, `PUT /usuarios/perfil` |
+| Humor | `POST /humor`, `GET /humor/:usuario_id`, `GET /humor/:usuario_id/hoje`, `PUT /humor/:id`, `DELETE /humor/:id` |
+| Sono | `POST /sono`, `GET /sono/:usuario_id`, `GET /sono/:usuario_id/hoje`, `PUT /sono/:id`, `DELETE /sono/:id` |
+| Energia | `POST /energia`, `GET /energia/:usuario_id`, `GET /energia/:usuario_id/hoje`, `PUT /energia/:id`, `DELETE /energia/:id` |
+| Lembretes | `POST /lembretes`, `GET /lembretes/:usuario_id`, `PUT /lembretes/:id/toggle`, `DELETE /lembretes/:id`, `GET /lembretes/:usuario_id/pendentes` |
+| Tarefas (API) | `POST /tarefas`, `GET /tarefas/:usuario_id`, `GET /tarefas/:usuario_id/hoje`, `GET /tarefas/:usuario_id/pendentes`, `GET /tarefas/item/:id`, `PUT /tarefas/:id/toggle`, `PUT /tarefas/:id`, `DELETE /tarefas/:id` |
+| Metas (API) | `POST /metas`, `GET /metas/:usuario_id`, `GET /metas/:usuario_id/ativas`, `GET /metas/:usuario_id/estatisticas`, `GET /metas/item/:id`, `PUT /metas/:id`, `PUT /metas/:id/progresso`, `DELETE /metas/:id` |
+| Sugestões | `GET /sugestoes`, `GET /sugestoes/:usuario_id` |
 
-Respostas de sucesso usam `{ "sucesso": true, ... }`. Erros usam HTTP `422` para dados inválidos, `401` para login inválido, `404` para registro inexistente e `409` para e-mail duplicado.
+Respostas usam JSON com `sucesso`; erros incluem `401` (sessão ausente/inválida), `403` (sem acesso ao registro), `404` (registro inexistente), `409` (e-mail duplicado) e `422` (dados inválidos). A interface atual não inclui telas de tarefas/metas; esses recursos permanecem disponíveis pela API.
 
-### Exemplo de Requisição `POST /api/usuarios/cadastro`
-
-**Body (JSON):**
-```json
-{
-  "nome": "Maria Silva",
-  "email": "maria.silva@exemplo.com",
-  "senha": "123456",
-  "tipo_usuario": "usuário"
-}
-```
-
-**Resposta de Sucesso (HTTP 201):**
-```json
-{
-  "sucesso": true,
-  "mensagem": "Conta criada com sucesso!",
-  "usuario": { "id_usuario": 1, "nome": "Maria Silva", "email": "maria.silva@exemplo.com", "tipo_usuario": "usuário" }
-}
-```
-
-### Exemplo de Requisição `POST /api/humor`
-
-**Body (JSON):**
-```json
-{
-  "id_usuario": 1,
-  "humor": "feliz",
-  "intensidade": 5,
-  "observacao": "Bom dia"
-}
-```
-
-**Resposta de Sucesso (HTTP 201):**
-```json
-{
-  "sucesso": true,
-  "mensagem": "Humor registrado!",
-  "id_humor": 1
-}
-```
+O cadastro recebe `nome`, `email`, `senha` (8 a 128 caracteres) e, opcionalmente, `idade` e `ocupacao`. Após cadastro ou login, o servidor define o cookie de sessão; chamadas privadas devem mantê-lo e não precisam usar um ID como credencial.
 
 ---
 
@@ -299,16 +235,23 @@ Respostas de sucesso usam `{ "sucesso": true, ... }`. Erros usam HTTP `422` para
    npm install
    ```
 
-  Copie `.env.example` para `.env` e configure `CHAVE_SESSAO` com uma chave aleatória de pelo menos 32 bytes. Gere uma com `node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"`; mantenha o valor apenas no `.env` local ou no gerenciador de segredos do ambiente, nunca no GitHub.
+2. **Configure o ambiente local:**
+   ```bash
+   cp .env.example .env
+   node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
+   ```
+   Cole o valor gerado em `CHAVE_SESSAO` no arquivo `api/.env`. Esse arquivo é ignorado pelo Git; não inclua segredos no repositório. Em produção, forneça a chave pelo ambiente ou por um gerenciador de segredos.
 
-2. **Inicie o servidor de desenvolvimento:**
+   `api/.env.example` documenta as variáveis `NODE_ENV`, `PORT`, `ORIGEM_PERMITIDA`, `CHAVE_SESSAO` e `DAILYMIND_DB_PATH`. O banco atual é SQLite e não possui usuário ou senha de conexão; use `DAILYMIND_DB_PATH` para configurar o caminho do arquivo.
+
+3. **Inicie o servidor de desenvolvimento:**
    ```bash
    npm run dev
    ```
 
    > O servidor executa automaticamente o script `iniciarBanco.js`, criando as tabelas e os dados padrão do banco.
 
-3. **Acesse a aplicação no navegador:**
+4. **Acesse a aplicação no navegador:**
    - **Aplicação (SPA):** [http://localhost:3000/](http://localhost:3000/)
    - **Health Check da API:** [http://localhost:3000/api/health](http://localhost:3000/api/health)
 
@@ -324,8 +267,8 @@ Respostas de sucesso usam `{ "sucesso": true, ... }`. Erros usam HTTP `422` para
 - **Sessões:** Token opaco em cookie HttpOnly, revogável e com expiração de sete dias
 - **Segredo do Backend:** `CHAVE_SESSAO` configurada fora do código; obrigatória em produção e ignorada pelo Git
 - **Autorização:** Rotas privadas restringem consultas e alterações ao usuário da sessão
-- **Sanitização de Entradas:** Limpeza de strings com a biblioteca `validator` (módulo de leads)
-- **Proteção contra Payload Abusivo:** Middleware com limite de `10kb` por requisição
+- **Validação de Entradas:** Validação de e-mail, senha e campos de perfil nos controladores
+- **Proteção contra Payload Abusivo:** Middleware JSON com limite de `12mb` por requisição
 - **Cabeçalhos de Segurança:** Middleware `helmet` habilitado
 - **CORS configurável:** Origem permitida via variável de ambiente `ORIGEM_PERMITIDA`
 - **Respostas Padronizadas:** Tratamento de erros com códigos HTTP semânticos (422, 401, 409, 404)

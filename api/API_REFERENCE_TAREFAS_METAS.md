@@ -61,6 +61,7 @@ Response (201):
 GET /tarefas/1?filtro=todas
 GET /tarefas/1?filtro=pendentes
 GET /tarefas/1?filtro=concluidas
+GET /tarefas/item/123
 
 Response (200):
 {
@@ -198,6 +199,7 @@ GET /metas/1?status=todas
 GET /metas/1?status=não_iniciada
 GET /metas/1?status=em_andamento
 GET /metas/1?status=concluida
+GET /metas/item/456
 
 Response (200):
 {
@@ -303,6 +305,8 @@ Response (200):
   }
 }
 ```
+
+The manual progress value is preserved in subsequent reads. Editing a goal's date range resets progress to the automatic period-based value.
 
 ### Delete Goal
 ```http

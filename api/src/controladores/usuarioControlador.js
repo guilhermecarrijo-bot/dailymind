@@ -45,14 +45,20 @@ async function cadastrarUsuario(req, res) {
   const { nome, email, senha, idade, ocupacao } = req.body
   const emailNormalizado = typeof email === 'string' ? email.trim().toLowerCase() : ''
 
-  if (typeof nome !== 'string' || nome.trim().length < 3) {
-    return res.status(422).json({ sucesso: false, mensagem: 'Nome deve ter pelo menos 3 caracteres.' })
+  if (typeof nome !== 'string' || nome.trim().length < 3 || nome.trim().length > 100) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Nome deve ter entre 3 e 100 caracteres.' })
   }
   if (!validator.isEmail(emailNormalizado)) {
     return res.status(422).json({ sucesso: false, mensagem: 'E-mail inválido.' })
   }
   if (typeof senha !== 'string' || senha.length < 8 || senha.length > 128) {
     return res.status(422).json({ sucesso: false, mensagem: 'A senha deve ter entre 8 e 128 caracteres.' })
+  }
+  if (idade !== undefined && idade !== null && idade !== '' && (!Number.isInteger(idade) || idade < 1 || idade > 150)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A idade deve estar entre 1 e 150 anos.' })
+  }
+  if (ocupacao !== undefined && ocupacao !== null && (typeof ocupacao !== 'string' || ocupacao.trim().length > 100)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A ocupação pode ter no máximo 100 caracteres.' })
   }
 
   const existente = banco.prepare('SELECT id FROM usuarios WHERE email = ?').get(emailNormalizado)
@@ -64,7 +70,7 @@ async function cadastrarUsuario(req, res) {
   const inserir = banco.prepare(
     'INSERT INTO usuarios (nome, email, senha, idade, ocupacao) VALUES (?, ?, ?, ?, ?)'
   )
-  const resultado = inserir.run(nome.trim(), emailNormalizado, senhaHash, idade || null, ocupacao || null)
+  const resultado = inserir.run(nome.trim(), emailNormalizado, senhaHash, idade || null, ocupacao?.trim() || null)
   criarSessao(Number(resultado.lastInsertRowid), res)
   const usuario = selecionarUsuario(Number(resultado.lastInsertRowid))
 

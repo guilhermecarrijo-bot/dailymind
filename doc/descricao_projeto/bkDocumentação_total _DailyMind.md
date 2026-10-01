@@ -4,7 +4,7 @@ Integrantes: Ana Eduarda Sousa Silva Soares, Byank Chrystinny Santana Lima, Eman
 
 Disciplina: Fábrica de Soluções Inteligentes
 
-Professores: André Lôbo
+Professores: André Lôbo e Carlos Eduardo.
  
 REQUISITOS DE USUÁRIO: 
 ---------------------------------------------------

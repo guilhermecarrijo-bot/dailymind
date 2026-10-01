@@ -87,11 +87,18 @@ banco.exec(`
     data_inicio     TEXT    NOT NULL,
     data_fim        TEXT    NOT NULL,
     progresso       INTEGER DEFAULT 0,
+    progresso_manual INTEGER NOT NULL DEFAULT 0,
     status          TEXT    DEFAULT 'não_iniciada',
     data_criacao    TEXT    DEFAULT (datetime('now','localtime')),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
   );
 `);
+
+try {
+  banco.exec('ALTER TABLE metas ADD COLUMN progresso_manual INTEGER NOT NULL DEFAULT 0')
+} catch (erro) {
+  if (!erro.message.includes('duplicate column name')) throw erro
+}
 
 banco.exec(`
   CREATE TABLE IF NOT EXISTS sessoes (

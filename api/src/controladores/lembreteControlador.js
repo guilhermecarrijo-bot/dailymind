@@ -4,21 +4,29 @@ const banco = require('../config/conexaoBanco')
 function criarLembrete(req, res) {
   const { usuario_id, titulo, icone, horario, objeto_deixado, hora_deixado } = req.body
 
-  if (!usuario_id || !titulo) {
-    return res.status(422).json({ sucesso: false, mensagem: 'Usuário e título são obrigatórios.' })
+  if (!usuario_id || typeof titulo !== 'string' || !titulo.trim() || titulo.trim().length > 150) {
+    return res.status(422).json({ sucesso: false, mensagem: 'O título deve ter entre 1 e 150 caracteres.' })
+  }
+  if (icone !== undefined && (typeof icone !== 'string' || icone.length > 10)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Ícone inválido.' })
+  }
+  for (const [campo, valor] of Object.entries({ horario, objeto_deixado, hora_deixado })) {
+    if (valor !== undefined && valor !== null && typeof valor !== 'string') {
+      return res.status(422).json({ sucesso: false, mensagem: `${campo} deve ser um texto.` })
+    }
   }
 
   const inserir = banco.prepare(
     'INSERT INTO lembretes (usuario_id, titulo, icone, horario, objeto_deixado, hora_deixado) VALUES (?, ?, ?, ?, ?, ?)'
   )
-  const resultado = inserir.run(usuario_id, titulo, icone || '📌', horario || null, objeto_deixado || null, hora_deixado || null)
+  const resultado = inserir.run(usuario_id, titulo.trim(), icone || '📌', horario || null, objeto_deixado || null, hora_deixado || null)
 
   res.status(201).json({
     sucesso: true,
     mensagem: 'Lembrete criado!',
     lembrete: { 
       id: resultado.lastInsertRowid, 
-      titulo, 
+      titulo: titulo.trim(),
       icone: icone || '📌', 
       horario, 
       objeto_deixado: objeto_deixado || null,

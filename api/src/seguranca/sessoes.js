@@ -1,19 +1,10 @@
 const crypto = require('crypto')
+const configuracao = require('../config/ambiente')
 const banco = require('../config/conexaoBanco')
 
 const NOME_COOKIE = 'dailymind_session'
 const DURACAO_SESSAO_MS = 7 * 24 * 60 * 60 * 1000
-const chaveConfigurada = process.env.CHAVE_SESSAO
-
-if (chaveConfigurada && Buffer.byteLength(chaveConfigurada) < 32) {
-  throw new Error('CHAVE_SESSAO deve ter pelo menos 32 bytes.')
-}
-
-if (process.env.NODE_ENV === 'production' && !chaveConfigurada) {
-  throw new Error('CHAVE_SESSAO é obrigatória em produção.')
-}
-
-const chaveSessao = chaveConfigurada || crypto.randomBytes(48)
+const chaveSessao = configuracao.chaveSessao || crypto.randomBytes(48)
 
 function resumirToken(token) {
   return crypto.createHmac('sha256', chaveSessao).update(token).digest('hex')
@@ -22,7 +13,7 @@ function resumirToken(token) {
 function definirCookie(res, valor, maxAge) {
   res.cookie(NOME_COOKIE, valor, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: configuracao.ambiente === 'production',
     sameSite: 'lax',
     path: '/api',
     maxAge

@@ -2,22 +2,17 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const path = require('path')
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+const configuracao = require('./config/ambiente')
 
 const rotasDailyMind = require('./rotas/dailyMindRotas')
 
 const app = express()
-const origensPermitidas = (process.env.ORIGEM_PERMITIDA || 'http://localhost:8000,http://127.0.0.1:8000,http://localhost:3000,http://127.0.0.1:3000')
-  .split(',')
-  .map(origem => origem.trim())
-  .filter(Boolean)
-
 // Middlewares de segurança e parsing
 app.use(helmet({
   contentSecurityPolicy: false
 }))
 app.use(cors({
-  origin: (origem, callback) => callback(null, !origem || origensPermitidas.includes(origem)),
+  origin: (origem, callback) => callback(null, !origem || configuracao.origensPermitidas.includes(origem)),
   credentials: true
 }))
 app.use(express.json({ limit: '12mb' }))

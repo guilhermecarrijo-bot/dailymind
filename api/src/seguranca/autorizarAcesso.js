@@ -34,12 +34,13 @@ function autorizarAcesso(req, res, next) {
   }
 
   const recurso = tabelasPorRecurso[partes[0]]
+  const consultaDeItem = recurso && partes[1] === 'item' && partes.length === 3
   if (partes[0] === 'sugestoes' && partes.length === 2 && partes[1] !== usuarioId) {
     return negarAcesso(res)
   }
 
   const sufixosDeColecao = ['hoje', 'pendentes', 'ativas', 'estatisticas']
-  const caminhoDeColecao = recurso && partes.length >= 2 && (
+  const caminhoDeColecao = recurso && !consultaDeItem && partes.length >= 2 && (
     sufixosDeColecao.includes(partes[2]) || (req.method === 'GET' && partes.length === 2)
   )
 
@@ -47,9 +48,10 @@ function autorizarAcesso(req, res, next) {
     return negarAcesso(res)
   }
 
-  const eItem = recurso && partes.length >= 2 && !caminhoDeColecao && ['GET', 'PUT', 'DELETE'].includes(req.method)
+  const eItem = recurso && (consultaDeItem || (partes.length >= 2 && !caminhoDeColecao && ['GET', 'PUT', 'DELETE'].includes(req.method)))
   if (eItem) {
-    const registro = banco.prepare(`SELECT usuario_id FROM ${recurso} WHERE id = ?`).get(partes[1])
+    const idRegistro = consultaDeItem ? partes[2] : partes[1]
+    const registro = banco.prepare(`SELECT usuario_id FROM ${recurso} WHERE id = ?`).get(idRegistro)
     if (!registro || String(registro.usuario_id) !== usuarioId) {
       return negarAcesso(res)
     }

@@ -1,4 +1,5 @@
 const banco = require('../config/conexaoBanco')
+const { dataLocal } = require('../utilitarios/data')
 
 function registrarSono(req, res) {
   const usuarioId = req.body.usuario_id || req.body.id_usuario
@@ -17,7 +18,7 @@ function registrarSono(req, res) {
     return res.status(422).json({ sucesso: false, mensagem: 'Qualidade deve ser entre 1 e 5.' })
   }
 
-  const hoje = new Date().toISOString().split('T')[0]
+  const hoje = dataLocal()
   const existente = banco.prepare(
     'SELECT id FROM sono WHERE usuario_id = ? AND data_registro = ?'
   ).get(usuarioId, hoje)
@@ -81,7 +82,7 @@ function removerSono(req, res) {
 
 function obterSonoHoje(req, res) {
   const usuarioId = req.params.usuario_id || req.params.id_usuario
-  const hoje = new Date().toISOString().split('T')[0]
+  const hoje = dataLocal()
 
   const registro = banco.prepare(
     'SELECT * FROM sono WHERE usuario_id = ? AND data_registro = ?'

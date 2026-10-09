@@ -1,4 +1,5 @@
 const banco = require('../config/conexaoBanco')
+const { dataLocal } = require('../utilitarios/data')
 
 function registrarEnergia(req, res) {
   const usuarioId = req.body.usuario_id || req.body.id_usuario
@@ -12,7 +13,7 @@ function registrarEnergia(req, res) {
     return res.status(422).json({ sucesso: false, mensagem: 'Nível de energia deve ser entre 1 e 10.' })
   }
 
-  const hoje = new Date().toISOString().split('T')[0]
+  const hoje = dataLocal()
   const existente = banco.prepare(
     'SELECT id FROM energia WHERE usuario_id = ? AND data_registro = ?'
   ).get(usuarioId, hoje)
@@ -69,7 +70,7 @@ function removerEnergia(req, res) {
 
 function obterEnergiaHoje(req, res) {
   const usuarioId = req.params.usuario_id || req.params.id_usuario
-  const hoje = new Date().toISOString().split('T')[0]
+  const hoje = dataLocal()
 
   const registro = banco.prepare(
     'SELECT * FROM energia WHERE usuario_id = ? AND data_registro = ?'

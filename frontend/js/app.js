@@ -617,6 +617,8 @@ async function registrarSono() {
     document.getElementById('sono-texto').textContent = `${horas}h de sono`
     atualizarBarraSono(horas)
     carregarHistoricoBemEstar()
+  } else {
+    exibirToast(resultado.mensagem || t('naoSalvo'), 'erro')
   }
 }
 
@@ -642,6 +644,8 @@ async function registrarEnergia() {
     document.getElementById('energia-texto').textContent = `${nivel}/10 de energia`
     atualizarBarraEnergia(nivel)
     carregarHistoricoBemEstar()
+  } else {
+    exibirToast(resultado.mensagem || t('naoSalvo'), 'erro')
   }
 }
 

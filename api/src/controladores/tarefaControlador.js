@@ -1,4 +1,5 @@
 const banco = require('../config/conexaoBanco')
+const { dataLocal } = require('../utilitarios/data')
 
 // Criar tarefa
 function criarTarefa(req, res) {
@@ -9,6 +10,9 @@ function criarTarefa(req, res) {
   }
   if (descricao !== undefined && descricao !== null && typeof descricao !== 'string') {
     return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ser um texto.' })
+  }
+  if (descricao?.length > 1000) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ter no máximo 1000 caracteres.' })
   }
   if (icone !== undefined && (typeof icone !== 'string' || icone.length > 10)) {
     return res.status(422).json({ sucesso: false, mensagem: 'Ícone inválido.' })
@@ -105,6 +109,9 @@ function atualizarTarefa(req, res) {
   if (descricao !== undefined && descricao !== null && typeof descricao !== 'string') {
     return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ser um texto.' })
   }
+  if (descricao?.length > 1000) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ter no máximo 1000 caracteres.' })
+  }
   if (icone !== undefined && (typeof icone !== 'string' || icone.length > 10)) {
     return res.status(422).json({ sucesso: false, mensagem: 'Ícone inválido.' })
   }
@@ -150,7 +157,7 @@ function contarPendentes(req, res) {
 // Obter tarefas de hoje
 function obterTarefasHoje(req, res) {
   const usuario_id = req.params.usuario_id
-  const hoje = new Date().toISOString().split('T')[0]
+  const hoje = dataLocal()
 
   const tarefas = banco.prepare(
     `SELECT * FROM tarefas 

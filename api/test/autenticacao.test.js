@@ -116,6 +116,14 @@ test('protege sessões e dados pessoais por usuário', async () => {
     data_fim: '2999-12-31'
   }, cookieLogin)
   assert.equal(meta.status, 201)
+  const metaComDescricaoLonga = await requisitar('/metas', 'POST', {
+    usuario_id: usuarioB.usuario.id,
+    titulo: 'Meta com descrição longa',
+    descricao: 'x'.repeat(1001),
+    data_inicio: '2000-01-01',
+    data_fim: '2999-12-31'
+  }, cookieLogin)
+  assert.equal(metaComDescricaoLonga.status, 422)
 
   const dataImpossivel = await requisitar('/metas', 'POST', {
     usuario_id: usuarioB.usuario.id,
@@ -145,6 +153,10 @@ test('protege sessões e dados pessoais por usuário', async () => {
     data_fim: '1999-12-31'
   }, cookieLogin)
   assert.equal(periodoInvalido.status, 422)
+  const metaAtualizadaComDescricaoLonga = await requisitar(`/metas/${meta.corpo.meta.id}`, 'PUT', {
+    descricao: 'x'.repeat(1001)
+  }, cookieLogin)
+  assert.equal(metaAtualizadaComDescricaoLonga.status, 422)
   const periodoAtualizado = await requisitar(`/metas/${meta.corpo.meta.id}`, 'PUT', {
     data_inicio: '2998-01-01',
     data_fim: '2999-12-31'
@@ -158,6 +170,16 @@ test('protege sessões e dados pessoais por usuário', async () => {
     titulo: 'Tarefa de teste'
   }, cookieLogin)
   assert.equal(tarefa.status, 201)
+  const tarefaComDescricaoLonga = await requisitar('/tarefas', 'POST', {
+    usuario_id: usuarioB.usuario.id,
+    titulo: 'Tarefa com descrição longa',
+    descricao: 'x'.repeat(1001)
+  }, cookieLogin)
+  assert.equal(tarefaComDescricaoLonga.status, 422)
+  const tarefaAtualizadaComDescricaoLonga = await requisitar(`/tarefas/${tarefa.corpo.tarefa.id}`, 'PUT', {
+    descricao: 'x'.repeat(1001)
+  }, cookieLogin)
+  assert.equal(tarefaAtualizadaComDescricaoLonga.status, 422)
   const tarefaEmBranco = await requisitar('/tarefas', 'POST', {
     usuario_id: usuarioB.usuario.id,
     titulo: '   '

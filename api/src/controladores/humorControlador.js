@@ -1,4 +1,5 @@
 const banco = require('../config/conexaoBanco')
+const { dataLocal } = require('../utilitarios/data')
 const HUMORES_VALIDOS = ['😊', '😔', '😰', '😫', '😤', '😐', 'feliz', 'triste', 'ansioso', 'cansado', 'irritado', 'neutro']
 
 function registrarHumor(req, res) {
@@ -12,7 +13,7 @@ function registrarHumor(req, res) {
     return res.status(422).json({ sucesso: false, mensagem: 'Humor inválido.' })
   }
 
-  const hoje = new Date().toISOString().split('T')[0]
+  const hoje = dataLocal()
   const existente = banco.prepare(
     'SELECT id FROM humor WHERE usuario_id = ? AND data_registro = ?'
   ).get(usuarioId, hoje)
@@ -68,7 +69,7 @@ function removerHumor(req, res) {
 
 function obterHumorHoje(req, res) {
   const usuarioId = req.params.usuario_id || req.params.id_usuario
-  const hoje = new Date().toISOString().split('T')[0]
+  const hoje = dataLocal()
 
   const registro = banco.prepare(
     'SELECT * FROM humor WHERE usuario_id = ? AND data_registro = ?'

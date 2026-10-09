@@ -1,4 +1,5 @@
 const banco = require('../config/conexaoBanco')
+const { dataLocal } = require('../utilitarios/data')
 
 function dataIsoValida(data) {
   if (typeof data !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(data)) return false
@@ -8,7 +9,7 @@ function dataIsoValida(data) {
 
 // Calcular status da meta baseado nas datas
 function calcularStatus(data_inicio, data_fim) {
-  const hoje = new Date().toISOString().slice(0, 10)
+  const hoje = dataLocal()
 
   if (hoje < data_inicio) {
     return 'não_iniciada'
@@ -21,14 +22,14 @@ function calcularStatus(data_inicio, data_fim) {
 
 // Calcular dias restantes
 function calcularDiasRestantes(data_inicio, data_fim) {
-  const hoje = Date.parse(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`)
+  const hoje = Date.parse(`${dataLocal()}T00:00:00Z`)
   const fim = Date.parse(`${data_fim}T00:00:00Z`)
   return Math.max(0, Math.ceil((fim - hoje) / (1000 * 60 * 60 * 24)))
 }
 
 // Calcular progresso automático baseado no período transcorrido
 function calcularProgressoAutomatico(data_inicio, data_fim) {
-  const hoje = Date.parse(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`)
+  const hoje = Date.parse(`${dataLocal()}T00:00:00Z`)
   const inicio = Date.parse(`${data_inicio}T00:00:00Z`)
   const fim = Date.parse(`${data_fim}T00:00:00Z`)
 
@@ -66,6 +67,9 @@ function criarMeta(req, res) {
   }
   if (descricao !== undefined && descricao !== null && typeof descricao !== 'string') {
     return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ser um texto.' })
+  }
+  if (descricao?.length > 1000) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ter no máximo 1000 caracteres.' })
   }
   if (icone !== undefined && (typeof icone !== 'string' || icone.length > 10)) {
     return res.status(422).json({ sucesso: false, mensagem: 'Ícone inválido.' })
@@ -142,6 +146,9 @@ function atualizarMeta(req, res) {
   }
   if (descricao !== undefined && descricao !== null && typeof descricao !== 'string') {
     return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ser um texto.' })
+  }
+  if (descricao?.length > 1000) {
+    return res.status(422).json({ sucesso: false, mensagem: 'A descrição deve ter no máximo 1000 caracteres.' })
   }
   if (icone !== undefined && (typeof icone !== 'string' || icone.length > 10)) {
     return res.status(422).json({ sucesso: false, mensagem: 'Ícone inválido.' })

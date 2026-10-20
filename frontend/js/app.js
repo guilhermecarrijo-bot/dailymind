@@ -572,6 +572,8 @@ async function registrarHumor(emoji) {
     exibirToast(`${t('humorAtualizado')}: ${(traducoesHumor[configuracoes.idioma]?.[emoji] || informacoesHumor[emoji]).nome}!`)
     fecharModal('modal-humor')
     carregarSugestoes()
+    carregarHistoricoBemEstar()
+    carregarGraficos()
   } else {
     exibirToast(resultado.mensagem || t('erroHumor'), 'erro')
   }
@@ -617,6 +619,7 @@ async function registrarSono() {
     document.getElementById('sono-texto').textContent = `${horas}h de sono`
     atualizarBarraSono(horas)
     carregarHistoricoBemEstar()
+    carregarGraficos()
   } else {
     exibirToast(resultado.mensagem || t('naoSalvo'), 'erro')
   }
@@ -644,6 +647,7 @@ async function registrarEnergia() {
     document.getElementById('energia-texto').textContent = `${nivel}/10 de energia`
     atualizarBarraEnergia(nivel)
     carregarHistoricoBemEstar()
+    carregarGraficos()
   } else {
     exibirToast(resultado.mensagem || t('naoSalvo'), 'erro')
   }
@@ -887,6 +891,33 @@ let graficoHumor = null
 let graficoSono = null
 let graficoEnergia = null
 
+function resetarCanvasVazio(idCanvas, mensagem) {
+  const canvas = document.getElementById(idCanvas)
+  if (!canvas) return
+  const area = canvas.parentElement
+  const vazio = area.querySelector('.chart-empty')
+  if (vazio) vazio.remove()
+  canvas.style.display = 'block'
+  canvas.dataset.empty = 'false'
+
+  const placeholder = document.createElement('div')
+  placeholder.className = 'chart-empty'
+  placeholder.textContent = mensagem
+  area.appendChild(placeholder)
+  canvas.style.display = 'none'
+  canvas.dataset.empty = 'true'
+}
+
+function limparEstadoGraficoVazio(idCanvas) {
+  const canvas = document.getElementById(idCanvas)
+  if (!canvas) return
+  const area = canvas.parentElement
+  const placeholder = area.querySelector('.chart-empty')
+  if (placeholder) placeholder.remove()
+  canvas.style.display = 'block'
+  canvas.dataset.empty = 'false'
+}
+
 function formatarData(data) {
   return new Date(`${data}T12:00:00`).toLocaleDateString(configuracoes.idioma, {
     day: '2-digit',
@@ -966,86 +997,172 @@ async function carregarGraficos() {
     return
   }
 
-  // Mapear emojis para números
+  const humorVazio = !Array.isArray(dadosHumor.dados) || dadosHumor.dados.length === 0
+  const sonoVazio = !Array.isArray(dadosSono.dados) || dadosSono.dados.length === 0
+  const energiaVazia = !Array.isArray(dadosEnergia.dados) || dadosEnergia.dados.length === 0
+
+  if (graficoHumor) { graficoHumor.destroy(); graficoHumor = null }
+  if (graficoSono) { graficoSono.destroy(); graficoSono = null }
+  if (graficoEnergia) { graficoEnergia.destroy(); graficoEnergia = null }
+
+  limparEstadoGraficoVazio('grafico-humor')
+  limparEstadoGraficoVazio('grafico-sono')
+  limparEstadoGraficoVazio('grafico-energia')
+
+  if (humorVazio) resetarCanvasVazio('grafico-humor', 'Nenhum registro de humor salvo ainda.')
+  if (sonoVazio) resetarCanvasVazio('grafico-sono', 'Nenhum registro de sono salvo ainda.')
+  if (energiaVazia) resetarCanvasVazio('grafico-energia', 'Nenhum registro de energia salvo ainda.')
+
+  if (humorVazio && sonoVazio && energiaVazia) return
+
+  const isEscuro = configuracoes.tema === 'escuro'
+  const paleta = {
+    texto: isEscuro ? '#e5e7eb' : '#526c6e',
+    grid: isEscuro ? 'rgba(148, 163, 184, 0.18)' : 'rgba(148, 163, 184, 0.24)',
+    tooltipBg: isEscuro ? '#0f172a' : '#ffffff',
+    tooltipBorder: isEscuro ? 'rgba(148, 163, 184, 0.35)' : 'rgba(148, 163, 184, 0.2)',
+    tooltipTexto: isEscuro ? '#f8fafc' : '#1f2937'
+  }
+
+  const opcoesBase = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 700, easing: 'easeOutQuart' },
+    interaction: { mode: 'nearest', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: paleta.tooltipBg,
+        titleColor: paleta.tooltipTexto,
+        bodyColor: paleta.tooltipTexto,
+        borderColor: paleta.tooltipBorder,
+        borderWidth: 1,
+        padding: 10,
+        displayColors: false,
+        cornerRadius: 10
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false, drawBorder: false },
+        border: { display: false },
+        ticks: { color: paleta.texto, font: { weight: '600', size: 11 } }
+      },
+      y: {
+        grid: { color: paleta.grid, drawBorder: false },
+        border: { display: false },
+        ticks: { color: paleta.texto, font: { weight: '600', size: 11 } }
+      }
+    }
+  }
+
   const mapaEmoji = { '😊': 5, '😔': 2, '😰': 3, '😫': 2, '😤': 1, '😐': 3 }
 
-  // Gráfico de Humor
-  const labelsHumor = dadosHumor.dados.map(d => d.data_registro).reverse()
-  const valoresHumor = dadosHumor.dados.map(d => mapaEmoji[d.emoji] || 3).reverse()
-
-  if (graficoHumor) graficoHumor.destroy()
-  graficoHumor = new Chart(document.getElementById('grafico-humor'), {
-    type: 'line',
-    data: {
-      labels: labelsHumor,
-      datasets: [{
-        label: t('humorHoje'),
-        data: valoresHumor,
-        borderColor: '#22c55e',
-        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-        fill: true,
-        tension: 0.4
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: { min: 0, max: 6, ticks: { stepSize: 1 } }
+  if (!humorVazio) {
+    const labelsHumor = dadosHumor.dados.map(d => d.data_registro).reverse()
+    const valoresHumor = dadosHumor.dados.map(d => mapaEmoji[d.emoji] || 3).reverse()
+    graficoHumor = new Chart(document.getElementById('grafico-humor'), {
+      type: 'line',
+      data: {
+        labels: labelsHumor,
+        datasets: [{
+          label: t('humorHoje'),
+          data: valoresHumor,
+          borderColor: '#34d399',
+          borderWidth: 3,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointBackgroundColor: '#10b981',
+          pointBorderColor: '#ecfdf5',
+          pointBorderWidth: 2,
+          backgroundColor: 'rgba(52, 211, 153, 0.18)',
+          fill: true,
+          tension: 0.38
+        }]
       },
-      plugins: { legend: { display: false } }
-    }
-  })
+      options: {
+        ...opcoesBase,
+        scales: {
+          ...opcoesBase.scales,
+          y: {
+            ...opcoesBase.scales.y,
+            min: 0,
+            max: 6,
+            ticks: { ...opcoesBase.scales.y.ticks, stepSize: 1 }
+          }
+        }
+      }
+    })
+  }
 
-  // Gráfico de Sono
-  const labelsSono = dadosSono.dados.map(d => d.data_registro).reverse()
-  const valoresSono = dadosSono.dados.map(d => d.horas_sono).reverse()
-
-  if (graficoSono) graficoSono.destroy()
-  graficoSono = new Chart(document.getElementById('grafico-sono'), {
-    type: 'bar',
-    data: {
-      labels: labelsSono,
-      datasets: [{
-        label: t('horasSono'),
-        data: valoresSono,
-        backgroundColor: '#a855f7',
-        borderRadius: 8
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: { min: 0, max: 12 }
+  if (!sonoVazio) {
+    const labelsSono = dadosSono.dados.map(d => d.data_registro).reverse()
+    const valoresSono = dadosSono.dados.map(d => d.horas_sono).reverse()
+    graficoSono = new Chart(document.getElementById('grafico-sono'), {
+      type: 'bar',
+      data: {
+        labels: labelsSono,
+        datasets: [{
+          label: t('horasSono'),
+          data: valoresSono,
+          backgroundColor: ['#a78bfa', '#8b5cf6', '#7c3aed', '#a78bfa', '#c4b5fd', '#8b5cf6'],
+          borderRadius: 10,
+          borderSkipped: false,
+          borderColor: 'rgba(139, 92, 246, 0.7)',
+          borderWidth: 1.5
+        }]
       },
-      plugins: { legend: { display: false } }
-    }
-  })
+      options: {
+        ...opcoesBase,
+        scales: {
+          ...opcoesBase.scales,
+          y: {
+            ...opcoesBase.scales.y,
+            min: 0,
+            max: 12,
+            ticks: { ...opcoesBase.scales.y.ticks, stepSize: 2 }
+          }
+        }
+      }
+    })
+  }
 
-  const labelsEnergia = dadosEnergia.dados.map(d => d.data_registro).reverse()
-  const valoresEnergia = dadosEnergia.dados.map(d => d.nivel_energia).reverse()
-
-  if (graficoEnergia) graficoEnergia.destroy()
-  graficoEnergia = new Chart(document.getElementById('grafico-energia'), {
-    type: 'line',
-    data: {
-      labels: labelsEnergia,
-      datasets: [{
-        label: t('energia'),
-        data: valoresEnergia,
-        borderColor: '#f97316',
-        backgroundColor: 'rgba(249, 115, 22, 0.12)',
-        fill: true,
-        tension: 0.35
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: { min: 0, max: 10, ticks: { stepSize: 2 } }
+  if (!energiaVazia) {
+    const labelsEnergia = dadosEnergia.dados.map(d => d.data_registro).reverse()
+    const valoresEnergia = dadosEnergia.dados.map(d => d.nivel_energia).reverse()
+    graficoEnergia = new Chart(document.getElementById('grafico-energia'), {
+      type: 'line',
+      data: {
+        labels: labelsEnergia,
+        datasets: [{
+          label: t('energia'),
+          data: valoresEnergia,
+          borderColor: '#fb923c',
+          borderWidth: 3,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointBackgroundColor: '#f97316',
+          pointBorderColor: '#fff7ed',
+          pointBorderWidth: 2,
+          backgroundColor: 'rgba(251, 146, 60, 0.18)',
+          fill: true,
+          tension: 0.34
+        }]
       },
-      plugins: { legend: { display: false } }
-    }
-  })
+      options: {
+        ...opcoesBase,
+        scales: {
+          ...opcoesBase.scales,
+          y: {
+            ...opcoesBase.scales.y,
+            min: 0,
+            max: 10,
+            ticks: { ...opcoesBase.scales.y.ticks, stepSize: 2 }
+          }
+        }
+      }
+    })
+  }
 }
 
 // ==================== PERFIL ====================

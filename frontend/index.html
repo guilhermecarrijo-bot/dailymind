@@ -312,17 +312,32 @@
         </div>
       </header>
       <h1 class="text-2xl font-bold text-gray-800 mb-6" data-i18n="graficosTitulo">📊 Seus Gráficos</h1>
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 mb-6">
-        <h3 class="font-semibold text-gray-700 mb-4" data-i18n="humor30">Humor nos últimos 30 dias</h3>
-        <canvas id="grafico-humor" height="200"></canvas>
+      <div class="chart-panel chart-card mb-6">
+        <div class="chart-header">
+          <h3 class="font-semibold text-gray-700" data-i18n="humor30">Humor nos últimos 30 dias</h3>
+          <span class="chart-pill">Humor</span>
+        </div>
+        <div class="chart-area">
+          <canvas id="grafico-humor" height="220"></canvas>
+        </div>
       </div>
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
-        <h3 class="font-semibold text-gray-700 mb-4" data-i18n="sono30">Sono nos últimos 30 dias</h3>
-        <canvas id="grafico-sono" height="200"></canvas>
+      <div class="chart-panel chart-card">
+        <div class="chart-header">
+          <h3 class="font-semibold text-gray-700" data-i18n="sono30">Sono nos últimos 30 dias</h3>
+          <span class="chart-pill purple">Sono</span>
+        </div>
+        <div class="chart-area">
+          <canvas id="grafico-sono" height="220"></canvas>
+        </div>
       </div>
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 mt-6">
-        <h3 class="font-semibold text-gray-700 mb-4" data-i18n="energia30">Energia nos últimos 30 dias</h3>
-        <canvas id="grafico-energia" height="200"></canvas>
+      <div class="chart-panel chart-card mt-6">
+        <div class="chart-header">
+          <h3 class="font-semibold text-gray-700" data-i18n="energia30">Energia nos últimos 30 dias</h3>
+          <span class="chart-pill orange">Energia</span>
+        </div>
+        <div class="chart-area">
+          <canvas id="grafico-energia" height="220"></canvas>
+        </div>
       </div>
     </div>
 

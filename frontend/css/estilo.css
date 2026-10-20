@@ -3,6 +3,113 @@ html {
   scroll-behavior: smooth;
 }
 
+.chart-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(246,251,255,0.92));
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+  padding: 1.25rem 1.25rem 0.75rem;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.chart-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  background: rgba(16, 185, 129, 0.08);
+  color: #0f766e;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.chart-pill.purple {
+  border-color: rgba(168, 85, 247, 0.18);
+  background: rgba(168, 85, 247, 0.08);
+  color: #7c3aed;
+}
+
+.chart-pill.orange {
+  border-color: rgba(249, 115, 22, 0.18);
+  background: rgba(249, 115, 22, 0.08);
+  color: #c2410c;
+}
+
+.chart-area {
+  position: relative;
+  height: 240px;
+  width: 100%;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, rgba(248,250,252,0.7), rgba(255,255,255,0.5));
+}
+
+.chart-area canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+  color: #64748b;
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px dashed rgba(148, 163, 184, 0.3);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+body[data-tema='escuro'] .chart-empty {
+  color: #dbeafe;
+  background: rgba(15, 23, 42, 0.45);
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+body[data-tema='escuro'] .chart-panel {
+  border-color: rgba(148, 163, 184, 0.22);
+  background: linear-gradient(180deg, rgba(17,24,39,0.96), rgba(15,23,42,0.94));
+  box-shadow: 0 18px 38px rgba(2, 6, 23, 0.42);
+}
+
+body[data-tema='escuro'] .chart-area {
+  background: linear-gradient(180deg, rgba(15,23,42,0.78), rgba(17,24,39,0.72));
+}
+
+body[data-tema='escuro'] .chart-pill {
+  border-color: rgba(52, 211, 153, 0.22);
+  background: rgba(52, 211, 153, 0.1);
+  color: #a7f3d0;
+}
+
+body[data-tema='escuro'] .chart-pill.purple {
+  border-color: rgba(192, 132, 252, 0.28);
+  background: rgba(168, 85, 247, 0.12);
+  color: #ddd6fe;
+}
+
+body[data-tema='escuro'] .chart-pill.orange {
+  border-color: rgba(251, 146, 60, 0.28);
+  background: rgba(249, 115, 22, 0.12);
+  color: #fdba74;
+}
+
 /* Animação do spinner de carregamento */
 @keyframes girar {
   to { transform: rotate(360deg); }

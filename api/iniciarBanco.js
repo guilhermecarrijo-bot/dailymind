@@ -141,7 +141,7 @@ banco.exec(`
   CREATE INDEX IF NOT EXISTS idx_metas_status ON metas(status);
 `);
 
-// Insere sugestões padrão de autocuidado
+// Mantém apenas sugestões padrão e nunca popula registros históricos para novos usuários.
 const sugestoesExistentes = banco.prepare('SELECT COUNT(*) AS total FROM sugestoes').get()
 if (sugestoesExistentes.total === 0) {
   const inserirSugestao = banco.prepare(

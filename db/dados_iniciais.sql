@@ -38,41 +38,6 @@ INSERT INTO sugestoes (humor_tipo, titulo, descricao, icone) VALUES
   ('neutro', 'Escolher uma prioridade pequena', 'Selecione uma tarefa curta para dar direção ao restante do dia.', '🧭'),
   ('neutro', 'Observar como seu corpo está', 'Perceba sua respiração, tensão e energia sem precisar mudar nada agora.', '👀');
 
-INSERT INTO humor (usuario_id, emoji, data_registro) VALUES
-  (1, 'feliz', '2026-09-13'),
-  (1, 'neutro', '2026-09-12'),
-  (1, 'ansioso', '2026-09-11'),
-  (2, 'cansado', '2026-09-13'),
-  (2, 'triste', '2026-09-12');
-
-INSERT INTO sono (usuario_id, horas_sono, qualidade, data_registro) VALUES
-  (1, 7.5, 4, '2026-09-13'),
-  (1, 6.0, 3, '2026-09-12'),
-  (1, 8.0, 5, '2026-09-11'),
-  (2, 6.5, 3, '2026-09-13'),
-  (2, 7.0, 4, '2026-09-12');
-
-INSERT INTO energia (usuario_id, nivel_energia, data_registro) VALUES
-  (1, 8, '2026-09-13'),
-  (1, 6, '2026-09-12'),
-  (1, 5, '2026-09-11'),
-  (2, 5, '2026-09-13'),
-  (2, 7, '2026-09-12');
-
-INSERT INTO lembretes (usuario_id, titulo, icone, horario, concluido, objeto_deixado, hora_deixado, data_criacao) VALUES
-  (1, 'Tomar água', '💧', '09:00', 0, NULL, NULL, '2026-09-13 09:00:00'),
-  (1, 'Tomar medicamento', '💊', '20:00', 0, NULL, NULL, '2026-09-13 09:05:00'),
-  (1, 'Peguei a chave de casa', '🔑', '07:30', 1, 'Chave de casa', '07:30', '2026-09-13 07:30:00'),
-  (2, 'Pausa para respirar', '🌬️', '15:00', 0, NULL, NULL, '2026-09-13 08:00:00');
-
-INSERT INTO tarefas (usuario_id, titulo, descricao, icone, concluido, data_criacao, data_conclusao) VALUES
-  (1, 'Estudar Node.js', 'Revisar middleware e rotas.', '📚', 0, '2026-09-13 08:00:00', NULL),
-  (1, 'Organizar a mesa', 'Guardar materiais que não estão sendo usados.', '🧹', 1, '2026-09-13 08:10:00', '2026-09-13 10:20:00'),
-  (2, 'Planejar a semana', 'Escolher três prioridades possíveis.', '🗓️', 0, '2026-09-13 08:30:00', NULL);
-
-INSERT INTO metas (usuario_id, titulo, descricao, icone, data_inicio, data_fim, progresso, status, data_criacao) VALUES
-  (1, 'Aprender TypeScript', 'Estudar tipos, interfaces e generics.', '🎯', '2026-09-01', '2026-12-31', 25, 'em_andamento', '2026-09-01 08:40:00'),
-  (1, 'Criar rotina de sono', 'Manter horário de sono regular por um mês.', '🌙', '2026-09-10', '2026-10-10', 10, 'em_andamento', '2026-09-10 07:30:00'),
-  (2, 'Fazer pausas durante o trabalho', 'Fazer ao menos três pausas conscientes por dia.', '⏳', '2026-09-01', '2026-09-30', 40, 'em_andamento', '2026-09-01 09:20:00');
+-- Banco inicial limpo: o usuário cria seus próprios registros e o sistema só mostra dados salvos por ele.
 
 COMMIT;

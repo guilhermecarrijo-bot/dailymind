@@ -1,3 +1,14 @@
+/* Ajustes para navegação em celulares */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+nav.fixed.bottom-0 {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* Transição suave para scroll âncora */
 html {
   scroll-behavior: smooth;

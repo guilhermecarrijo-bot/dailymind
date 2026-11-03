@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dailymind-shell-v1'
+const CACHE_NAME = 'dailymind-shell-v2'
 const ARQUIVOS_DE_CACHE = [
   '/',
   '/index.html',
@@ -28,12 +28,12 @@ self.addEventListener('fetch', (evento) => {
   if (evento.request.method !== 'GET' || evento.request.url.includes('/api/')) return
 
   evento.respondWith(
-    caches.match(evento.request).then((recurso) => recurso || fetch(evento.request).then((resposta) => {
+    fetch(evento.request).then((resposta) => {
       if (resposta.ok) {
         const copia = resposta.clone()
         caches.open(CACHE_NAME).then((cache) => cache.put(evento.request, copia))
       }
       return resposta
-    }).catch(() => caches.match('/index.html')))
+    }).catch(() => caches.match(evento.request).then((recurso) => recurso || caches.match('/index.html')))
   )
 })

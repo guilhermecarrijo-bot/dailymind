@@ -15,6 +15,7 @@ let sugestoesCarregando = false
 let proximaSugestaoEm = 120
 let sessaoPerfil = 0
 let perfilAlteradoLocalmente = false
+let fotosPerfilPendentes = { foto_perfil: null, banner_perfil: null }
 let filtroTarefas = 'todas'
 let configuracoes = {
   tema: 'claro',
@@ -1203,12 +1204,13 @@ function atualizarPreviaPerfil() {
   document.getElementById('perfil-ocupacao-preview').textContent = ocupacao || 'DailyMind'
   document.getElementById('perfil-bio-preview').textContent = bio
   document.getElementById('perfil-bio-contador').textContent = `${bio.length}/280`
-  avatar.textContent = nome.charAt(0).toUpperCase()
-
-  if (usuarioAtual.foto_perfil) {
-    avatar.style.backgroundImage = `url(${usuarioAtual.foto_perfil})`
+  const fotoPerfilExibida = fotosPerfilPendentes.foto_perfil || usuarioAtual.foto_perfil
+  if (fotoPerfilExibida) {
+    avatar.textContent = ''
+    avatar.style.backgroundImage = `url(${fotoPerfilExibida})`
     avatar.classList.add('has-image')
   } else {
+    avatar.textContent = nome.charAt(0).toUpperCase()
     avatar.style.backgroundImage = ''
     avatar.classList.remove('has-image')
   }
@@ -1220,8 +1222,9 @@ function atualizarPreviaPerfil() {
   botaoPerfil.style.backgroundPosition = 'center'
   botaoPerfil.style.backgroundSize = 'cover'
 
-  if (usuarioAtual.banner_perfil) {
-    bannerImagem.src = usuarioAtual.banner_perfil
+  const bannerPerfilExibido = fotosPerfilPendentes.banner_perfil || usuarioAtual.banner_perfil
+  if (bannerPerfilExibido) {
+    bannerImagem.src = bannerPerfilExibido
     bannerImagem.hidden = false
     banner.classList.add('has-image')
   } else {
@@ -1232,6 +1235,7 @@ function atualizarPreviaPerfil() {
 }
 
 function limparImagensPerfil() {
+  fotosPerfilPendentes = { foto_perfil: null, banner_perfil: null }
   const avatar = document.getElementById('perfil-avatar-preview')
   const banner = document.getElementById('perfil-banner-preview')
   const botaoPerfil = document.getElementById('btn-perfil')
@@ -1296,7 +1300,7 @@ async function carregarImagemPerfil(input, campo) {
     const imagemProcessada = await prepararImagemPerfil(arquivo)
     imagensPerfilCarregando -= 1
     if (idSessao !== sessaoPerfil || !usuarioAtual || usuarioAtual.id !== usuarioId) return
-    usuarioAtual[campo] = imagemProcessada
+    fotosPerfilPendentes[campo] = imagemProcessada
     perfilAlteradoLocalmente = true
     atualizarPreviaPerfil()
     if (!imagensPerfilCarregando) atualizarStatusPerfil(t('prontoSalvar'))
@@ -1363,12 +1367,13 @@ document.getElementById('form-perfil').addEventListener('submit', async (e) => {
       idade: idade ? parseInt(idade) : null,
       ocupacao: ocupacao || null,
       bio: bio || null,
-      foto_perfil: usuarioAtual.foto_perfil || null,
-      banner_perfil: usuarioAtual.banner_perfil || null
+      foto_perfil: fotosPerfilPendentes.foto_perfil || usuarioAtual.foto_perfil || null,
+      banner_perfil: fotosPerfilPendentes.banner_perfil || usuarioAtual.banner_perfil || null
     })
 
     if (resultado.sucesso) {
       usuarioAtual = resultado.usuario
+      fotosPerfilPendentes = { foto_perfil: null, banner_perfil: null }
       perfilAlteradoLocalmente = false
       document.getElementById('nome-usuario').textContent = usuarioAtual.nome
       document.getElementById('inicial-usuario').textContent = usuarioAtual.nome.charAt(0).toUpperCase()

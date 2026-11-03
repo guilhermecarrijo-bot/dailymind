@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dailymind-shell-v4'
+const CACHE_NAME = 'dailymind-shell-v5'
 const ARQUIVOS_DE_CACHE = [
   '/',
   '/index.html',

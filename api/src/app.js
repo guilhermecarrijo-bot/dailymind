@@ -12,7 +12,20 @@ app.use(helmet({
   contentSecurityPolicy: false
 }))
 app.use(cors({
-  origin: (origem, callback) => callback(null, !origem || configuracao.origensPermitidas.includes(origem)),
+  origin: (origem, callback) => {
+    if (!origem) return callback(null, true)
+
+    let permitida = configuracao.origensPermitidas.includes(origem)
+    if (configuracao.ambiente !== 'production') {
+      try {
+        const urlOrigem = new URL(origem)
+        permitida ||= ['localhost', '127.0.0.1'].includes(urlOrigem.hostname)
+          || /^(192\.168\.|10\.\d{1,3}\.|172\.(1[6-9]|2\d|3[01])\.)/.test(urlOrigem.hostname)
+      } catch (_) { permitida = false }
+    }
+
+    callback(permitida ? null : new Error('Origem não permitida pelo CORS'), permitida)
+  },
   credentials: true
 }))
 app.use(express.json({ limit: '12mb' }))

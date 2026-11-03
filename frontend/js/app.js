@@ -1,5 +1,7 @@
-// URL base da API
-const URL_API = window.location.port === '8000' ? 'http://localhost:3000/api' : '/api'
+// URL base da API: usa o mesmo computador pela rede local no celular
+const URL_API = window.location.port === '8000'
+  ? `${window.location.protocol}//${window.location.hostname}:3000/api`
+  : '/api'
 
 // Estado do aplicativo
 let usuarioAtual = null

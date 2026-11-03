@@ -1,9 +1,9 @@
-const CACHE_NAME = 'dailymind-shell-v3'
+const CACHE_NAME = 'dailymind-shell-v4'
 const ARQUIVOS_DE_CACHE = [
   '/',
   '/index.html',
   '/css/estilo.css',
-  '/js/app.js',
+  '/js/app.js?v=20261103-autenticacao',
   '/manifest.webmanifest',
   '/icons/icon.svg',
   '/icons/icon-192.png',

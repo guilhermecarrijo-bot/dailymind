@@ -3,7 +3,8 @@ node_modules/
 .env.*
 !.env.example
 api/db/
-*.db
+api/db/*.db
+api/db/*.db-*
 *.log
 *.err
 dailymind/

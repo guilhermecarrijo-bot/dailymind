@@ -314,8 +314,11 @@ function limparSessaoLocal() {
   limparImagensPerfil()
   pararAtualizacaoSugestoes()
   fecharNotificacoes()
-  ;['tela-dashboard', 'tela-graficos', 'tela-lembretes', 'tela-perfil', 'tela-configuracoes'].forEach((id) => {
-    document.getElementById(id).classList.add('hidden')
+  const navAdmin = document.getElementById('nav-admin')
+  if (navAdmin) navAdmin.classList.add('hidden')
+  ;['tela-dashboard', 'tela-graficos', 'tela-lembretes', 'tela-perfil', 'tela-configuracoes', 'tela-admin'].forEach((id) => {
+    const elemento = document.getElementById(id)
+    if (elemento) elemento.classList.add('hidden')
   })
   document.getElementById('tela-auth').classList.remove('hidden')
   document.getElementById('form-login').querySelector('form').reset()
@@ -327,11 +330,18 @@ async function fazerLogout() {
   limparSessaoLocal()
 }
 
+function atualizarInterfaceAdmin() {
+  const navAdmin = document.getElementById('nav-admin')
+  if (!navAdmin) return
+  navAdmin.classList.toggle('hidden', !(usuarioAtual && usuarioAtual.role === 'admin'))
+}
+
 function entrarApp() {
   document.getElementById('tela-auth').classList.add('hidden')
   document.getElementById('tela-dashboard').classList.remove('hidden')
   document.getElementById('nome-usuario').textContent = usuarioAtual.nome
   document.getElementById('inicial-usuario').textContent = usuarioAtual.nome.charAt(0).toUpperCase()
+  atualizarInterfaceAdmin()
   atualizarPreviaPerfil()
   iniciarAtualizacaoSugestoes()
   carregarPerfil()
@@ -341,21 +351,281 @@ function entrarApp() {
 // ==================== NAVEGAÇÃO ====================
 
 function mostrarTela(tela) {
-  document.getElementById('tela-dashboard').classList.add('hidden')
-  document.getElementById('tela-graficos').classList.add('hidden')
-  document.getElementById('tela-lembretes').classList.add('hidden')
-  document.getElementById('tela-perfil').classList.add('hidden')
-  document.getElementById('tela-configuracoes').classList.add('hidden')
-  document.getElementById(`tela-${tela}`).classList.remove('hidden')
+  const telas = ['dashboard', 'graficos', 'lembretes', 'perfil', 'configuracoes', 'admin']
+  telas.forEach((nome) => {
+    const elemento = document.getElementById(`tela-${nome}`)
+    if (elemento) elemento.classList.add('hidden')
+  })
+
+  const alvo = document.getElementById(`tela-${tela}`)
+  if (alvo) alvo.classList.remove('hidden')
 
   if (tela === 'graficos') carregarGraficos()
   if (tela === 'lembretes') carregarTodosLembretes()
   if (tela === 'perfil') carregarPerfil()
   if (tela === 'configuracoes') carregarConfiguracoesTela()
+  if (tela === 'admin') carregarPainelAdmin()
 }
 
 function mostrarPerfil() {
   mostrarTela('perfil')
+}
+
+const adminState = {
+  pagina: 1,
+  limite: 8,
+  pesquisa: '',
+  inicio: '',
+  fim: ''
+}
+
+function formatarNumero(valor) {
+  return Number(valor || 0).toLocaleString('pt-BR')
+}
+
+async function carregarPainelAdmin() {
+  if (!usuarioAtual || usuarioAtual.role !== 'admin') {
+    mostrarTela('dashboard')
+    return
+  }
+
+  try {
+    const [metricas, relatorios] = await Promise.all([
+      api('GET', '/admin/dashboard/metricas'),
+      api('GET', '/admin/relatorios')
+    ])
+
+    if (metricas.sucesso && metricas.dados) {
+      const container = document.getElementById('admin-metricas')
+      const dados = metricas.dados
+      container.innerHTML = `
+        <div class="admin-metric-card">
+          <span class="label">Usuários</span>
+          <span class="valor">${formatarNumero(dados.usuarios)}</span>
+          <span class="subvalor">cadastros ativos</span>
+        </div>
+        <div class="admin-metric-card">
+          <span class="label">Humor</span>
+          <span class="valor">${formatarNumero(dados.humor_30_dias)}</span>
+          <span class="subvalor">registros em 30 dias</span>
+        </div>
+        <div class="admin-metric-card">
+          <span class="label">Média de sono</span>
+          <span class="valor">${Number(dados.media_sono || 0).toFixed(1)}h</span>
+          <span class="subvalor">últimos 30 dias</span>
+        </div>
+        <div class="admin-metric-card">
+          <span class="label">Energia</span>
+          <span class="valor">${Number(dados.media_energia || 0).toFixed(1)}/10</span>
+          <span class="subvalor">média geral</span>
+        </div>
+      `
+    }
+
+    if (relatorios.sucesso && relatorios.dados) {
+      document.getElementById('admin-data-inicio').value = relatorios.dados.periodo.inicio
+      document.getElementById('admin-data-fim').value = relatorios.dados.periodo.fim
+      renderizarRelatoriosAdmin(relatorios.dados)
+    }
+
+    await carregarUsuariosAdmin()
+    renderizarGraficosAdmin(relatorios.sucesso ? relatorios.dados : null)
+  } catch (erro) {
+    console.error('Erro ao carregar painel admin:', erro)
+  }
+}
+
+function renderizarGraficosAdmin(dados) {
+  if (!dados) return
+
+  const humorCanvas = document.getElementById('grafico-admin-humor')
+  const usuariosCanvas = document.getElementById('grafico-admin-usuarios')
+
+  if (!humorCanvas || !usuariosCanvas || typeof Chart === 'undefined') return
+
+  const humorDistribuicao = (dados.distribuicao_humor || []).map(item => ({
+    label: item.emoji,
+    value: Number(item.total || 0)
+  }))
+
+  const usuariosMes = (dados.usuarios_por_mes || []).map(item => ({
+    label: item.mes,
+    value: Number(item.total || 0)
+  }))
+
+  if (window.graficoAdminHumor) window.graficoAdminHumor.destroy()
+  if (window.graficoAdminUsuarios) window.graficoAdminUsuarios.destroy()
+
+  window.graficoAdminHumor = new Chart(humorCanvas, {
+    type: 'doughnut',
+    data: {
+      labels: humorDistribuicao.map(item => item.label),
+      datasets: [{
+        data: humorDistribuicao.map(item => item.value),
+        backgroundColor: ['#34d399', '#a78bfa', '#fbbf24', '#f97316', '#f87171', '#60a5fa']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom' } }
+    }
+  })
+
+  window.graficoAdminUsuarios = new Chart(usuariosCanvas, {
+    type: 'bar',
+    data: {
+      labels: usuariosMes.map(item => item.label),
+      datasets: [{
+        label: 'Usuários',
+        data: usuariosMes.map(item => item.value),
+        borderRadius: 8,
+        backgroundColor: '#8b5cf6'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } }
+      }
+    }
+  })
+}
+
+function renderizarRelatoriosAdmin(dados) {
+  const container = document.getElementById('admin-relatorios')
+  if (!container || !dados) return
+
+  const linhas = (dados.engajamento_diario || []).slice(0, 7).map(item => `
+    <div class="flex items-center justify-between border-b border-gray-200 py-2">
+      <span class="font-medium text-gray-700">${item.dia}</span>
+      <span class="text-sm text-gray-500">${Number(item.total || 0)} registros</span>
+    </div>
+  `).join('')
+
+  container.innerHTML = `
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div class="rounded-xl bg-violet-50 p-3">
+        <p class="text-xs uppercase tracking-wider text-violet-700 font-bold">Usuários novos</p>
+        <p class="text-2xl font-black text-violet-900 mt-1">${formatarNumero(dados.usuarios_novos)}</p>
+      </div>
+      <div class="rounded-xl bg-mint-50 p-3">
+        <p class="text-xs uppercase tracking-wider text-mint-700 font-bold">Registros de humor</p>
+        <p class="text-2xl font-black text-mint-900 mt-1">${formatarNumero(dados.registros_humor)}</p>
+      </div>
+      <div class="rounded-xl bg-orange-50 p-3">
+        <p class="text-xs uppercase tracking-wider text-orange-700 font-bold">Engajamento</p>
+        <p class="text-2xl font-black text-orange-900 mt-1">${formatarNumero((dados.engajamento_diario || []).reduce((total, item) => total + Number(item.total || 0), 0))}</p>
+      </div>
+    </div>
+    <div class="mt-4 rounded-2xl border border-gray-200 bg-white p-4">
+      <h3 class="font-bold text-gray-800 mb-3">Atividade recente</h3>
+      ${linhas || '<p class="text-sm text-gray-500">Nenhum registro no intervalo informado.</p>'}
+    </div>
+  `
+}
+
+async function carregarUsuariosAdmin() {
+  const pesquisa = encodeURIComponent(adminState.pesquisa)
+  const inicio = adminState.inicio ? `&inicio=${encodeURIComponent(adminState.inicio)}` : ''
+  const fim = adminState.fim ? `&fim=${encodeURIComponent(adminState.fim)}` : ''
+  const resultado = await api('GET', `/admin/usuarios?page=${adminState.pagina}&limit=${adminState.limite}&search=${pesquisa}${inicio}${fim}`)
+  const tabela = document.getElementById('admin-usuarios-tabela')
+  const paginacao = document.getElementById('admin-paginacao')
+
+  if (!resultado.sucesso || !Array.isArray(resultado.dados)) {
+    tabela.innerHTML = '<tr><td colspan="5" class="px-4 py-6 text-center text-gray-500">Não foi possível carregar os usuários.</td></tr>'
+    return
+  }
+
+  tabela.innerHTML = resultado.dados.map((usuario) => `
+    <tr class="border-t border-gray-100">
+      <td class="px-4 py-3 font-medium text-gray-800">${escaparHtml(usuario.nome)}</td>
+      <td class="px-4 py-3 text-gray-600">${escaparHtml(usuario.email)}</td>
+      <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold ${usuario.role === 'admin' ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-700'}">${usuario.role === 'admin' ? 'Admin' : 'Usuário'}</span></td>
+      <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold ${usuario.ativo ? 'bg-mint-100 text-mint-700' : 'bg-red-100 text-red-700'}">${usuario.ativo ? 'Ativo' : 'Inativo'}</span></td>
+      <td class="px-4 py-3">
+        <div class="flex gap-2">
+          <button type="button" data-usuario-id="${usuario.id}" data-usuario-ativo="${usuario.ativo ? 0 : 1}" class="toggle-usuario btn-status rounded-lg px-2 py-1 text-xs font-semibold bg-gray-900 text-white">${usuario.ativo ? 'Desativar' : 'Ativar'}</button>
+          <button type="button" data-usuario-id="${usuario.id}" class="delete-usuario rounded-lg px-2 py-1 text-xs font-semibold bg-red-100 text-red-700">Excluir</button>
+        </div>
+      </td>
+    </tr>
+  `).join('')
+
+  paginacao.innerHTML = Array.from({ length: Math.max(1, Math.ceil(resultado.total / resultado.limite)) }, (_, indice) => {
+    const pagina = indice + 1
+    return `<button type="button" data-pagina="${pagina}" class="rounded-lg px-3 py-1.5 text-sm font-semibold ${adminState.pagina === pagina ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-700'}">${pagina}</button>`
+  }).join('')
+
+  paginacao.querySelectorAll('button[data-pagina]').forEach(botao => {
+    botao.addEventListener('click', () => {
+      adminState.pagina = Number(botao.dataset.pagina)
+      carregarUsuariosAdmin()
+    })
+  })
+
+  document.querySelectorAll('.toggle-usuario').forEach(botao => {
+    botao.addEventListener('click', async () => {
+      const id = Number(botao.dataset.usuarioId)
+      const ativo = Number(botao.dataset.usuarioAtivo) === 1
+      const resposta = await api('PUT', `/admin/usuarios/${id}/status`, { ativo })
+      if (resposta.sucesso) {
+        exibirToast(resposta.mensagem || 'Status atualizado.')
+        carregarPainelAdmin()
+      } else {
+        exibirToast(resposta.mensagem || 'Não foi possível atualizar o status.', 'erro')
+      }
+    })
+  })
+
+  document.querySelectorAll('.delete-usuario').forEach(botao => {
+    botao.addEventListener('click', async () => {
+      const id = Number(botao.dataset.usuarioId)
+      if (!confirm('Deseja realmente excluir este usuário?')) return
+      const resposta = await api('DELETE', `/admin/usuarios/${id}`)
+      if (resposta.sucesso) {
+        exibirToast(resposta.mensagem || 'Usuário removido.')
+        carregarPainelAdmin()
+      } else {
+        exibirToast(resposta.mensagem || 'Não foi possível excluir o usuário.', 'erro')
+      }
+    })
+  })
+}
+
+async function aplicarFiltroAdmin() {
+  adminState.inicio = document.getElementById('admin-data-inicio').value
+  adminState.fim = document.getElementById('admin-data-fim').value
+  adminState.pagina = 1
+
+  const resultado = await api('GET', `/admin/relatorios?inicio=${encodeURIComponent(adminState.inicio)}&fim=${encodeURIComponent(adminState.fim)}`)
+  if (resultado.sucesso && resultado.dados) {
+    renderizarRelatoriosAdmin(resultado.dados)
+    renderizarGraficosAdmin(resultado.dados)
+  }
+}
+
+function exportarRelatorioCsv() {
+  const tabela = document.getElementById('admin-relatorios')
+  if (!tabela) return
+
+  const linhas = [
+    'indicador,valor',
+    `usuarios_novos,${document.getElementById('admin-relatorios').dataset.usuariosNovos || 0}`,
+    `registros_humor,${document.getElementById('admin-relatorios').dataset.registrosHumor || 0}`,
+    `engajamento_total,${document.getElementById('admin-relatorios').dataset.engajamentoTotal || 0}`
+  ]
+
+  const blob = new Blob([linhas.join('\n')], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'relatorio_dailymind.csv'
+  link.click()
+  URL.revokeObjectURL(url)
 }
 
 function lerConfiguracoes() {
@@ -494,6 +764,21 @@ document.getElementById('btn-atualizar-sugestoes').addEventListener('click', () 
   proximaSugestaoEm = 120
   atualizarContadorSugestoes()
   carregarSugestoes(true)
+})
+
+document.getElementById('btn-admin-filtrar').addEventListener('click', aplicarFiltroAdmin)
+document.getElementById('btn-exportar-csv').addEventListener('click', exportarRelatorioCsv)
+document.getElementById('btn-admin-busca').addEventListener('click', () => {
+  adminState.pagina = 1
+  adminState.pesquisa = document.getElementById('admin-busca-usuarios').value.trim()
+  carregarUsuariosAdmin()
+})
+document.getElementById('admin-busca-usuarios').addEventListener('keydown', (evento) => {
+  if (evento.key === 'Enter') {
+    adminState.pagina = 1
+    adminState.pesquisa = document.getElementById('admin-busca-usuarios').value.trim()
+    carregarUsuariosAdmin()
+  }
 })
 
 // ==================== MODAIS ====================

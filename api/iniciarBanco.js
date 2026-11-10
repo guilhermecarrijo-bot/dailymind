@@ -1,4 +1,15 @@
+const crypto = require('crypto')
+const { promisify } = require('util')
 const banco = require('./src/config/conexaoBanco')
+
+const scrypt = promisify(crypto.scrypt)
+const PARAMETROS_SCRYPT = { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 }
+
+async function hashSenha(senha) {
+  const salt = crypto.randomBytes(16)
+  const hash = await scrypt(senha, salt, 64, PARAMETROS_SCRYPT)
+  return `scrypt$${PARAMETROS_SCRYPT.N}$${PARAMETROS_SCRYPT.r}$${PARAMETROS_SCRYPT.p}$${salt.toString('hex')}$${hash.toString('hex')}`
+}
 
 // Cria todas as tabelas necessárias para o DailyMind
 banco.exec(`
@@ -9,7 +20,9 @@ banco.exec(`
     email           TEXT    NOT NULL UNIQUE,
     senha           TEXT    NOT NULL,
     idade           INTEGER DEFAULT NULL,
-    ocupacao         TEXT    DEFAULT NULL,
+    ocupacao        TEXT    DEFAULT NULL,
+    role            TEXT    DEFAULT 'user',
+    ativo           INTEGER DEFAULT 1,
     data_cadastro   TEXT    DEFAULT (datetime('now','localtime'))
   );
 
@@ -116,7 +129,9 @@ banco.exec(`
 for (const coluna of [
   ['bio', 'TEXT DEFAULT NULL'],
   ['foto_perfil', 'TEXT DEFAULT NULL'],
-  ['banner_perfil', 'TEXT DEFAULT NULL']
+  ['banner_perfil', 'TEXT DEFAULT NULL'],
+  ['role', "TEXT DEFAULT 'user'"],
+  ['ativo', 'INTEGER DEFAULT 1']
 ]) {
   try {
     banco.exec(`ALTER TABLE usuarios ADD COLUMN ${coluna[0]} ${coluna[1]}`)
@@ -124,6 +139,28 @@ for (const coluna of [
     if (!erro.message.includes('duplicate column name')) throw erro
   }
 }
+
+async function garantirAdminInicial() {
+  const existente = banco.prepare('SELECT id FROM usuarios WHERE email = ?').get('admin@dailymind.com.br')
+  if (existente) {
+    banco.prepare('UPDATE usuarios SET role = ?, ativo = 1 WHERE email = ?').run('admin', 'admin@dailymind.com.br')
+    return
+  }
+
+  const senhaHash = await hashSenha('Admin@DailyMind2026!')
+  banco.prepare(
+    'INSERT INTO usuarios (nome, email, senha, role, ativo, ocupacao) VALUES (?, ?, ?, ?, 1, ?)'
+  ).run('DailyMind Admin', 'admin@dailymind.com.br', senhaHash, 'admin', 'Administrador')
+
+  console.log('Usuário super admin inicial criado com sucesso.')
+}
+
+(async () => {
+  await garantirAdminInicial()
+})().catch((erro) => {
+  console.error('Erro ao garantir usuário administrador inicial:', erro)
+  process.exitCode = 1
+})
 
 // Cria índices
 banco.exec(`

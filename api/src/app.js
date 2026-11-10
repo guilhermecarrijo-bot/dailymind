@@ -5,6 +5,7 @@ const path = require('path')
 const configuracao = require('./config/ambiente')
 
 const rotasDailyMind = require('./rotas/dailyMindRotas')
+const rotasAdmin = require('./rotas/adminRotas')
 
 const app = express()
 // Middlewares de segurança e parsing
@@ -37,6 +38,7 @@ app.use(express.static(caminhoFrontend))
 // Rotas da API
 // Rota de health check
 app.get('/api/health', (_, res) => res.json({ sucesso: true, mensagem: 'DailyMind API funcionando!' }))
+app.use('/api/admin', rotasAdmin)
 app.use('/api', rotasDailyMind)
 
 // Fallback para o frontend

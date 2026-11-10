@@ -37,7 +37,7 @@ async function verificarSenha(senha, armazenada) {
 
 function selecionarUsuario(id) {
   return banco.prepare(
-    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil FROM usuarios WHERE id = ?'
+    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, role, ativo FROM usuarios WHERE id = ?'
   ).get(id)
 }
 
@@ -89,11 +89,15 @@ async function loginUsuario(req, res) {
     return res.status(422).json({ sucesso: false, mensagem: 'E-mail e senha são obrigatórios.' })
   }
 
-  const conta = banco.prepare('SELECT id, senha FROM usuarios WHERE email = ?').get(emailNormalizado)
+  const conta = banco.prepare('SELECT id, senha, role, ativo FROM usuarios WHERE email = ?').get(emailNormalizado)
   const resultadoSenha = conta ? await verificarSenha(senha, conta.senha) : { valida: false, legado: false }
 
   if (!conta || !resultadoSenha.valida) {
     return res.status(401).json({ sucesso: false, mensagem: 'E-mail ou senha incorretos.' })
+  }
+
+  if (Number(conta.ativo) === 0) {
+    return res.status(403).json({ sucesso: false, mensagem: 'Esta conta está desativada.' })
   }
 
   if (resultadoSenha.legado) {
@@ -116,7 +120,7 @@ function logoutUsuario(req, res) {
 function consultarPerfil(req, res) {
   const usuarioId = req.params.id_usuario || req.params.id
   const usuario = banco.prepare(
-    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil FROM usuarios WHERE id = ?'
+    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, role, ativo FROM usuarios WHERE id = ?'
   ).get(usuarioId)
 
   if (!usuario) {
@@ -175,7 +179,7 @@ function atualizarPerfil(req, res) {
   )
 
   const usuario = banco.prepare(
-    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil FROM usuarios WHERE id = ?'
+    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, role, ativo FROM usuarios WHERE id = ?'
   ).get(idUsuario)
   res.json({ sucesso: true, mensagem: 'Perfil atualizado!', usuario })
 }

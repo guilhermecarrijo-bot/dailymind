@@ -36,71 +36,120 @@
   <div id="app" class="min-h-screen">
     
     <!-- Tela de Login/Cadastro -->
-    <div id="tela-auth" class="min-h-screen flex items-center justify-center p-4">
-      <div class="w-full max-w-md">
-        <!-- Logo -->
-        <div class="text-center mb-8">
-          <div class="text-5xl mb-2">🧠</div>
-          <h1 class="logo-marca text-3xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</h1>
-          <p class="text-gray-500 mt-1" data-i18n="tagline">Cuide da sua mente, um dia de cada vez</p>
+    <div id="tela-auth" class="min-h-screen flex items-center justify-center p-4 lg:p-8">
+      <div class="grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+        <div class="wellness-panel">
+          <div class="wellness-badge">DailyMind</div>
+          <div class="flex items-center gap-3 mb-5">
+            <div class="text-4xl">🧠</div>
+            <h1 class="logo-marca text-4xl font-black bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</h1>
+          </div>
+          <h2 class="text-3xl font-black text-slate-800 leading-tight mb-4">Seu espaço leve para perceber o que você precisa.</h2>
+          <p class="text-base text-slate-600 mb-6">Acompanhe humor, sono, energia e lembretes com uma rotina mais gentil, clara e útil para o seu dia.</p>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <span class="feature-emoji">😊</span>
+              <div>
+                <h3>Humor</h3>
+                <p>Registre como você está em poucos segundos.</p>
+              </div>
+            </article>
+            <article class="feature-card">
+              <span class="feature-emoji">🌙</span>
+              <div>
+                <h3>Sono</h3>
+                <p>Veja seu descanso e o impacto no seu ritmo.</p>
+              </div>
+            </article>
+            <article class="feature-card">
+              <span class="feature-emoji">⚡</span>
+              <div>
+                <h3>Energia</h3>
+                <p>Monitore o nível de disposição ao longo do dia.</p>
+              </div>
+            </article>
+          </div>
+          <div class="preview-metrics">
+            <div>
+              <strong>+1.200</strong>
+              <span>registros</span>
+            </div>
+            <div>
+              <strong>7 dias</strong>
+              <span>de acompanhamento</span>
+            </div>
+            <div>
+              <strong>100%</strong>
+              <span>focado em acolhimento</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Formulário de Login -->
-        <div id="form-login" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center" data-i18n="entrar">Entrar</h2>
-          <form class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="email">E-mail</label>
-              <input type="email" id="login-email" required data-i18n-placeholder="email" placeholder="E-mail" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="senha">Senha</label>
-              <input type="password" id="login-senha" required autocomplete="current-password" data-i18n-placeholder="senha" placeholder="Senha" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-            <button type="submit" id="btn-login" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
-              <span data-i18n="entrar">Entrar</span>
-            </button>
-          </form>
-          <p class="text-center mt-6 text-gray-500">
-            <span data-i18n="naoTemConta">Não tem conta?</span>
-            <button onclick="mostrarCadastro()" class="text-mint-600 font-semibold hover:underline" data-i18n="criarConta">Criar conta</button>
-          </p>
-        </div>
+        <div class="w-full max-w-md mx-auto">
+          <!-- Logo -->
+          <div class="text-center mb-8 lg:hidden">
+            <div class="text-5xl mb-2">🧠</div>
+            <h1 class="logo-marca text-3xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</h1>
+            <p class="text-gray-500 mt-1" data-i18n="tagline">Cuide da sua mente, um dia de cada vez</p>
+          </div>
 
-        <!-- Formulário de Cadastro -->
-        <div id="form-cadastro" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hidden">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center" data-i18n="criarConta">Criar Conta</h2>
-          <form class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="nomeCompleto">Nome completo</label>
-                <input type="text" id="cadastro-nome" required minlength="3" data-i18n-placeholder="nomeCompleto" placeholder="Nome completo" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-            <div>
+          <!-- Formulário de Login -->
+          <div id="form-login" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center" data-i18n="entrar">Entrar</h2>
+            <form class="space-y-4">
+              <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="email">E-mail</label>
-                <input type="email" id="cadastro-email" required data-i18n-placeholder="email" placeholder="E-mail" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-            <div>
+                <input type="email" id="login-email" required data-i18n-placeholder="email" placeholder="E-mail" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+              </div>
+              <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="senha">Senha</label>
-                <input type="password" id="cadastro-senha" required minlength="8" maxlength="128" autocomplete="new-password" data-i18n-placeholder="senha" placeholder="Senha" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
-            </div>
-            <div class="grid grid-cols-2 gap-4">
+                <input type="password" id="login-senha" required autocomplete="current-password" data-i18n-placeholder="senha" placeholder="Senha" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+              </div>
+              <button type="submit" id="btn-login" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
+                <span data-i18n="entrar">Entrar</span>
+              </button>
+            </form>
+            <p class="text-center mt-6 text-gray-500">
+              <span data-i18n="naoTemConta">Não tem conta?</span>
+              <button onclick="mostrarCadastro()" class="text-mint-600 font-semibold hover:underline" data-i18n="criarConta">Criar conta</button>
+            </p>
+          </div>
+
+          <!-- Formulário de Cadastro -->
+          <div id="form-cadastro" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center" data-i18n="criarConta">Criar Conta</h2>
+            <form class="space-y-4">
               <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="idadeOpcional">Idade (opcional)</label>
-                <input type="number" id="cadastro-idade" min="1" max="150" placeholder="Idade" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                  <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="nomeCompleto">Nome completo</label>
+                  <input type="text" id="cadastro-nome" required minlength="3" data-i18n-placeholder="nomeCompleto" placeholder="Nome completo" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
               </div>
               <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="ocupacaoOpcional">Ocupação (opcional)</label>
-                <input type="text" id="cadastro-ocupacao" placeholder="Ex: Estudante" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                  <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="email">E-mail</label>
+                  <input type="email" id="cadastro-email" required data-i18n-placeholder="email" placeholder="E-mail" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
               </div>
-            </div>
-            <button type="submit" id="btn-cadastro" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
-              <span data-i18n="criarMinhaConta">Criar minha conta</span>
-            </button>
-          </form>
-          <p class="text-center mt-6 text-gray-500">
-            <span data-i18n="jaTemConta">Já tem conta?</span>
-            <button onclick="mostrarLogin()" class="text-mint-600 font-semibold hover:underline" data-i18n="entrar">Entrar</button>
-          </p>
+              <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="senha">Senha</label>
+                  <input type="password" id="cadastro-senha" required minlength="8" maxlength="128" autocomplete="new-password" data-i18n-placeholder="senha" placeholder="Senha" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="idadeOpcional">Idade (opcional)</label>
+                  <input type="number" id="cadastro-idade" min="1" max="150" placeholder="Idade" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="ocupacaoOpcional">Ocupação (opcional)</label>
+                  <input type="text" id="cadastro-ocupacao" placeholder="Ex: Estudante" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                </div>
+              </div>
+              <button type="submit" id="btn-cadastro" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
+                <span data-i18n="criarMinhaConta">Criar minha conta</span>
+              </button>
+            </form>
+            <p class="text-center mt-6 text-gray-500">
+              <span data-i18n="jaTemConta">Já tem conta?</span>
+              <button onclick="mostrarLogin()" class="text-mint-600 font-semibold hover:underline" data-i18n="entrar">Entrar</button>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -131,6 +180,10 @@
                 <p class="text-sm text-gray-400 py-3" data-i18n="nenhumaNotificacao">Nenhuma notificação pendente.</p>
               </div>
             </div>
+            <button id="nav-admin" type="button" onclick="mostrarTela('admin')" class="hidden items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-700 transition hover:bg-violet-100">
+              <span>⚙️</span>
+              <span>Painel Admin</span>
+            </button>
             <!-- Perfil -->
             <button id="btn-perfil" class="w-10 h-10 bg-gradient-to-r from-mint-400 to-lavender-400 rounded-full flex items-center justify-center text-white font-bold" onclick="mostrarPerfil()">
               <span id="inicial-usuario">U</span>
@@ -299,6 +352,98 @@
           </button>
         </div>
       </nav>
+    </div>
+
+    <!-- Tela de Administração -->
+    <div id="tela-admin" class="hidden min-h-screen pt-20 pb-24 px-4 max-w-6xl mx-auto">
+      <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-mint-100">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+          <button onclick="mostrarTela('dashboard')" class="flex items-center gap-2 text-gray-600 hover:text-mint-600 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span class="font-semibold">Voltar</span>
+          </button>
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🧠</span>
+            <span class="logo-marca text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span>
+          </div>
+          <div class="w-20"></div>
+        </div>
+      </header>
+
+      <div class="mb-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-violet-600">Painel</p>
+        <h1 class="text-3xl font-bold text-gray-800 mt-1">Área administrativa</h1>
+      </div>
+
+      <div id="admin-metricas" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6"></div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <h3 class="font-semibold text-gray-700">Distribuição de humor</h3>
+            <span class="chart-pill">Humor</span>
+          </div>
+          <div class="chart-area" style="height: 260px;">
+            <canvas id="grafico-admin-humor" height="220"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-panel">
+          <div class="chart-header">
+            <h3 class="font-semibold text-gray-700">Cadastros por mês</h3>
+            <span class="chart-pill purple">Usuários</span>
+          </div>
+          <div class="chart-area" style="height: 260px;">
+            <canvas id="grafico-admin-usuarios" height="220"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <section class="admin-section mb-6">
+        <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Relatórios</h2>
+            <p class="text-sm text-gray-500">Engajamento e uso em um intervalo de datas.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input id="admin-data-inicio" type="date" class="border border-gray-300 rounded-lg px-3 py-2">
+            <input id="admin-data-fim" type="date" class="border border-gray-300 rounded-lg px-3 py-2">
+            <button id="btn-admin-filtrar" type="button" class="bg-violet-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-violet-700 transition">Filtrar</button>
+            <button id="btn-exportar-csv" type="button" class="bg-mint-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-mint-600 transition">Exportar CSV</button>
+          </div>
+        </div>
+
+        <div id="admin-relatorios" class="space-y-3"></div>
+      </section>
+
+      <section class="admin-section">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-gray-800">Usuários</h2>
+          <div class="flex items-center gap-2">
+            <input id="admin-busca-usuarios" type="search" placeholder="Buscar por nome ou e-mail" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+            <button id="btn-admin-busca" type="button" class="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm font-semibold">Buscar</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
+          <table class="min-w-full text-left">
+            <thead class="bg-gray-50 text-gray-600">
+              <tr>
+                <th class="px-4 py-3 font-semibold">Nome</th>
+                <th class="px-4 py-3 font-semibold">E-mail</th>
+                <th class="px-4 py-3 font-semibold">Perfil</th>
+                <th class="px-4 py-3 font-semibold">Status</th>
+                <th class="px-4 py-3 font-semibold">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="admin-usuarios-tabela"></tbody>
+          </table>
+        </div>
+
+        <div id="admin-paginacao" class="flex justify-end gap-2 mt-4"></div>
+      </section>
     </div>
 
     <!-- Tela de Gráficos -->

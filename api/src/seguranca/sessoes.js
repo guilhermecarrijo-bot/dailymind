@@ -53,13 +53,18 @@ function exigirAutenticacao(req, res, next) {
   const token = valor.slice(separador + 1)
   const sessao = banco.prepare(
     `SELECT sessoes.id AS sessao_id, sessoes.token_hash, usuarios.id, usuarios.nome, usuarios.email,
-      usuarios.idade, usuarios.ocupacao, usuarios.bio, usuarios.foto_perfil, usuarios.banner_perfil
+      usuarios.idade, usuarios.ocupacao, usuarios.bio, usuarios.foto_perfil, usuarios.banner_perfil,
+      usuarios.role, usuarios.ativo
      FROM sessoes JOIN usuarios ON usuarios.id = sessoes.usuario_id
      WHERE sessoes.id = ? AND sessoes.expira_em > ?`
   ).get(idSessao, new Date().toISOString())
 
   if (!sessao) {
     return res.status(401).json({ sucesso: false, mensagem: 'Sessão inválida ou expirada.' })
+  }
+
+  if (Number(sessao.ativo) === 0) {
+    return res.status(403).json({ sucesso: false, mensagem: 'Esta conta foi desativada.' })
   }
 
   const hashArmazenado = Buffer.from(sessao.token_hash, 'hex')
@@ -77,7 +82,9 @@ function exigirAutenticacao(req, res, next) {
     ocupacao: sessao.ocupacao,
     bio: sessao.bio,
     foto_perfil: sessao.foto_perfil,
-    banner_perfil: sessao.banner_perfil
+    banner_perfil: sessao.banner_perfil,
+    role: sessao.role || 'user',
+    ativo: Number(sessao.ativo ?? 1)
   }
   return next()
 }

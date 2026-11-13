@@ -8,6 +8,8 @@ const rotasDailyMind = require('./rotas/dailyMindRotas')
 const rotasAdmin = require('./rotas/adminRotas')
 
 const app = express()
+// O Render (e outros proxies) encaminha o IP real em X-Forwarded-For.
+app.set('trust proxy', 1)
 // Middlewares de segurança e parsing
 app.use(helmet({
   contentSecurityPolicy: false

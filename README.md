@@ -260,6 +260,26 @@ O cadastro recebe `nome`, `email`, `senha` (8 a 128 caracteres) e, opcionalmente
 
 ---
 
+## Deploy no Render
+
+O projeto já inclui o blueprint `render.yaml`, que cria o Web Service apontando para a pasta `api`.
+
+1. Envie o repositório para o GitHub.
+2. No [Render](https://render.com), escolha **New > Blueprint** e selecione o repositório.
+3. Confirme a criação do serviço `dailymind`. O Render configura automaticamente:
+   - **Root Directory:** `api`
+   - **Build Command:** `npm ci`
+   - **Start Command:** `npm start`
+   - **Health Check:** `/api/health`
+   - **NODE_ENV:** `production`
+   - **CHAVE_SESSAO:** gerada automaticamente
+
+Também é possível criar manualmente um **New > Web Service** com as mesmas configurações e definir `CHAVE_SESSAO` em **Environment** (mínimo de 32 bytes). A URL pública do serviço é liberada no CORS automaticamente por meio da variável `RENDER_EXTERNAL_URL`.
+
+> **Atenção:** no plano gratuito o disco do Render é efêmero, então o arquivo SQLite é recriado a cada deploy/reinício. Para manter os dados, use um plano com **Persistent Disk** montado em `/var/data` e defina `DAILYMIND_DB_PATH=/var/data/dailymind.db`.
+
+---
+
 ## Segurança e Boas Práticas
 
 - **Prepared Statements:** Uso de consultas preparadas para prevenir SQL Injection

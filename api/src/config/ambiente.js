@@ -32,12 +32,26 @@ const dbPath = process.env.DAILYMIND_DB_PATH
 const pastaPublica = path.resolve(__dirname, '../../frontend')
 const foraDePastaPublica = !path.resolve(dbPath).startsWith(pastaPublica + path.sep) && path.resolve(dbPath) !== pastaPublica
 
+const normalizarOrigem = origem => origem.trim().replace(/\/+$/, '')
+
 const origensPermitidasConfiguradas = (process.env.ORIGEM_PERMITIDA || 'http://localhost:8000,http://127.0.0.1:8000')
   .split(',')
-  .map(origem => origem.trim())
+  .map(normalizarOrigem)
   .filter(Boolean)
+
+// Em produção no Render a própria URL pública do serviço precisa ser aceita
+// para que as requisições same-origin (ex.: login via POST) passem pelo CORS.
+const origensDoRender = [
+  frontendOrigin,
+  process.env.RENDER_EXTERNAL_URL,
+  process.env.RENDER_EXTERNAL_HOSTNAME ? `https://${process.env.RENDER_EXTERNAL_HOSTNAME}` : ''
+]
+  .map(normalizarOrigem)
+  .filter(Boolean)
+
 const origensPermitidas = [...new Set([
   ...origensPermitidasConfiguradas,
+  ...origensDoRender,
   `http://localhost:${porta}`,
   `http://127.0.0.1:${porta}`
 ])]

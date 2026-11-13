@@ -278,6 +278,15 @@ Também é possível criar manualmente um **New > Web Service** com as mesmas co
 
 > **Atenção:** no plano gratuito o disco do Render é efêmero, então o arquivo SQLite é recriado a cada deploy/reinício. Para manter os dados, use um plano com **Persistent Disk** montado em `/var/data` e defina `DAILYMIND_DB_PATH=/var/data/dailymind.db`.
 
+### GitHub Pages
+
+O arquivo `index.html` na raiz redireciona para o aplicativo publicado no Render, já que o GitHub Pages não executa o backend Express.
+
+1. No GitHub, acesse **Settings > Pages**.
+2. Em **Build and deployment**, escolha **Deploy from a branch**.
+3. Selecione a branch `main` e a pasta `/ (root)` e salve.
+4. Se a URL do serviço no Render for diferente de `https://dailymind.onrender.com`, atualize o endereço no `index.html`.
+
 ---
 
 ## Segurança e Boas Práticas

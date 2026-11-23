@@ -10,8 +10,8 @@ if (chaveSessao && Buffer.byteLength(chaveSessao) < 32) {
 
 const ambiente = process.env.NODE_ENV || 'development'
 
-if (ambiente === 'production' && !chaveSessao) {
-  throw new Error('CHAVE_SESSAO e obrigatoria em producao.')
+if (!chaveSessao) {
+  throw new Error('CHAVE_SESSAO é obrigatória. Execute configurarAmbiente.js antes de iniciar a API.')
 }
 
 const porta = process.env.PORT || 3000
@@ -32,7 +32,7 @@ const dbPath = process.env.DAILYMIND_DB_PATH
 const pastaPublica = path.resolve(__dirname, '../../frontend')
 const foraDePastaPublica = !path.resolve(dbPath).startsWith(pastaPublica + path.sep) && path.resolve(dbPath) !== pastaPublica
 
-const normalizarOrigem = origem => origem.trim().replace(/\/+$/, '')
+const normalizarOrigem = origem => (origem || '').trim().replace(/\/+$/, '')
 
 const origensPermitidasConfiguradas = (process.env.ORIGEM_PERMITIDA || 'http://localhost:8000,http://127.0.0.1:8000')
   .split(',')

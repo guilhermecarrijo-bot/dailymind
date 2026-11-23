@@ -1,4 +1,4 @@
-const banco = require('../config/conexaoBanco')
+const banco = require('../repositorio')
 const crypto = require('crypto')
 const { promisify } = require('util')
 const validator = require('validator')
@@ -6,6 +6,10 @@ const { criarSessao, encerrarSessao } = require('../seguranca/sessoes')
 
 const scrypt = promisify(crypto.scrypt)
 const PARAMETROS_SCRYPT = { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 }
+
+function camposAcessoUsuario() {
+  return `${banco.temColuna('usuarios', 'role') ? 'role' : "'user' AS role"}, ${banco.temColuna('usuarios', 'ativo') ? 'ativo' : '1 AS ativo'}`
+}
 
 async function hashSenha(senha) {
   const salt = crypto.randomBytes(16)
@@ -37,7 +41,7 @@ async function verificarSenha(senha, armazenada) {
 
 function selecionarUsuario(id) {
   return banco.prepare(
-    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, role, ativo FROM usuarios WHERE id = ?'
+    `SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, ${camposAcessoUsuario()} FROM usuarios WHERE id = ?`
   ).get(id)
 }
 
@@ -70,9 +74,21 @@ async function cadastrarUsuario(req, res) {
   const inserir = banco.prepare(
     'INSERT INTO usuarios (nome, email, senha, idade, ocupacao) VALUES (?, ?, ?, ?, ?)'
   )
-  const resultado = inserir.run(nome.trim(), emailNormalizado, senhaHash, idade || null, ocupacao?.trim() || null)
-  criarSessao(Number(resultado.lastInsertRowid), res)
-  const usuario = selecionarUsuario(Number(resultado.lastInsertRowid))
+  let usuarioId
+  try {
+    usuarioId = banco.transacao(() => {
+      const resultado = inserir.run(nome.trim(), emailNormalizado, senhaHash, idade || null, ocupacao?.trim() || null)
+      const novoUsuarioId = Number(resultado.lastInsertRowid)
+      criarSessao(novoUsuarioId, res)
+      return novoUsuarioId
+    })()
+  } catch (erro) {
+    if (erro.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      return res.status(409).json({ sucesso: false, mensagem: 'E-mail já cadastrado.' })
+    }
+    throw erro
+  }
+  const usuario = selecionarUsuario(usuarioId)
 
   res.status(201).json({
     sucesso: true,
@@ -89,7 +105,7 @@ async function loginUsuario(req, res) {
     return res.status(422).json({ sucesso: false, mensagem: 'E-mail e senha são obrigatórios.' })
   }
 
-  const conta = banco.prepare('SELECT id, senha, role, ativo FROM usuarios WHERE email = ?').get(emailNormalizado)
+  const conta = banco.prepare(`SELECT id, senha, ${camposAcessoUsuario()} FROM usuarios WHERE email = ?`).get(emailNormalizado)
   const resultadoSenha = conta ? await verificarSenha(senha, conta.senha) : { valida: false, legado: false }
 
   if (!conta || !resultadoSenha.valida) {
@@ -100,11 +116,13 @@ async function loginUsuario(req, res) {
     return res.status(403).json({ sucesso: false, mensagem: 'Esta conta está desativada.' })
   }
 
-  if (resultadoSenha.legado) {
-    banco.prepare('UPDATE usuarios SET senha = ? WHERE id = ?').run(await hashSenha(senha), conta.id)
-  }
-
-  criarSessao(conta.id, res)
+  const senhaAtualizada = resultadoSenha.legado ? await hashSenha(senha) : null
+  banco.transacao(() => {
+    if (resultadoSenha.legado) {
+      banco.prepare('UPDATE usuarios SET senha = ? WHERE id = ?').run(senhaAtualizada, conta.id)
+    }
+    criarSessao(conta.id, res)
+  })()
   res.json({ sucesso: true, mensagem: 'Login realizado com sucesso!', usuario: selecionarUsuario(conta.id) })
 }
 
@@ -120,7 +138,7 @@ function logoutUsuario(req, res) {
 function consultarPerfil(req, res) {
   const usuarioId = req.params.id_usuario || req.params.id
   const usuario = banco.prepare(
-    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, role, ativo FROM usuarios WHERE id = ?'
+    `SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, ${camposAcessoUsuario()} FROM usuarios WHERE id = ?`
   ).get(usuarioId)
 
   if (!usuario) {
@@ -179,7 +197,7 @@ function atualizarPerfil(req, res) {
   )
 
   const usuario = banco.prepare(
-    'SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, role, ativo FROM usuarios WHERE id = ?'
+    `SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, ${camposAcessoUsuario()} FROM usuarios WHERE id = ?`
   ).get(idUsuario)
   res.json({ sucesso: true, mensagem: 'Perfil atualizado!', usuario })
 }

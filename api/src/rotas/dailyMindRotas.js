@@ -5,7 +5,7 @@ const autorizarAcesso = require('../seguranca/autorizarAcesso')
 const { registrarHumor, listarHumor, obterHumorHoje, editarHumor, removerHumor } = require('../controladores/humorControlador')
 const { registrarSono, listarSono, obterSonoHoje, editarSono, removerSono } = require('../controladores/sonoControlador')
 const { registrarEnergia, listarEnergia, obterEnergiaHoje, editarEnergia, removerEnergia } = require('../controladores/energiaControlador')
-const { criarLembrete, listarLembretes, alternarLembrete, removerLembrete, contarPendentes } = require('../controladores/lembreteControlador')
+const { criarLembrete, listarLembretes, atualizarLembrete, alternarLembrete, removerLembrete, contarPendentes } = require('../controladores/lembreteControlador')
 const { obterSugestoes, listarTodasSugestoes } = require('../controladores/sugestaoControlador')
 const {
   criarTarefa,
@@ -23,6 +23,7 @@ const {
   obterMeta,
   atualizarMeta,
   atualizarProgresso,
+  concluirMeta,
   removerMeta,
   obterMetasAtivas,
   obterEstatisticas
@@ -69,6 +70,7 @@ rotas.delete('/energia/:id', removerEnergia)
 // Lembretes
 rotas.post('/lembretes', criarLembrete)
 rotas.get('/lembretes/:usuario_id', listarLembretes)
+rotas.put('/lembretes/:id', atualizarLembrete)
 rotas.put('/lembretes/:id/toggle', alternarLembrete)
 rotas.delete('/lembretes/:id', removerLembrete)
 rotas.get('/lembretes/:usuario_id/pendentes', contarPendentes)
@@ -91,6 +93,7 @@ rotas.get('/metas/:usuario_id/estatisticas', obterEstatisticas)
 rotas.get('/metas/item/:id', obterMeta)
 rotas.put('/metas/:id', atualizarMeta)
 rotas.put('/metas/:id/progresso', atualizarProgresso)
+rotas.put('/metas/:id/concluir', concluirMeta)
 rotas.delete('/metas/:id', removerMeta)
 
 // Sugestões

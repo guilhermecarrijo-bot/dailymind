@@ -1,4 +1,4 @@
-const banco = require('../config/conexaoBanco')
+const banco = require('../repositorio')
 const { dataLocal } = require('../utilitarios/data')
 
 // Criar tarefa
@@ -22,20 +22,13 @@ function criarTarefa(req, res) {
     'INSERT INTO tarefas (usuario_id, titulo, descricao, icone) VALUES (?, ?, ?, ?)'
   )
   const resultado = inserir.run(usuario_id, titulo.trim(), descricao || null, icone || '✓')
+  const tarefa = banco.prepare('SELECT * FROM tarefas WHERE id = ? AND usuario_id = ?')
+    .get(resultado.lastInsertRowid, usuario_id)
 
   res.status(201).json({
     sucesso: true,
     mensagem: 'Tarefa criada com sucesso!',
-    tarefa: {
-      id: resultado.lastInsertRowid,
-      usuario_id,
-      titulo: titulo.trim(),
-      descricao: descricao || null,
-      icone: icone || '✓',
-      concluido: 0,
-      data_criacao: new Date().toISOString(),
-      data_conclusao: null
-    }
+    tarefa
   })
 }
 
@@ -75,26 +68,24 @@ function obterTarefa(req, res) {
 // Marcar tarefa como concluída/pendente (toggle checkbox)
 function alternarTarefa(req, res) {
   const { id } = req.params
+  const usuarioId = req.usuario.id
 
-  const tarefa = banco.prepare('SELECT * FROM tarefas WHERE id = ?').get(id)
+  const tarefa = banco.prepare('SELECT * FROM tarefas WHERE id = ? AND usuario_id = ?').get(id, usuarioId)
   if (!tarefa) {
     return res.status(404).json({ sucesso: false, mensagem: 'Tarefa não encontrada.' })
   }
 
   const novoStatus = tarefa.concluido ? 0 : 1
-  const dataConclusao = novoStatus ? new Date().toISOString() : null
-
-  banco.prepare('UPDATE tarefas SET concluido = ?, data_conclusao = ? WHERE id = ?')
-    .run(novoStatus, dataConclusao, id)
+  banco.prepare(`UPDATE tarefas SET concluido = ?,
+    data_conclusao = CASE WHEN ? = 1 THEN datetime('now', 'localtime') ELSE NULL END
+    WHERE id = ? AND usuario_id = ?`)
+    .run(novoStatus, novoStatus, id, usuarioId)
+  const tarefaAtualizada = banco.prepare('SELECT * FROM tarefas WHERE id = ? AND usuario_id = ?').get(id, usuarioId)
 
   res.json({
     sucesso: true,
     mensagem: novoStatus ? 'Tarefa concluída!' : 'Tarefa reaberida!',
-    tarefa: {
-      id,
-      concluido: novoStatus,
-      data_conclusao: dataConclusao
-    }
+    tarefa: tarefaAtualizada
   })
 }
 

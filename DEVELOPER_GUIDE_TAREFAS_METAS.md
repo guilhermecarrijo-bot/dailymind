@@ -253,7 +253,7 @@ api/
 → Use **Goals** endpoint with date_inicio and date_fim
 
 ### Scenario: User wants to track both (e.g., daily tasks for a goal)
-→ Create a Goal for the project, then create Tasks as sub-items (optional: add goal_id to tasks)
+→ Create the Goal and Tasks separately. The existing schema has no `goal_id` column or foreign key between these tables, so they cannot be persisted as linked records without a schema change.
 
 ### Scenario: User needs reminders
 → Use existing **Lembretes** (reminders) endpoint

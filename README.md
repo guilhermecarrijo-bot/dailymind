@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS sugestoes (
 
 ### Índices e Seed
 
-O arquivo `iniciarBanco.js` cria índices para todas as tabelas e insere automaticamente **12 sugestões padrão de autocuidado** (mapping: `feliz`, `triste`, `ansioso`, `cansado`, `irritado`, `neutro`) quando a tabela `sugestoes` está vazia.
+O arquivo `iniciarBanco.js` cria índices para as tabelas existentes e preenche o catálogo global `sugestoes` com 26 modelos de autocuidado (categorias `feliz`, `triste`, `ansioso`, `cansado`, `irritado`, `neutro`) quando necessário.
 
 > **Obs.:** O módulo de **leads** (pré-cadastro da antiga landing page) permanece no código como legado (`leadControlador.js` / `leadRotas.js`), porém não faz mais parte do banco nem das rotas ativas.
 
@@ -211,12 +211,12 @@ Todas as rotas usam o prefixo `/api`. Cadastro, login, health check e `GET /suge
 | Humor | `POST /humor`, `GET /humor/:usuario_id`, `GET /humor/:usuario_id/hoje`, `PUT /humor/:id`, `DELETE /humor/:id` |
 | Sono | `POST /sono`, `GET /sono/:usuario_id`, `GET /sono/:usuario_id/hoje`, `PUT /sono/:id`, `DELETE /sono/:id` |
 | Energia | `POST /energia`, `GET /energia/:usuario_id`, `GET /energia/:usuario_id/hoje`, `PUT /energia/:id`, `DELETE /energia/:id` |
-| Lembretes | `POST /lembretes`, `GET /lembretes/:usuario_id`, `PUT /lembretes/:id/toggle`, `DELETE /lembretes/:id`, `GET /lembretes/:usuario_id/pendentes` |
-| Tarefas (API) | `POST /tarefas`, `GET /tarefas/:usuario_id`, `GET /tarefas/:usuario_id/hoje`, `GET /tarefas/:usuario_id/pendentes`, `GET /tarefas/item/:id`, `PUT /tarefas/:id/toggle`, `PUT /tarefas/:id`, `DELETE /tarefas/:id` |
-| Metas (API) | `POST /metas`, `GET /metas/:usuario_id`, `GET /metas/:usuario_id/ativas`, `GET /metas/:usuario_id/estatisticas`, `GET /metas/item/:id`, `PUT /metas/:id`, `PUT /metas/:id/progresso`, `DELETE /metas/:id` |
+| Lembretes | `POST /lembretes`, `GET /lembretes/:usuario_id`, `PUT /lembretes/:id`, `PUT /lembretes/:id/toggle`, `DELETE /lembretes/:id`, `GET /lembretes/:usuario_id/pendentes` |
+| Tarefas | `POST /tarefas`, `GET /tarefas/:usuario_id`, `GET /tarefas/:usuario_id/hoje`, `GET /tarefas/:usuario_id/pendentes`, `GET /tarefas/item/:id`, `PUT /tarefas/:id/toggle`, `PUT /tarefas/:id`, `DELETE /tarefas/:id` |
+| Metas | `POST /metas`, `GET /metas/:usuario_id`, `GET /metas/:usuario_id/ativas`, `GET /metas/:usuario_id/estatisticas`, `GET /metas/item/:id`, `PUT /metas/:id`, `PUT /metas/:id/progresso`, `PUT /metas/:id/concluir`, `DELETE /metas/:id` |
 | Sugestões | `GET /sugestoes`, `GET /sugestoes/:usuario_id` |
 
-Respostas usam JSON com `sucesso`; erros incluem `401` (sessão ausente/inválida), `403` (sem acesso ao registro), `404` (registro inexistente), `409` (e-mail duplicado) e `422` (dados inválidos). A interface atual não inclui telas de tarefas/metas; esses recursos permanecem disponíveis pela API.
+Respostas usam JSON com `sucesso`; erros incluem `401` (sessão ausente/inválida), `403` (sem acesso ao registro), `404` (registro inexistente), `409` (e-mail duplicado) e `422` (dados inválidos). Tarefas e metas permanecem disponíveis pela API, mas não têm telas no frontend original. O schema existente não relaciona essas duas tabelas. As sugestões são calculadas com registros reais, mas o catálogo `sugestoes` não tem colunas de usuário/data para guardar histórico personalizado.
 
 O cadastro recebe `nome`, `email`, `senha` (8 a 128 caracteres) e, opcionalmente, `idade` e `ocupacao`. Após cadastro ou login, o servidor define o cookie de sessão; chamadas privadas devem mantê-lo e não precisam usar um ID como credencial.
 
@@ -235,23 +235,15 @@ O cadastro recebe `nome`, `email`, `senha` (8 a 128 caracteres) e, opcionalmente
    npm install
    ```
 
-2. **Configure o ambiente local:**
-   ```bash
-   cp .env.example .env
-   node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
-   ```
-   Cole o valor gerado em `CHAVE_SESSAO` no arquivo `api/.env`. Esse arquivo é ignorado pelo Git; não inclua segredos no repositório. Em produção, forneça a chave pelo ambiente ou por um gerenciador de segredos.
+2. **Inicie o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+    O comando prepara `api/.env` e gera uma chave de sessão persistente se ainda não existir. Preserve essa chave entre inicializações para que as sessões possam ser restauradas. O arquivo `.env` é ignorado pelo Git.
 
-   `api/.env.example` documenta as variáveis `NODE_ENV`, `PORT`, `ORIGEM_PERMITIDA`, `CHAVE_SESSAO` e `DAILYMIND_DB_PATH`. O banco atual é SQLite e não possui usuário ou senha de conexão; use `DAILYMIND_DB_PATH` para configurar o caminho do arquivo.
+    `api/.env.example` documenta `NODE_ENV`, `PORT`, `ORIGEM_PERMITIDA`, `CHAVE_SESSAO` e `DAILYMIND_DB_PATH`. O banco SQLite fica em `api/db/dailymind.db` por padrão; use `DAILYMIND_DB_PATH` para escolher outro caminho no servidor.
 
-3. **Inicie o servidor de desenvolvimento:**
-   ```bash
-   npm run dev
-   ```
-
-   > O servidor executa automaticamente o script `iniciarBanco.js`, criando as tabelas e os dados padrão do banco.
-
-4. **Acesse a aplicação no navegador:**
+3. **Acesse a aplicação no navegador:**
    - **Aplicação (SPA):** [http://localhost:3000/](http://localhost:3000/)
    - **Health Check da API:** [http://localhost:3000/api/health](http://localhost:3000/api/health)
 

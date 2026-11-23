@@ -12,7 +12,7 @@ process.env.CHAVE_SESSAO = crypto.randomBytes(48).toString('base64')
 process.env.DAILYMIND_DB_PATH = path.join(pastaTemporaria, 'test.sqlite')
 
 const app = require('../src/app')
-require('../iniciarBanco')
+const inicializacaoBanco = require('../iniciarBanco')
 const banco = require('../src/config/conexaoBanco')
 const servidor = http.createServer(app)
 const servidorPronto = new Promise(resolve => servidor.listen(0, '127.0.0.1', resolve))
@@ -24,6 +24,7 @@ after(async () => {
 })
 
 test('protege sessões e dados pessoais por usuário', async () => {
+  await inicializacaoBanco
   await servidorPronto
   const api = `http://127.0.0.1:${servidor.address().port}/api`
 
@@ -62,6 +63,19 @@ test('protege sessões e dados pessoais por usuário', async () => {
   const emailB = `b-${crypto.randomUUID()}@example.com`
   const usuarioA = await cadastrar('Pessoa Um', emailA)
   const usuarioB = await cadastrar('Pessoa Dois', emailB)
+
+  const emailDuplicado = await requisitar('/usuarios/cadastro', 'POST', {
+    nome: 'Pessoa Duplicada',
+    email: emailA,
+    senha: 'senha-segura-123'
+  })
+  assert.equal(emailDuplicado.status, 409)
+
+  const senhaIncorreta = await requisitar('/usuarios/login', 'POST', {
+    email: emailA,
+    senha: 'senha-incorreta'
+  })
+  assert.equal(senhaIncorreta.status, 401)
 
   const idadeInvalida = await requisitar('/usuarios/cadastro', 'POST', {
     nome: 'Pessoa Teste',
@@ -105,6 +119,32 @@ test('protege sessões e dados pessoais por usuário', async () => {
   const cookieLogin = login.cookie.split(';')[0]
   assert.equal((await requisitar('/usuarios/sessao', 'GET', null, cookieLogin)).status, 200)
   assert.match(banco.prepare('SELECT senha FROM usuarios WHERE id = ?').get(usuarioB.usuario.id).senha, /^scrypt\$/)
+
+  const humorB = await requisitar('/humor', 'POST', { usuario_id: usuarioB.usuario.id, emoji: '😔' }, cookieLogin)
+  const sonoB = await requisitar('/sono', 'POST', { usuario_id: usuarioB.usuario.id, horas_sono: 5, qualidade: 3 }, cookieLogin)
+  const energiaB = await requisitar('/energia', 'POST', { usuario_id: usuarioB.usuario.id, nivel_energia: 2 }, cookieLogin)
+  assert.equal(humorB.status, 201)
+  assert.equal(sonoB.status, 201)
+  assert.equal(energiaB.status, 201)
+  assert.equal((await requisitar('/sono', 'POST', { usuario_id: usuarioB.usuario.id, horas_sono: 25 }, cookieLogin)).status, 422)
+  assert.equal((await requisitar('/energia', 'POST', { usuario_id: usuarioB.usuario.id, nivel_energia: 0 }, cookieLogin)).status, 422)
+  assert.equal((await requisitar('/humor', 'POST', { usuario_id: usuarioB.usuario.id, emoji: 'inválido' }, cookieLogin)).status, 422)
+  assert.equal((await requisitar(`/humor/${usuarioB.usuario.id}`, 'GET', null, usuarioA.cookie)).status, 403)
+
+  const lembrete = await requisitar('/lembretes', 'POST', {
+    usuario_id: usuarioB.usuario.id,
+    titulo: 'Lembrete persistente',
+    hora_deixado: '08:30'
+  }, cookieLogin)
+  assert.equal(lembrete.status, 201)
+  const lembreteEditado = await requisitar(`/lembretes/${lembrete.corpo.lembrete.id}`, 'PUT', {
+    titulo: 'Lembrete editado'
+  }, cookieLogin)
+  assert.equal(lembreteEditado.status, 200)
+  assert.equal(lembreteEditado.corpo.lembrete.titulo, 'Lembrete editado')
+  assert.equal((await requisitar(`/lembretes/${lembrete.corpo.lembrete.id}`, 'PUT', { titulo: 'Acesso alheio' }, usuarioA.cookie)).status, 403)
+  assert.equal((await requisitar(`/lembretes/${lembrete.corpo.lembrete.id}/toggle`, 'PUT', {}, cookieLogin)).status, 200)
+  assert.equal(banco.prepare('SELECT concluido FROM lembretes WHERE id = ? AND usuario_id = ?').get(lembrete.corpo.lembrete.id, usuarioB.usuario.id).concluido, 1)
 
   assert.equal((await requisitar('/usuarios/logout', 'POST', {}, usuarioA.cookie)).status, 200)
   assert.equal((await requisitar('/usuarios/sessao', 'GET', null, usuarioA.cookie)).status, 401)
@@ -208,4 +248,27 @@ test('protege sessões e dados pessoais por usuário', async () => {
   assert.equal(loginA.status, 200)
   const tarefaDeOutroUsuario = await requisitar(`/tarefas/item/${tarefa.corpo.tarefa.id}`, 'GET', null, loginA.cookie.split(';')[0])
   assert.equal(tarefaDeOutroUsuario.status, 403)
+
+  const sugestoesContextuais = await requisitar(`/sugestoes/${usuarioB.usuario.id}`, 'GET', null, cookieLogin)
+  assert.equal(sugestoesContextuais.status, 200)
+  assert.deepEqual(new Set(sugestoesContextuais.corpo.dados.map(item => item.humor_tipo)), new Set(['triste', 'cansado', 'neutro']))
+  assert.equal((await requisitar(`/sugestoes/${usuarioB.usuario.id}`, 'GET', null, loginA.cookie.split(';')[0])).status, 403)
+
+  assert.equal((await requisitar(`/tarefas/${tarefa.corpo.tarefa.id}/toggle`, 'PUT', {}, cookieLogin)).status, 200)
+  assert.equal((await requisitar(`/tarefas/${tarefa.corpo.tarefa.id}`, 'DELETE', {}, cookieLogin)).status, 200)
+  assert.equal((await requisitar(`/lembretes/${lembrete.corpo.lembrete.id}`, 'DELETE', {}, cookieLogin)).status, 200)
+
+  const metaConcluida = await requisitar(`/metas/${meta.corpo.meta.id}/concluir`, 'PUT', {}, cookieLogin)
+  assert.equal(metaConcluida.status, 200)
+  assert.equal(metaConcluida.corpo.meta.status, 'concluida')
+  assert.equal(metaConcluida.corpo.meta.progresso, 100)
+
+  banco.prepare('UPDATE sessoes SET expira_em = ? WHERE id = ?').run(
+    new Date(Date.now() - 1000).toISOString(),
+    login.cookie.split(';')[0].split('=')[1].split('.')[0]
+  )
+  assert.equal((await requisitar('/usuarios/sessao', 'GET', null, cookieLogin)).status, 401)
+  assert.equal(banco.prepare('SELECT COUNT(*) AS total FROM sessoes WHERE id = ?').get(
+    login.cookie.split(';')[0].split('=')[1].split('.')[0]
+  ).total, 1)
 })

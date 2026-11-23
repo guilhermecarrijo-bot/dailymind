@@ -155,12 +155,13 @@ async function garantirAdminInicial() {
   console.log('Usuário super admin inicial criado com sucesso.')
 }
 
-(async () => {
-  await garantirAdminInicial()
-})().catch((erro) => {
+const inicializacaoAdmin = garantirAdminInicial()
+inicializacaoAdmin.catch((erro) => {
   console.error('Erro ao garantir usuário administrador inicial:', erro)
   process.exitCode = 1
 })
+
+module.exports = inicializacaoAdmin
 
 // Cria índices
 banco.exec(`

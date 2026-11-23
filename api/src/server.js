@@ -1,9 +1,6 @@
 const app = require('./app')
 const configuracao = require('./config/ambiente')
 
-// Inicializa a tabela no banco antes de subir o servidor
-require('../iniciarBanco')
-
 const servidor = app.listen(configuracao.porta, '0.0.0.0', () => {
 	console.log(`Servidor rodando na porta ${configuracao.porta}`)
 })

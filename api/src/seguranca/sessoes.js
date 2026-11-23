@@ -1,10 +1,10 @@
 const crypto = require('crypto')
 const configuracao = require('../config/ambiente')
-const banco = require('../config/conexaoBanco')
+const banco = require('../repositorio')
 
 const NOME_COOKIE = 'dailymind_session'
 const DURACAO_SESSAO_MS = 7 * 24 * 60 * 60 * 1000
-const chaveSessao = configuracao.chaveSessao || crypto.randomBytes(48)
+const chaveSessao = configuracao.chaveSessao
 
 function resumirToken(token) {
   return crypto.createHmac('sha256', chaveSessao).update(token).digest('hex')
@@ -25,7 +25,6 @@ function criarSessao(usuarioId, res) {
   const token = crypto.randomBytes(32).toString('base64url')
   const expiraEm = new Date(Date.now() + DURACAO_SESSAO_MS).toISOString()
 
-  banco.prepare('DELETE FROM sessoes WHERE expira_em <= ?').run(new Date().toISOString())
   banco.prepare('INSERT INTO sessoes (id, usuario_id, token_hash, expira_em) VALUES (?, ?, ?, ?)')
     .run(id, usuarioId, resumirToken(token), expiraEm)
 
@@ -51,10 +50,12 @@ function exigirAutenticacao(req, res, next) {
 
   const idSessao = valor.slice(0, separador)
   const token = valor.slice(separador + 1)
+  const roleColuna = banco.temColuna('usuarios', 'role') ? 'usuarios.role' : "'user' AS role"
+  const ativoColuna = banco.temColuna('usuarios', 'ativo') ? 'usuarios.ativo' : '1 AS ativo'
   const sessao = banco.prepare(
     `SELECT sessoes.id AS sessao_id, sessoes.token_hash, usuarios.id, usuarios.nome, usuarios.email,
       usuarios.idade, usuarios.ocupacao, usuarios.bio, usuarios.foto_perfil, usuarios.banner_perfil,
-      usuarios.role, usuarios.ativo
+      ${roleColuna}, ${ativoColuna}
      FROM sessoes JOIN usuarios ON usuarios.id = sessoes.usuario_id
      WHERE sessoes.id = ? AND sessoes.expira_em > ?`
   ).get(idSessao, new Date().toISOString())

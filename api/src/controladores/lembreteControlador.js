@@ -1,4 +1,4 @@
-const banco = require('../config/conexaoBanco')
+const banco = require('../repositorio')
 
 // Criar lembrete
 function criarLembrete(req, res) {
@@ -20,19 +20,12 @@ function criarLembrete(req, res) {
     'INSERT INTO lembretes (usuario_id, titulo, icone, horario, objeto_deixado, hora_deixado) VALUES (?, ?, ?, ?, ?, ?)'
   )
   const resultado = inserir.run(usuario_id, titulo.trim(), icone || '📌', horario || null, objeto_deixado || null, hora_deixado || null)
+  const lembrete = banco.prepare('SELECT * FROM lembretes WHERE id = ? AND usuario_id = ?').get(resultado.lastInsertRowid, usuario_id)
 
   res.status(201).json({
     sucesso: true,
     mensagem: 'Lembrete criado!',
-    lembrete: { 
-      id: resultado.lastInsertRowid, 
-      titulo: titulo.trim(),
-      icone: icone || '📌', 
-      horario, 
-      objeto_deixado: objeto_deixado || null,
-      hora_deixado: hora_deixado || null,
-      concluido: 0 
-    }
+    lembrete
   })
 }
 
@@ -46,17 +39,55 @@ function listarLembretes(req, res) {
   res.json({ sucesso: true, dados: lembretes })
 }
 
+function atualizarLembrete(req, res) {
+  const { id } = req.params
+  const { titulo, icone, horario, objeto_deixado, hora_deixado } = req.body
+  const usuarioId = req.usuario.id
+
+  if (titulo !== undefined && (typeof titulo !== 'string' || !titulo.trim() || titulo.trim().length > 150)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'O título deve ter entre 1 e 150 caracteres.' })
+  }
+  if (icone !== undefined && (typeof icone !== 'string' || icone.length > 10)) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Ícone inválido.' })
+  }
+  for (const [campo, valor] of Object.entries({ horario, objeto_deixado, hora_deixado })) {
+    if (valor !== undefined && valor !== null && typeof valor !== 'string') {
+      return res.status(422).json({ sucesso: false, mensagem: `${campo} deve ser um texto.` })
+    }
+  }
+
+  const campos = { titulo, icone, horario, objeto_deixado, hora_deixado }
+  const alteracoes = Object.fromEntries(Object.entries(campos).filter(([, valor]) => valor !== undefined))
+  if (!Object.keys(alteracoes).length) {
+    return res.status(422).json({ sucesso: false, mensagem: 'Informe ao menos um campo para atualizar.' })
+  }
+  if (alteracoes.titulo !== undefined) alteracoes.titulo = alteracoes.titulo.trim()
+
+  const resultado = banco.prepare(
+    `UPDATE lembretes SET ${Object.keys(alteracoes).map(campo => `${campo} = ?`).join(', ')}
+     WHERE id = ? AND usuario_id = ?`
+  ).run(...Object.values(alteracoes), id, usuarioId)
+
+  if (!resultado.changes) {
+    return res.status(404).json({ sucesso: false, mensagem: 'Lembrete não encontrado.' })
+  }
+
+  const lembrete = banco.prepare('SELECT * FROM lembretes WHERE id = ? AND usuario_id = ?').get(id, usuarioId)
+  res.json({ sucesso: true, mensagem: 'Lembrete atualizado!', lembrete })
+}
+
 // Marcar lembrete como concluído/pendente
 function alternarLembrete(req, res) {
   const { id } = req.params
+  const usuarioId = req.usuario.id
 
-  const lembrete = banco.prepare('SELECT * FROM lembretes WHERE id = ?').get(id)
+  const lembrete = banco.prepare('SELECT * FROM lembretes WHERE id = ? AND usuario_id = ?').get(id, usuarioId)
   if (!lembrete) {
     return res.status(404).json({ sucesso: false, mensagem: 'Lembrete não encontrado.' })
   }
 
   const novoStatus = lembrete.concluido ? 0 : 1
-  banco.prepare('UPDATE lembretes SET concluido = ? WHERE id = ?').run(novoStatus, id)
+  banco.prepare('UPDATE lembretes SET concluido = ? WHERE id = ? AND usuario_id = ?').run(novoStatus, id, usuarioId)
 
   res.json({ sucesso: true, mensagem: novoStatus ? 'Lembrete concluído!' : 'Lembrete reaberto!' })
 }
@@ -64,13 +95,14 @@ function alternarLembrete(req, res) {
 // Remover lembrete
 function removerLembrete(req, res) {
   const { id } = req.params
+  const usuarioId = req.usuario.id
 
-  const lembrete = banco.prepare('SELECT * FROM lembretes WHERE id = ?').get(id)
+  const lembrete = banco.prepare('SELECT * FROM lembretes WHERE id = ? AND usuario_id = ?').get(id, usuarioId)
   if (!lembrete) {
     return res.status(404).json({ sucesso: false, mensagem: 'Lembrete não encontrado.' })
   }
 
-  banco.prepare('DELETE FROM lembretes WHERE id = ?').run(id)
+  banco.prepare('DELETE FROM lembretes WHERE id = ? AND usuario_id = ?').run(id, usuarioId)
   res.json({ sucesso: true, mensagem: 'Lembrete removido!' })
 }
 
@@ -84,4 +116,4 @@ function contarPendentes(req, res) {
   res.json({ sucesso: true, total: resultado.total })
 }
 
-module.exports = { criarLembrete, listarLembretes, alternarLembrete, removerLembrete, contarPendentes }
+module.exports = { criarLembrete, listarLembretes, atualizarLembrete, alternarLembrete, removerLembrete, contarPendentes }

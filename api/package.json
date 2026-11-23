@@ -7,7 +7,9 @@
     "node": ">=22"
   },
   "scripts": {
+    "prestart": "node configurarAmbiente.js",
     "start": "node src/server.js",
+    "predev": "node configurarAmbiente.js",
     "dev": "node --watch src/server.js",
     "test": "node --test"
   },

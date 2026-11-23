@@ -1,4 +1,4 @@
-const banco = require('../config/conexaoBanco')
+const banco = require('../repositorio')
 const { dataLocal } = require('../utilitarios/data')
 
 function dataIsoValida(data) {
@@ -47,7 +47,7 @@ function calcularProgressoAutomatico(data_inicio, data_fim) {
 function representarMeta(meta) {
   return {
     ...meta,
-    status: calcularStatus(meta.data_inicio, meta.data_fim),
+    status: meta.status === 'concluida' ? 'concluida' : calcularStatus(meta.data_inicio, meta.data_fim),
     progresso: meta.progresso_manual
       ? meta.progresso
       : calcularProgressoAutomatico(meta.data_inicio, meta.data_fim),
@@ -90,23 +90,12 @@ function criarMeta(req, res) {
     'INSERT INTO metas (usuario_id, titulo, descricao, icone, data_inicio, data_fim, status, progresso) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
   )
   const resultado = inserir.run(usuario_id, titulo.trim(), descricao?.trim() || null, icone || '🎯', data_inicio, data_fim, status, progresso)
+  const meta = banco.prepare('SELECT * FROM metas WHERE id = ? AND usuario_id = ?').get(resultado.lastInsertRowid, usuario_id)
 
   res.status(201).json({
     sucesso: true,
     mensagem: 'Meta criada com sucesso!',
-    meta: {
-      id: resultado.lastInsertRowid,
-      usuario_id,
-      titulo: titulo.trim(),
-      descricao: descricao?.trim() || null,
-      icone: icone || '🎯',
-      data_inicio,
-      data_fim,
-      status,
-      progresso,
-      dias_restantes: calcularDiasRestantes(data_inicio, data_fim),
-      data_criacao: new Date().toISOString()
-    }
+    meta: representarMeta(meta)
   })
 }
 
@@ -232,6 +221,21 @@ function atualizarProgresso(req, res) {
   })
 }
 
+function concluirMeta(req, res) {
+  const { id } = req.params
+  const usuarioId = req.usuario.id
+  const resultado = banco.prepare(
+    "UPDATE metas SET status = 'concluida', progresso = 100, progresso_manual = 1 WHERE id = ? AND usuario_id = ?"
+  ).run(id, usuarioId)
+
+  if (!resultado.changes) {
+    return res.status(404).json({ sucesso: false, mensagem: 'Meta não encontrada.' })
+  }
+
+  const meta = banco.prepare('SELECT * FROM metas WHERE id = ? AND usuario_id = ?').get(id, usuarioId)
+  res.json({ sucesso: true, mensagem: 'Meta concluída!', meta: representarMeta(meta) })
+}
+
 // Remover meta
 function removerMeta(req, res) {
   const { id } = req.params
@@ -293,6 +297,7 @@ module.exports = {
   obterMeta,
   atualizarMeta,
   atualizarProgresso,
+  concluirMeta,
   removerMeta,
   obterMetasAtivas,
   obterEstatisticas

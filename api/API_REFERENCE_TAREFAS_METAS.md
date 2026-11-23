@@ -50,7 +50,7 @@ Response (201):
     "descricao": "Revisar conceitos de middleware",
     "icone": "📚",
     "concluido": 0,
-    "data_criacao": "2026-09-01T10:30:00Z",
+    "data_criacao": "2026-09-01 10:30:00",
     "data_conclusao": null
   }
 }
@@ -109,7 +109,7 @@ Response (200):
   "tarefa": {
     "id": 123,
     "concluido": 1,
-    "data_conclusao": "2026-09-01T14:45:00Z"
+    "data_conclusao": "2026-09-01 14:45:00"
   }
 }
 ```
@@ -188,7 +188,7 @@ Response (201):
     "status": "em_andamento",
     "progresso": 8,
     "dias_restantes": 120,
-    "data_criacao": "2026-09-01T10:30:00Z"
+    "data_criacao": "2026-09-01 10:30:00"
   }
 }
 ```
@@ -308,6 +308,21 @@ Response (200):
 
 The manual progress value is preserved in subsequent reads. Editing a goal's date range resets progress to the automatic period-based value.
 
+### Complete Goal
+```http
+PUT /metas/456/concluir
+
+Response (200):
+{
+  "sucesso": true,
+  "mensagem": "Meta concluída!",
+  "meta": {
+    "status": "concluida",
+    "progresso": 100
+  }
+}
+```
+
 ### Delete Goal
 ```http
 DELETE /metas/456
@@ -331,7 +346,7 @@ Response (200):
 ### Goal Status
 - **status: "não_iniciada"** - Goal hasn't started yet (today < data_inicio)
 - **status: "em_andamento"** - Goal is currently active (data_inicio <= today <= data_fim)
-- **status: "concluida"** - Goal has ended (today > data_fim)
+- **status: "concluida"** - Goal was completed explicitly or its period has ended
 
 ### Goal Progress
 - **0-100** - Percentage of goal completion

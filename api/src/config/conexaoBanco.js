@@ -1,11 +1,19 @@
 const Database = require('better-sqlite3')
 const path = require('path')
 const fs = require('fs')
+const os = require('os')
 const configuracao = require('./ambiente')
 
-// Define o arquivo SQLite e garante que sua pasta existe
-const pastaDb = path.resolve(__dirname, '../../db')
-const caminhoBanco = configuracao.caminhoBanco || path.join(pastaDb, 'dailymind.db')
+const caminhoBancoExistente = path.resolve(__dirname, '../../db/dailymind.db')
+const pastaDadosSistema = process.platform === 'win32'
+	? process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming')
+	: process.platform === 'darwin'
+		? path.join(os.homedir(), 'Library', 'Application Support')
+		: process.env.XDG_DATA_HOME || path.join(os.homedir(), '.local', 'share')
+const caminhoBancoPadrao = fs.existsSync(caminhoBancoExistente)
+	? caminhoBancoExistente
+	: path.join(pastaDadosSistema, 'DailyMind', 'dailymind.db')
+const caminhoBanco = configuracao.caminhoBanco || caminhoBancoPadrao
 const pastaBanco = path.dirname(caminhoBanco)
 if (!fs.existsSync(pastaBanco)) fs.mkdirSync(pastaBanco, { recursive: true })
 

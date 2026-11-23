@@ -11,6 +11,7 @@
     "start": "node src/server.js",
     "predev": "node configurarAmbiente.js",
     "dev": "node --watch src/server.js",
+    "admin:setup": "node configurarAdministrador.js",
     "test": "node --test"
   },
   "dependencies": {

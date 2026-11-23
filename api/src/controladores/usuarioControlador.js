@@ -3,12 +3,21 @@ const crypto = require('crypto')
 const { promisify } = require('util')
 const validator = require('validator')
 const { criarSessao, encerrarSessao } = require('../seguranca/sessoes')
+const configuracao = require('../config/ambiente')
 
 const scrypt = promisify(crypto.scrypt)
 const PARAMETROS_SCRYPT = { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 }
 
 function camposAcessoUsuario() {
   return `${banco.temColuna('usuarios', 'role') ? 'role' : "'user' AS role"}, ${banco.temColuna('usuarios', 'ativo') ? 'ativo' : '1 AS ativo'}`
+}
+
+function aplicarPapelAdmin(usuario) {
+  if (usuario && !banco.temColuna('usuarios', 'role')
+      && usuario.email?.toLowerCase() === configuracao.adminEmail.toLowerCase()) {
+    usuario.role = 'admin'
+  }
+  return usuario
 }
 
 async function hashSenha(senha) {
@@ -40,9 +49,10 @@ async function verificarSenha(senha, armazenada) {
 }
 
 function selecionarUsuario(id) {
-  return banco.prepare(
+  const usuario = banco.prepare(
     `SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, ${camposAcessoUsuario()} FROM usuarios WHERE id = ?`
   ).get(id)
+  return aplicarPapelAdmin(usuario)
 }
 
 async function cadastrarUsuario(req, res) {
@@ -105,7 +115,7 @@ async function loginUsuario(req, res) {
     return res.status(422).json({ sucesso: false, mensagem: 'E-mail e senha são obrigatórios.' })
   }
 
-  const conta = banco.prepare(`SELECT id, senha, ${camposAcessoUsuario()} FROM usuarios WHERE email = ?`).get(emailNormalizado)
+  const conta = banco.prepare(`SELECT id, senha, email, ${camposAcessoUsuario()} FROM usuarios WHERE email = ?`).get(emailNormalizado)
   const resultadoSenha = conta ? await verificarSenha(senha, conta.senha) : { valida: false, legado: false }
 
   if (!conta || !resultadoSenha.valida) {
@@ -137,9 +147,9 @@ function logoutUsuario(req, res) {
 
 function consultarPerfil(req, res) {
   const usuarioId = req.params.id_usuario || req.params.id
-  const usuario = banco.prepare(
+  const usuario = aplicarPapelAdmin(banco.prepare(
     `SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, ${camposAcessoUsuario()} FROM usuarios WHERE id = ?`
-  ).get(usuarioId)
+  ).get(usuarioId))
 
   if (!usuario) {
     return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' })
@@ -196,9 +206,9 @@ function atualizarPerfil(req, res) {
     idUsuario
   )
 
-  const usuario = banco.prepare(
+  const usuario = aplicarPapelAdmin(banco.prepare(
     `SELECT id, nome, email, idade, ocupacao, bio, foto_perfil, banner_perfil, ${camposAcessoUsuario()} FROM usuarios WHERE id = ?`
-  ).get(idUsuario)
+  ).get(idUsuario))
   res.json({ sucesso: true, mensagem: 'Perfil atualizado!', usuario })
 }
 

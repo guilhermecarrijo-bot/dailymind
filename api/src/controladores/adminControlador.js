@@ -1,4 +1,5 @@
-const banco = require('../config/conexaoBanco')
+const banco = require('../repositorio')
+const configuracao = require('../config/ambiente')
 
 function normalizarLista(value, padrao) {
   const numero = Number(value)
@@ -60,12 +61,19 @@ function listarUsuarios(req, res) {
   const totalSql = `SELECT COUNT(*) AS total FROM usuarios ${filtro}`
   const total = banco.prepare(totalSql).get(...parametros).total
 
-  const sqlUsuarios = `SELECT id, nome, email, role, ativo, data_cadastro FROM usuarios ${filtro} ORDER BY data_cadastro DESC LIMIT ? OFFSET ?`
+  const roleCampo = banco.temColuna('usuarios', 'role') ? 'role' : "'user' AS role"
+  const ativoCampo = banco.temColuna('usuarios', 'ativo') ? 'ativo' : '1 AS ativo'
+  const sqlUsuarios = `SELECT id, nome, email, ${roleCampo}, ${ativoCampo}, data_cadastro FROM usuarios ${filtro} ORDER BY data_cadastro DESC LIMIT ? OFFSET ?`
   const usuarios = banco.prepare(sqlUsuarios).all(...parametros, limite, offset)
 
   return res.json({
     sucesso: true,
-    dados: usuarios.map(montarListaUsuarios),
+    dados: usuarios.map(usuario => montarListaUsuarios({
+      ...usuario,
+      role: !banco.temColuna('usuarios', 'role') && usuario.email.toLowerCase() === configuracao.adminEmail.toLowerCase()
+        ? 'admin'
+        : usuario.role
+    })),
     pagina,
     limite,
     total,
@@ -77,6 +85,10 @@ function atualizarStatusUsuario(req, res) {
   const id = Number(req.params.id)
   if (!Number.isInteger(id) || id <= 0) {
     return res.status(400).json({ sucesso: false, mensagem: 'ID de usuário inválido.' })
+  }
+
+  if (!banco.temColuna('usuarios', 'ativo') && !banco.temColuna('usuarios', 'role')) {
+    return res.status(409).json({ sucesso: false, mensagem: 'O schema atual não permite alterar perfil ou status de contas.' })
   }
 
   if (req.usuario.id === id && req.body.ativo === false) {

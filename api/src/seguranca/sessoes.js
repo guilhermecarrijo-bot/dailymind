@@ -50,7 +50,8 @@ function exigirAutenticacao(req, res, next) {
 
   const idSessao = valor.slice(0, separador)
   const token = valor.slice(separador + 1)
-  const roleColuna = banco.temColuna('usuarios', 'role') ? 'usuarios.role' : "'user' AS role"
+  const temRole = banco.temColuna('usuarios', 'role')
+  const roleColuna = temRole ? 'usuarios.role' : "'user' AS role"
   const ativoColuna = banco.temColuna('usuarios', 'ativo') ? 'usuarios.ativo' : '1 AS ativo'
   const sessao = banco.prepare(
     `SELECT sessoes.id AS sessao_id, sessoes.token_hash, usuarios.id, usuarios.nome, usuarios.email,
@@ -62,6 +63,10 @@ function exigirAutenticacao(req, res, next) {
 
   if (!sessao) {
     return res.status(401).json({ sucesso: false, mensagem: 'Sessão inválida ou expirada.' })
+  }
+
+  if (!temRole && sessao.email.toLowerCase() === configuracao.adminEmail.toLowerCase()) {
+    sessao.role = 'admin'
   }
 
   if (Number(sessao.ativo) === 0) {

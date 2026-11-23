@@ -250,6 +250,12 @@ O cadastro recebe `nome`, `email`, `senha` (8 a 128 caracteres) e, opcionalmente
 ### Parar o Servidor
 - Pressione **Ctrl + C** no terminal
 
+### Conta administrativa
+
+Na pasta `api`, execute `npm run admin:setup` para criar a conta configurada por `ADMIN_EMAIL` (padrão: `admin@dailymind.com.br`). A senha aleatória fica somente em `api/.env`, na variável `ADMIN_PASSWORD`; consulte esse arquivo localmente para entrar e nunca o envie ao GitHub. Para trocar a senha, execute `npm run admin:setup -- --rotate`.
+
+O schema existente não tem as colunas `role` e `ativo`. Nesse banco, o email configurado identifica o administrador e o painel oferece métricas/listagem; alterar papel ou ativar/desativar contas exige colunas que não serão criadas automaticamente.
+
 ---
 
 ## Deploy no Render

@@ -7,9 +7,9 @@
     "node": ">=22"
   },
   "scripts": {
-    "prestart": "node configurarAmbiente.js",
+    "prestart": "node configurarAmbiente.js && node iniciarBanco.js",
     "start": "node src/server.js",
-    "predev": "node configurarAmbiente.js",
+    "predev": "node configurarAmbiente.js && node iniciarBanco.js",
     "dev": "node --watch src/server.js",
     "admin:setup": "node configurarAdministrador.js",
     "test": "node --test"

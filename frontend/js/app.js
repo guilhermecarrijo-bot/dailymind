@@ -878,14 +878,31 @@ function lerConfiguracoes() {
 let manifestOriginal = null
 let urlManifestTraduzido = null
 
+// O manifesto traduzido é servido por uma URL blob:, e URLs relativas dentro dele
+// seriam resolvidas contra essa URL blob: (inválida). Por isso, todos os caminhos
+// são convertidos em URLs absolutas com base na URL do manifesto original.
+function absolutizarUrlsManifest(manifest, urlBase) {
+  const absoluta = caminho => (typeof caminho === 'string' ? new URL(caminho, urlBase).href : caminho)
+  return {
+    ...manifest,
+    id: absoluta(manifest.id),
+    start_url: absoluta(manifest.start_url),
+    scope: absoluta(manifest.scope),
+    icons: Array.isArray(manifest.icons)
+      ? manifest.icons.map(icone => ({ ...icone, src: absoluta(icone.src) }))
+      : manifest.icons
+  }
+}
+
 async function atualizarManifestIdioma() {
   const link = document.querySelector('link[rel="manifest"]')
   if (!link) return
   if (!manifestOriginal) {
     try {
-      const resposta = await fetch(link.href)
+      const urlManifest = link.href
+      const resposta = await fetch(urlManifest)
       if (!resposta.ok) return
-      manifestOriginal = await resposta.json()
+      manifestOriginal = absolutizarUrlsManifest(await resposta.json(), urlManifest)
     } catch (_) {
       return
     }

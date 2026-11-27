@@ -41,11 +41,11 @@ function lerCookie(req) {
   return cookie ? cookie.slice(NOME_COOKIE.length + 1) : null
 }
 
-function exigirAutenticacao(req, res, next) {
+function autenticar(req, res, next, responderSemSessao) {
   const valor = lerCookie(req)
   const separador = valor ? valor.indexOf('.') : -1
   if (separador < 1) {
-    return res.status(401).json({ sucesso: false, mensagem: 'Autenticação necessária.' })
+    return responderSemSessao('Autenticação necessária.')
   }
 
   const idSessao = valor.slice(0, separador)
@@ -62,7 +62,7 @@ function exigirAutenticacao(req, res, next) {
   ).get(idSessao, new Date().toISOString())
 
   if (!sessao) {
-    return res.status(401).json({ sucesso: false, mensagem: 'Sessão inválida ou expirada.' })
+    return responderSemSessao('Sessão inválida ou expirada.')
   }
 
   if (!temRole && sessao.email.toLowerCase() === configuracao.adminEmail.toLowerCase()) {
@@ -76,7 +76,7 @@ function exigirAutenticacao(req, res, next) {
   const hashArmazenado = Buffer.from(sessao.token_hash, 'hex')
   const hashRecebido = Buffer.from(resumirToken(token), 'hex')
   if (hashArmazenado.length !== hashRecebido.length || !crypto.timingSafeEqual(hashArmazenado, hashRecebido)) {
-    return res.status(401).json({ sucesso: false, mensagem: 'Sessão inválida ou expirada.' })
+    return responderSemSessao('Sessão inválida ou expirada.')
   }
 
   req.sessaoId = sessao.sessao_id
@@ -95,9 +95,19 @@ function exigirAutenticacao(req, res, next) {
   return next()
 }
 
+function exigirAutenticacao(req, res, next) {
+  return autenticar(req, res, next, mensagem => res.status(401).json({ sucesso: false, mensagem }))
+}
+
+// Usada na consulta de sessão ao abrir o app: não estar logado é uma resposta
+// normal (200), e não um erro 401 registrado no console do navegador.
+function verificarSessao(req, res, next) {
+  return autenticar(req, res, next, () => res.json({ sucesso: false, usuario: null }))
+}
+
 function encerrarSessao(req, res) {
   if (req.sessaoId) banco.prepare('DELETE FROM sessoes WHERE id = ?').run(req.sessaoId)
   limparCookie(res)
 }
 
-module.exports = { criarSessao, exigirAutenticacao, encerrarSessao }
+module.exports = { criarSessao, exigirAutenticacao, verificarSessao, encerrarSessao }

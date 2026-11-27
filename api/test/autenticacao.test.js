@@ -147,7 +147,7 @@ test('protege sessões e dados pessoais por usuário', async () => {
   assert.equal(banco.prepare('SELECT concluido FROM lembretes WHERE id = ? AND usuario_id = ?').get(lembrete.corpo.lembrete.id, usuarioB.usuario.id).concluido, 1)
 
   assert.equal((await requisitar('/usuarios/logout', 'POST', {}, usuarioA.cookie)).status, 200)
-  assert.equal((await requisitar('/usuarios/sessao', 'GET', null, usuarioA.cookie)).status, 401)
+  assert.deepEqual((await requisitar('/usuarios/sessao', 'GET', null, usuarioA.cookie)).corpo, { sucesso: false, usuario: null })
 
   const meta = await requisitar('/metas', 'POST', {
     usuario_id: usuarioB.usuario.id,
@@ -267,7 +267,7 @@ test('protege sessões e dados pessoais por usuário', async () => {
     new Date(Date.now() - 1000).toISOString(),
     login.cookie.split(';')[0].split('=')[1].split('.')[0]
   )
-  assert.equal((await requisitar('/usuarios/sessao', 'GET', null, cookieLogin)).status, 401)
+  assert.deepEqual((await requisitar('/usuarios/sessao', 'GET', null, cookieLogin)).corpo, { sucesso: false, usuario: null })
   assert.equal(banco.prepare('SELECT COUNT(*) AS total FROM sessoes WHERE id = ?').get(
     login.cookie.split(';')[0].split('=')[1].split('.')[0]
   ).total, 1)

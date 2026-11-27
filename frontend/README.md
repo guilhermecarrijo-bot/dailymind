@@ -1,6 +1,17 @@
 # Frontend do DailyMind
 
-Interface web responsiva do DailyMind. O frontend é uma SPA sem etapa de build: usa HTML, CSS e JavaScript no navegador e consome a API Express do projeto.
+Interface web responsiva do DailyMind. O frontend é uma SPA que usa HTML, CSS e JavaScript no navegador e consome a API Express do projeto.
+
+## CSS (Tailwind)
+
+O arquivo `css/tailwind.css` é gerado pela Tailwind CLI e fica versionado, pois o deploy não executa build do frontend. Ao adicionar ou alterar classes no HTML ou no JavaScript, gere o arquivo novamente dentro de `frontend/` e inclua-o no commit:
+
+```bash
+npm install
+npm run build:css
+```
+
+Durante o desenvolvimento, use `npm run watch:css`.
 
 ## Arquivos
 

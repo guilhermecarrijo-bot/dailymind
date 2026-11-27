@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { cadastrarUsuario, loginUsuario, consultarPerfil, atualizarPerfil, consultarSessao, logoutUsuario } = require('../controladores/usuarioControlador')
-const { exigirAutenticacao } = require('../seguranca/sessoes')
+const { exigirAutenticacao, verificarSessao } = require('../seguranca/sessoes')
 const autorizarAcesso = require('../seguranca/autorizarAcesso')
 const { registrarHumor, listarHumor, obterHumorHoje, editarHumor, removerHumor } = require('../controladores/humorControlador')
 const { registrarSono, listarSono, obterSonoHoje, editarSono, removerSono } = require('../controladores/sonoControlador')
@@ -38,10 +38,10 @@ const lidarComErroAssincrono = controlador => (req, res, next) => {
 rotas.post('/usuarios/cadastro', lidarComErroAssincrono(cadastrarUsuario))
 rotas.post('/usuarios/login', lidarComErroAssincrono(loginUsuario))
 rotas.get('/sugestoes', listarTodasSugestoes)
+rotas.get('/usuarios/sessao', verificarSessao, consultarSessao)
 
 rotas.use(exigirAutenticacao, autorizarAcesso)
 
-rotas.get('/usuarios/sessao', consultarSessao)
 rotas.post('/usuarios/logout', logoutUsuario)
 rotas.get('/usuarios/:id', consultarPerfil)
 rotas.put('/usuarios/perfil', atualizarPerfil)

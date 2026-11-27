@@ -117,6 +117,11 @@ test('protege sessões e dados pessoais por usuário', async () => {
   })
   assert.equal(login.status, 200)
   const cookieLogin = login.cookie.split(';')[0]
+  for (const rota of ['login', 'cadastro']) {
+    const resposta = await fetch(`${api}/usuarios/${rota}`, { redirect: 'manual', headers: { Cookie: cookieLogin } })
+    assert.equal(resposta.status, 302)
+    assert.equal(resposta.headers.get('location'), '/')
+  }
   assert.equal((await requisitar('/usuarios/sessao', 'GET', null, cookieLogin)).status, 200)
   assert.match(banco.prepare('SELECT senha FROM usuarios WHERE id = ?').get(usuarioB.usuario.id).senha, /^scrypt\$/)
 

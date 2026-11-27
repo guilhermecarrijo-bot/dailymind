@@ -37,6 +37,8 @@ const lidarComErroAssincrono = controlador => (req, res, next) => {
 // Usuários
 rotas.post('/usuarios/cadastro', lidarComErroAssincrono(cadastrarUsuario))
 rotas.post('/usuarios/login', lidarComErroAssincrono(loginUsuario))
+// Login e cadastro só aceitam POST. Quem abre esses endereços no navegador volta ao app.
+rotas.get(['/usuarios/login', '/usuarios/cadastro'], (_, res) => res.redirect('/'))
 rotas.get('/sugestoes', listarTodasSugestoes)
 rotas.get('/usuarios/sessao', verificarSessao, consultarSessao)
 

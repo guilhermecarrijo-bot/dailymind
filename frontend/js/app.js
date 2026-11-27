@@ -31,47 +31,168 @@ const traducoes = {
   'pt-BR': {
     navInicio: 'Início', navGraficos: 'Gráficos', navLembretes: 'Lembretes', navPerfil: 'Perfil', navConfiguracoes: 'Configurações', voltar: 'Voltar',
     preferencias: 'Preferências', configuracoesTitulo: 'Configurações', configuracoesDescricao: 'Personalize o DailyMind do seu jeito. As escolhas ficam salvas neste dispositivo.',
-    aparencia: 'Aparência', aparenciaDescricao: 'Escolha como o DailyMind aparece para você.', tema: 'Tema', temaClaro: 'Claro', temaPreto: 'Preto',
+    aparencia: 'Aparência', aparenciaDescricao: 'Escolha como o DailyMind aparece para você.', tema: 'Tema', temaClaro: 'Claro', temaEscuro: 'Escuro',
     idiomaTitulo: 'Idioma', idiomaDescricao: 'Altere os textos principais da interface.', idioma: 'Idioma',
     acessibilidadeTitulo: 'Acessibilidade', acessibilidadeDescricao: 'Ajustes para deixar a experiência mais confortável.', fonteMaior: 'Fonte maior', fonteMaiorDescricao: 'Aumenta o tamanho dos textos.',
     altoContraste: 'Alto contraste', altoContrasteDescricao: 'Reforça a leitura de textos e bordas.', reduzirMovimento: 'Reduzir movimento', reduzirMovimentoDescricao: 'Diminui transições e animações.', salvoConfiguracoes: 'Preferências salvas.',
     tagline: 'Cuide da sua mente, um dia de cada vez', bomDia: 'Bom dia,', atualizar: 'Atualizar →', entrar: 'Entrar', criarConta: 'Criar Conta', email: 'E-mail', senha: 'Senha', nomeCompleto: 'Nome completo', idadeOpcional: 'Idade (opcional)', ocupacaoOpcional: 'Ocupação (opcional)', criarMinhaConta: 'Criar minha conta', naoTemConta: 'Não tem conta?', jaTemConta: 'Já tem conta?',
-    comoVoceEsta: 'Como você está hoje?', humorHoje: 'Humor de hoje', sono: 'Sono', energia: 'Energia', editar: 'Editar', registrar: 'Toque para registrar', lembretesHoje: 'Lembretes de hoje', novo: '+ Novo', sugestoes: 'Sugestões para você', sugestoesDescricao: 'Ideias pequenas para cuidar de você no seu ritmo.', atualizarAgora: 'Atualizar agora', atualizarSugestoes: 'Atualizar sugestões', atualizando: 'Atualizando...', proximaEm: 'Próxima em', graficosTitulo: 'Seus Gráficos', humor30: 'Humor nos últimos 30 dias', sono30: 'Sono nos últimos 30 dias', energia30: 'Energia nos últimos 30 dias', todosLembretes: 'Todos os Lembretes', nenhumLembrete: 'Nenhum lembrete criado',
+    comoVoceEsta: 'Como você está hoje?', humorHoje: 'Humor de hoje', sono: 'Sono', energia: 'Energia', editar: 'Editar', registrar: 'Toque para registrar', lembretesHoje: 'Lembretes de hoje', novo: '+ Novo', sugestoes: '💡 Sugestões para você', sugestoesDescricao: 'Ideias pequenas para cuidar de você no seu ritmo.', atualizarAgora: 'Atualizar agora', atualizarSugestoes: 'Atualizar sugestões', atualizando: 'Atualizando...', proximaEm: 'Próxima em', graficosTitulo: '📊 Seus Gráficos', humor30: 'Humor nos últimos 30 dias', sono30: 'Sono nos últimos 30 dias', energia30: 'Energia nos últimos 30 dias', todosLembretes: '⏰ Todos os Lembretes', nenhumLembrete: 'Nenhum lembrete criado',
     erroGraficos: 'Não foi possível carregar os gráficos agora.',
-    meuPerfil: 'Meu Perfil', perfilDescricao: 'Suas informações ficam salvas na sua conta.', salvarAlteracoes: 'Salvar alterações', sair: 'Sair da conta', biografia: 'Biografia', ate280: 'Até 280 caracteres', fechar: 'Fechar', confirmar: 'Confirmar', cancelar: 'Cancelar', qualidadePercebida: 'Qualidade percebida', nivelEnergia: 'Nível de energia', horasSono: 'Horas de sono', novoLembrete: 'Novo Lembrete', titulo: 'Título', objetoDeixado: 'Objeto deixado (opcional)', horarioDeixado: 'Que horas deixou? (opcional)', icone: 'Ícone', criarLembrete: 'Criar lembrete',
+    meuPerfil: '👤 Meu Perfil', perfilDescricao: 'Suas informações ficam salvas na sua conta.', salvarAlteracoes: 'Salvar alterações', sair: 'Sair da conta', biografia: 'Biografia', ate280: 'Até 280 caracteres', fechar: 'Fechar', confirmar: 'Confirmar', cancelar: 'Cancelar', qualidadePercebida: 'Qualidade percebida', nivelEnergia: 'Nível de energia', horasSono: 'Horas de sono', novoLembrete: 'Novo Lembrete', titulo: 'Título', objetoDeixado: 'Objeto deixado (opcional)', horarioDeixado: 'Que horas deixou? (opcional)', icone: 'Ícone', criarLembrete: 'Criar lembrete',
     nenhumaNotificacao: 'Nenhuma notificação pendente.', notificacoes: 'Notificações', voltarDashboard: 'Voltar', objeto: 'Objeto', horario: 'Horário', lembretePendente: 'Lembrete pendente', tudoEmDia: 'Tudo em dia. Nenhuma notificação pendente.', removerLembrete: 'Remover este lembrete?',
-    ritmoDescanso: 'Ritmo de descanso', historicoSono: 'Histórico de sono', ajustarRegistro: 'Ajuste qualquer registro quando precisar.', disposicaoDiaria: 'Disposição diária', historicoEnergia: 'Histórico de energia', verEvolucao: 'Veja a evolução e altere o que foi anotado.', qualidade: 'Qualidade', nenhumSono: 'Nenhum registro de sono ainda.', nenhumaEnergia: 'Nenhum registro de energia ainda.', paraVoce: 'Para você', carregarSugestoes: 'Registre seu humor para ver sugestões', erroSugestoes: 'Não foi possível carregar sugestões agora.', unidadeHoras: 'horas', anos: 'anos', bemVindo: 'Bem-vindo', contaCriada: 'Conta criada com sucesso!', humorAtualizado: 'Humor atualizado', erroHumor: 'Não foi possível registrar seu humor.', sonoAtualizado: 'Registro de sono atualizado!', sonoRegistrado: 'Sono registrado!', energiaAtualizada: 'Registro de energia atualizado!', energiaRegistrada: 'Energia registrada!', lembreteCriado: 'Lembrete criado!', lembreteRemovido: 'Lembrete removido', salvando: 'Salvando...',
+    ritmoDescanso: 'Ritmo de descanso', historicoSono: 'Histórico de sono', ajustarRegistro: 'Ajuste qualquer registro quando precisar.', disposicaoDiaria: 'Disposição diária', historicoEnergia: 'Histórico de energia', verEvolucao: 'Veja a evolução e altere o que foi anotado.', qualidade: 'Qualidade', nenhumSono: 'Nenhum registro de sono ainda.', nenhumaEnergia: 'Nenhum registro de energia ainda.', paraVoce: 'Para você', carregarSugestoes: 'Registre seu humor para ver sugestões', erroSugestoes: 'Não foi possível carregar sugestões agora.', unidadeHoras: ' horas', anos: 'anos', bemVindo: 'Bem-vindo', contaCriada: 'Conta criada com sucesso!', humorAtualizado: 'Humor atualizado', erroHumor: 'Não foi possível registrar seu humor.', sonoAtualizado: 'Registro de sono atualizado!', sonoRegistrado: 'Sono registrado!', energiaAtualizada: 'Registro de energia atualizado!', energiaRegistrada: 'Energia registrada!', lembreteCriado: 'Lembrete criado!', lembreteRemovido: 'Lembrete removido', salvando: 'Salvando...',
     carregando: 'Carregando registros...', semLembretes: 'Nenhum lembrete ainda', naoFoiPossivel: 'Não foi possível carregar as notificações.', erroSessao: 'Sua sessão expirou. Entre novamente para editar o perfil.', salvoAgora: 'Salvo agora', prontoSalvar: 'Pronto para salvar', imagemGrande: 'Cada imagem deve ter no máximo 900 KB.', aguardeImagem: 'Aguarde a imagem terminar de carregar.', naoSalvo: 'Não salvo', semRegistros: 'Nenhum registro de sono ainda.', registradoHoje: 'Registrado hoje', aindaNaoRegistrado: 'Ainda não registrado', sincronizado: 'Sincronizado', alterarBanner: 'Alterar banner', alterarFoto: 'Alterar foto', humorCheckin: 'Um check-in rápido para se escutar.', humorMuda: 'Seu registro pode mudar ao longo do dia.'
   },
   en: {
     navInicio: 'Home', navGraficos: 'Charts', navLembretes: 'Reminders', navPerfil: 'Profile', navConfiguracoes: 'Settings', voltar: 'Back',
     preferencias: 'Preferences', configuracoesTitulo: 'Settings', configuracoesDescricao: 'Personalize DailyMind your way. These choices are saved on this device.',
-    aparencia: 'Appearance', aparenciaDescricao: 'Choose how DailyMind looks for you.', tema: 'Theme', temaClaro: 'Light', temaPreto: 'Black',
+    aparencia: 'Appearance', aparenciaDescricao: 'Choose how DailyMind looks for you.', tema: 'Theme', temaClaro: 'Light', temaEscuro: 'Dark',
     idiomaTitulo: 'Language', idiomaDescricao: 'Change the main interface language.', idioma: 'Language',
     acessibilidadeTitulo: 'Accessibility', acessibilidadeDescricao: 'Adjust the experience for more comfort.', fonteMaior: 'Larger text', fonteMaiorDescricao: 'Increase text size.',
     altoContraste: 'High contrast', altoContrasteDescricao: 'Strengthen text and border contrast.', reduzirMovimento: 'Reduce motion', reduzirMovimentoDescricao: 'Reduce transitions and animations.', salvoConfiguracoes: 'Preferences saved.',
     tagline: 'Care for your mind, one day at a time', bomDia: 'Good morning,', atualizar: 'Update →', entrar: 'Sign in', criarConta: 'Create account', email: 'Email', senha: 'Password', nomeCompleto: 'Full name', idadeOpcional: 'Age (optional)', ocupacaoOpcional: 'Occupation (optional)', criarMinhaConta: 'Create my account', naoTemConta: 'Do not have an account?', jaTemConta: 'Already have an account?',
-    comoVoceEsta: 'How are you feeling today?', humorHoje: 'Today\'s mood', sono: 'Sleep', energia: 'Energy', editar: 'Edit', registrar: 'Tap to record', lembretesHoje: 'Today\'s reminders', novo: '+ New', sugestoes: 'Suggestions for you', sugestoesDescricao: 'Small ideas to care for yourself at your own pace.', atualizarAgora: 'Refresh now', atualizarSugestoes: 'Refresh suggestions', atualizando: 'Refreshing...', proximaEm: 'Next in', graficosTitulo: 'Your charts', humor30: 'Mood in the last 30 days', sono30: 'Sleep in the last 30 days', energia30: 'Energy in the last 30 days', todosLembretes: 'All reminders', nenhumLembrete: 'No reminders created',
+    comoVoceEsta: 'How are you feeling today?', humorHoje: 'Today\'s mood', sono: 'Sleep', energia: 'Energy', editar: 'Edit', registrar: 'Tap to record', lembretesHoje: 'Today\'s reminders', novo: '+ New', sugestoes: '💡 Suggestions for you', sugestoesDescricao: 'Small ideas to care for yourself at your own pace.', atualizarAgora: 'Refresh now', atualizarSugestoes: 'Refresh suggestions', atualizando: 'Refreshing...', proximaEm: 'Next in', graficosTitulo: '📊 Your charts', humor30: 'Mood in the last 30 days', sono30: 'Sleep in the last 30 days', energia30: 'Energy in the last 30 days', todosLembretes: '⏰ All reminders', nenhumLembrete: 'No reminders created',
     erroGraficos: 'Charts could not be loaded right now.',
-    meuPerfil: 'My profile', perfilDescricao: 'Your information is saved to your account.', salvarAlteracoes: 'Save changes', sair: 'Sign out', biografia: 'Bio', ate280: 'Up to 280 characters', fechar: 'Close', confirmar: 'Confirm', cancelar: 'Cancel', qualidadePercebida: 'Perceived quality', nivelEnergia: 'Energy level', horasSono: 'Sleep hours', novoLembrete: 'New reminder', titulo: 'Title', objetoDeixado: 'Object left (optional)', horarioDeixado: 'What time did you leave it? (optional)', icone: 'Icon', criarLembrete: 'Create reminder',
+    meuPerfil: '👤 My profile', perfilDescricao: 'Your information is saved to your account.', salvarAlteracoes: 'Save changes', sair: 'Sign out', biografia: 'Bio', ate280: 'Up to 280 characters', fechar: 'Close', confirmar: 'Confirm', cancelar: 'Cancel', qualidadePercebida: 'Perceived quality', nivelEnergia: 'Energy level', horasSono: 'Sleep hours', novoLembrete: 'New reminder', titulo: 'Title', objetoDeixado: 'Object left (optional)', horarioDeixado: 'What time did you leave it? (optional)', icone: 'Icon', criarLembrete: 'Create reminder',
     nenhumaNotificacao: 'No pending notifications.', notificacoes: 'Notifications', voltarDashboard: 'Back', objeto: 'Object', horario: 'Time', lembretePendente: 'Pending reminder', tudoEmDia: 'All clear. No pending notifications.', removerLembrete: 'Remove this reminder?',
-    ritmoDescanso: 'Rest rhythm', historicoSono: 'Sleep history', ajustarRegistro: 'Adjust any record whenever you need.', disposicaoDiaria: 'Daily energy', historicoEnergia: 'Energy history', verEvolucao: 'See your progress and update past entries.', qualidade: 'Quality', nenhumSono: 'No sleep records yet.', nenhumaEnergia: 'No energy records yet.', paraVoce: 'For you', carregarSugestoes: 'Record your mood to see suggestions', erroSugestoes: 'Suggestions could not be loaded.', unidadeHoras: 'hours', anos: 'years', bemVindo: 'Welcome', contaCriada: 'Account created successfully!', humorAtualizado: 'Mood updated', erroHumor: 'Your mood could not be saved.', sonoAtualizado: 'Sleep record updated!', sonoRegistrado: 'Sleep recorded!', energiaAtualizada: 'Energy record updated!', energiaRegistrada: 'Energy recorded!', lembreteCriado: 'Reminder created!', lembreteRemovido: 'Reminder removed', salvando: 'Saving...', carregando: 'Loading records...', semLembretes: 'No reminders yet', naoFoiPossivel: 'Notifications could not be loaded.', erroSessao: 'Your session expired. Sign in again to edit your profile.', salvoAgora: 'Saved now', prontoSalvar: 'Ready to save', imagemGrande: 'Each image must be at most 900 KB.', aguardeImagem: 'Wait for the image to finish loading.', naoSalvo: 'Not saved', semRegistros: 'No sleep records yet.', registradoHoje: 'Recorded today', aindaNaoRegistrado: 'Not recorded yet', sincronizado: 'Synced', alterarBanner: 'Change banner', alterarFoto: 'Change photo', humorCheckin: 'A quick check-in to listen to yourself.', humorMuda: 'Your record can change throughout the day.'
+    ritmoDescanso: 'Rest rhythm', historicoSono: 'Sleep history', ajustarRegistro: 'Adjust any record whenever you need.', disposicaoDiaria: 'Daily energy', historicoEnergia: 'Energy history', verEvolucao: 'See your progress and update past entries.', qualidade: 'Quality', nenhumSono: 'No sleep records yet.', nenhumaEnergia: 'No energy records yet.', paraVoce: 'For you', carregarSugestoes: 'Record your mood to see suggestions', erroSugestoes: 'Suggestions could not be loaded.', unidadeHoras: ' hours', anos: 'years', bemVindo: 'Welcome', contaCriada: 'Account created successfully!', humorAtualizado: 'Mood updated', erroHumor: 'Your mood could not be saved.', sonoAtualizado: 'Sleep record updated!', sonoRegistrado: 'Sleep recorded!', energiaAtualizada: 'Energy record updated!', energiaRegistrada: 'Energy recorded!', lembreteCriado: 'Reminder created!', lembreteRemovido: 'Reminder removed', salvando: 'Saving...', carregando: 'Loading records...', semLembretes: 'No reminders yet', naoFoiPossivel: 'Notifications could not be loaded.', erroSessao: 'Your session expired. Sign in again to edit your profile.', salvoAgora: 'Saved now', prontoSalvar: 'Ready to save', imagemGrande: 'Each image must be at most 900 KB.', aguardeImagem: 'Wait for the image to finish loading.', naoSalvo: 'Not saved', semRegistros: 'No sleep records yet.', registradoHoje: 'Recorded today', aindaNaoRegistrado: 'Not recorded yet', sincronizado: 'Synced', alterarBanner: 'Change banner', alterarFoto: 'Change photo', humorCheckin: 'A quick check-in to listen to yourself.', humorMuda: 'Your record can change throughout the day.'
   },
   es: {
     navInicio: 'Inicio', navGraficos: 'Gráficos', navLembretes: 'Recordatorios', navPerfil: 'Perfil', navConfiguracoes: 'Configuración', voltar: 'Volver',
     preferencias: 'Preferencias', configuracoesTitulo: 'Configuración', configuracoesDescricao: 'Personaliza DailyMind. Estas opciones se guardan en este dispositivo.',
-    aparencia: 'Apariencia', aparenciaDescricao: 'Elige cómo se muestra DailyMind.', tema: 'Tema', temaClaro: 'Claro', temaPreto: 'Negro',
+    aparencia: 'Apariencia', aparenciaDescricao: 'Elige cómo se muestra DailyMind.', tema: 'Tema', temaClaro: 'Claro', temaEscuro: 'Oscuro',
     idiomaTitulo: 'Idioma', idiomaDescricao: 'Cambia el idioma principal de la interfaz.', idioma: 'Idioma',
     acessibilidadeTitulo: 'Accesibilidad', acessibilidadeDescricao: 'Ajustes para una experiencia más cómoda.', fonteMaior: 'Texto más grande', fonteMaiorDescricao: 'Aumenta el tamaño del texto.',
     altoContraste: 'Alto contraste', altoContrasteDescricao: 'Refuerza el contraste de textos y bordes.', reduzirMovimento: 'Reducir movimiento', reduzirMovimentoDescricao: 'Reduce transiciones y animaciones.', salvoConfiguracoes: 'Preferencias guardadas.',
     tagline: 'Cuida tu mente, un día a la vez', bomDia: 'Buenos días,', atualizar: 'Actualizar →', entrar: 'Entrar', criarConta: 'Crear cuenta', email: 'Correo electrónico', senha: 'Contraseña', nomeCompleto: 'Nombre completo', idadeOpcional: 'Edad (opcional)', ocupacaoOpcional: 'Ocupación (opcional)', criarMinhaConta: 'Crear mi cuenta', naoTemConta: '¿No tienes una cuenta?', jaTemConta: '¿Ya tienes una cuenta?',
-    comoVoceEsta: '¿Cómo te sientes hoy?', humorHoje: 'Estado de ánimo de hoy', sono: 'Sueño', energia: 'Energía', editar: 'Editar', registrar: 'Toca para registrar', lembretesHoje: 'Recordatorios de hoy', novo: '+ Nuevo', sugestoes: 'Sugerencias para ti', sugestoesDescricao: 'Ideas pequeñas para cuidarte a tu ritmo.', atualizarAgora: 'Actualizar ahora', atualizarSugestoes: 'Actualizar sugerencias', atualizando: 'Actualizando...', proximaEm: 'Siguiente en', graficosTitulo: 'Tus gráficos', humor30: 'Ánimo en los últimos 30 días', sono30: 'Sueño en los últimos 30 días', energia30: 'Energía en los últimos 30 días', todosLembretes: 'Todos los recordatorios', nenhumLembrete: 'No hay recordatorios creados',
+    comoVoceEsta: '¿Cómo te sientes hoy?', humorHoje: 'Estado de ánimo de hoy', sono: 'Sueño', energia: 'Energía', editar: 'Editar', registrar: 'Toca para registrar', lembretesHoje: 'Recordatorios de hoy', novo: '+ Nuevo', sugestoes: '💡 Sugerencias para ti', sugestoesDescricao: 'Ideas pequeñas para cuidarte a tu ritmo.', atualizarAgora: 'Actualizar ahora', atualizarSugestoes: 'Actualizar sugerencias', atualizando: 'Actualizando...', proximaEm: 'Siguiente en', graficosTitulo: '📊 Tus gráficos', humor30: 'Ánimo en los últimos 30 días', sono30: 'Sueño en los últimos 30 días', energia30: 'Energía en los últimos 30 días', todosLembretes: '⏰ Todos los recordatorios', nenhumLembrete: 'No hay recordatorios creados',
     erroGraficos: 'No se pudieron cargar los gráficos ahora.',
-    meuPerfil: 'Mi perfil', perfilDescricao: 'Tu información se guarda en tu cuenta.', salvarAlteracoes: 'Guardar cambios', sair: 'Cerrar sesión', biografia: 'Biografía', ate280: 'Hasta 280 caracteres', fechar: 'Cerrar', confirmar: 'Confirmar', cancelar: 'Cancelar', qualidadePercebida: 'Calidad percibida', nivelEnergia: 'Nivel de energía', horasSono: 'Horas de sueño', novoLembrete: 'Nuevo recordatorio', titulo: 'Título', objetoDeixado: 'Objeto dejado (opcional)', horarioDeixado: '¿A qué hora lo dejaste? (opcional)', icone: 'Icono', criarLembrete: 'Crear recordatorio',
+    meuPerfil: '👤 Mi perfil', perfilDescricao: 'Tu información se guarda en tu cuenta.', salvarAlteracoes: 'Guardar cambios', sair: 'Cerrar sesión', biografia: 'Biografía', ate280: 'Hasta 280 caracteres', fechar: 'Cerrar', confirmar: 'Confirmar', cancelar: 'Cancelar', qualidadePercebida: 'Calidad percibida', nivelEnergia: 'Nivel de energía', horasSono: 'Horas de sueño', novoLembrete: 'Nuevo recordatorio', titulo: 'Título', objetoDeixado: 'Objeto dejado (opcional)', horarioDeixado: '¿A qué hora lo dejaste? (opcional)', icone: 'Icono', criarLembrete: 'Crear recordatorio',
     nenhumaNotificacao: 'No hay notificaciones pendientes.', notificacoes: 'Notificaciones', voltarDashboard: 'Volver', objeto: 'Objeto', horario: 'Horario', lembretePendente: 'Recordatorio pendiente', tudoEmDia: 'Todo al día. No hay notificaciones pendientes.', removerLembrete: '¿Eliminar este recordatorio?',
-    ritmoDescanso: 'Ritmo de descanso', historicoSono: 'Historial de sueño', ajustarRegistro: 'Ajusta cualquier registro cuando lo necesites.', disposicaoDiaria: 'Disposición diaria', historicoEnergia: 'Historial de energía', verEvolucao: 'Mira tu evolución y actualiza tus registros.', qualidade: 'Calidad', nenhumSono: 'Aún no hay registros de sueño.', nenhumaEnergia: 'Aún no hay registros de energia.', paraVoce: 'Para ti', carregarSugestoes: 'Registra tu ánimo para ver sugerencias', erroSugestoes: 'No se pudieron cargar las sugerencias.', unidadeHoras: 'horas', anos: 'años', bemVindo: 'Bienvenido', contaCriada: '¡Cuenta creada!', humorAtualizado: 'Ánimo actualizado', erroHumor: 'No se pudo guardar tu ánimo.', sonoAtualizado: '¡Registro de sueño actualizado!', sonoRegistrado: '¡Sueño registrado!', energiaAtualizada: '¡Registro de energia actualizado!', energiaRegistrada: '¡Energía registrada!', lembreteCriado: '¡Recordatorio creado!', lembreteRemovido: 'Recordatorio eliminado', salvando: 'Guardando...', carregando: 'Cargando registros...', semLembretes: 'Aún no hay recordatorios', naoFoiPossivel: 'No se pudieron cargar las notificaciones.', erroSessao: 'Tu sesión expiró. Entra de nuevo para editar tu perfil.', salvoAgora: 'Guardado ahora', prontoSalvar: 'Listo para guardar', imagemGrande: 'Cada imagen debe pesar como máximo 900 KB.', aguardeImagem: 'Espera a que la imagen termine de cargar.', naoSalvo: 'No guardado', semRegistros: 'Aún no hay registros de sueño.', registradoHoje: 'Registrado hoy', aindaNaoRegistrado: 'Aún no registrado', sincronizado: 'Sincronizado', alterarBanner: 'Cambiar banner', alterarFoto: 'Cambiar foto', humorCheckin: 'Un check-in rápido para escucharte.', humorMuda: 'Tu registro puede cambiar durante el día.'
+    ritmoDescanso: 'Ritmo de descanso', historicoSono: 'Historial de sueño', ajustarRegistro: 'Ajusta cualquier registro cuando lo necesites.', disposicaoDiaria: 'Disposición diaria', historicoEnergia: 'Historial de energía', verEvolucao: 'Mira tu evolución y actualiza tus registros.', qualidade: 'Calidad', nenhumSono: 'Aún no hay registros de sueño.', nenhumaEnergia: 'Aún no hay registros de energía.', paraVoce: 'Para ti', carregarSugestoes: 'Registra tu ánimo para ver sugerencias', erroSugestoes: 'No se pudieron cargar las sugerencias.', unidadeHoras: ' horas', anos: 'años', bemVindo: 'Bienvenido', contaCriada: '¡Cuenta creada!', humorAtualizado: 'Ánimo actualizado', erroHumor: 'No se pudo guardar tu ánimo.', sonoAtualizado: '¡Registro de sueño actualizado!', sonoRegistrado: '¡Sueño registrado!', energiaAtualizada: '¡Registro de energia actualizado!', energiaRegistrada: '¡Energía registrada!', lembreteCriado: '¡Recordatorio creado!', lembreteRemovido: 'Recordatorio eliminado', salvando: 'Guardando...', carregando: 'Cargando registros...', semLembretes: 'Aún no hay recordatorios', naoFoiPossivel: 'No se pudieron cargar las notificaciones.', erroSessao: 'Tu sesión expiró. Entra de nuevo para editar tu perfil.', salvoAgora: 'Guardado ahora', prontoSalvar: 'Listo para guardar', imagemGrande: 'Cada imagen debe pesar como máximo 900 KB.', aguardeImagem: 'Espera a que la imagen termine de cargar.', naoSalvo: 'No guardado', semRegistros: 'Aún no hay registros de sueño.', registradoHoje: 'Registrado hoy', aindaNaoRegistrado: 'Aún no registrado', sincronizado: 'Sincronizado', alterarBanner: 'Cambiar banner', alterarFoto: 'Cambiar foto', humorCheckin: 'Un check-in rápido para escucharte.', humorMuda: 'Tu registro puede cambiar durante el día.'
   }
 }
+
+const traducoesComplementares = {
+  'pt-BR': {
+    documentTitulo: 'DailyMind - Cuide da sua mente', heroTitulo: 'Seu espaço leve para perceber o que você precisa.', heroDescricao: 'Acompanhe humor, sono, energia e lembretes com uma rotina mais gentil, clara e útil para o seu dia.',
+    humor: 'Humor', humorFeatureDescricao: 'Registre como você está em poucos segundos.', sonoFeatureDescricao: 'Veja seu descanso e o impacto no seu ritmo.', energiaFeatureDescricao: 'Monitore o nível de disposição ao longo do dia.',
+    recupereRitmo: 'Recupere seu ritmo', combustivelHoje: 'Seu combustível de hoje', perfilPadrao: 'Seu perfil, do seu jeito', nomeObrigatorio: 'Informe o nome para salvar o perfil.', campoMuitoLongo: 'Um ou mais campos ultrapassam o limite de caracteres.', erroImagem: 'Não foi possível concluir esta ação.',
+    saudacao: 'Olá,', roleUsuario: 'Usuário', metricRegistrosNumero: '+1.200', carregandoImagem: 'Carregando imagem...', sonoResumo: 'de sono', energiaResumo: 'de energia',
+    metricRegistros: 'registros', metricDias: '7 dias', metricAcompanhamento: 'de acompanhamento', metricAcolhimento: 'focado em acolhimento',
+    idadePlaceholder: 'Idade', ocupacaoPlaceholder: 'Ex: Estudante', abrirNotificacoes: 'Abrir notificações', fecharNotificacoes: 'Fechar notificações',
+    painelAdmin: 'Painel Admin', painel: 'Painel', areaAdministrativa: 'Área administrativa', distribuicaoHumor: 'Distribuição de humor', cadastrosPorMes: 'Cadastros por mês',
+    relatorios: 'Relatórios', relatoriosDescricao: 'Engajamento e uso em um intervalo de datas.', filtrar: 'Filtrar', exportarCsv: 'Exportar CSV',
+    buscarPlaceholder: 'Buscar por nome ou e-mail', buscar: 'Buscar', colunaNome: 'Nome', colunaEmail: 'E-mail', colunaPerfil: 'Perfil', colunaStatus: 'Status', colunaAcoes: 'Ações',
+    nome: 'Nome', bannerPerfil: 'Banner do perfil', biografiaPlaceholder: 'Conte um pouco sobre você...', perfilSalvo: 'Perfil salvo', perfilSalvoDescricao: 'Suas alterações foram confirmadas e já estão na sua conta.', entendi: 'Entendi',
+    checkinEmocional: 'Check-in emocional', semRespostaCerta: 'Não existe resposta certa. Escolha o que mais combina com agora.', sonoDescricaoModal: 'Conte como foi sua noite, sem cobrança.', energiaDescricaoModal: 'Registre sua disposição real para o dia.',
+    noLimite: 'No limite', cheioEnergia: 'Cheio de energia', lembreteTituloPlaceholder: 'Ex: Beber água', lembreteObjetoPlaceholder: 'Ex: Chaves, celular',
+    humorPergunta: 'Como você está?', humorEscolha: 'Escolha uma opção para registrar seu momento.', usuarioPadrao: 'Usuário', manifestDescricao: 'Registro diário de humor, sono, energia, lembretes e autocuidado.',
+    cadastrosAtivos: 'cadastros ativos', registros30Dias: 'registros em 30 dias', mediaSono: 'Média de sono', ultimos30Dias: 'últimos 30 dias', mediaGeral: 'média geral',
+    usuarios: 'Usuários', usuariosNovos: 'Usuários novos', registrosHumor: 'Registros de humor', engajamento: 'Engajamento', atividadeRecente: 'Atividade recente', semRegistrosIntervalo: 'Nenhum registro no intervalo informado.',
+    erroCarregarUsuarios: 'Não foi possível carregar os usuários.', adminRole: 'Admin', ativo: 'Ativo', inativo: 'Inativo', desativar: 'Desativar', ativar: 'Ativar', excluir: 'Excluir',
+    statusAtualizado: 'Status atualizado.', erroAtualizarStatus: 'Não foi possível atualizar o status.', confirmarExclusaoUsuario: 'Deseja realmente excluir este usuário?', usuarioRemovido: 'Usuário removido.', erroExcluirUsuario: 'Não foi possível excluir o usuário.',
+    csvIndicador: 'indicador', csvValor: 'valor', csvUsuariosNovos: 'usuarios_novos', csvRegistrosHumor: 'registros_humor', csvEngajamentoTotal: 'engajamento_total', csvNomeArquivo: 'relatorio_dailymind.csv',
+    semHumorGrafico: 'Nenhum registro de humor salvo ainda.', semSonoGrafico: 'Nenhum registro de sono salvo ainda.', semEnergiaGrafico: 'Nenhum registro de energia salvo ainda.',
+    erroSalvarPerfil: 'Não foi possível salvar o perfil.', acaoFalhou: 'Não foi possível concluir a ação', conexaoFalhou: 'Não foi possível conectar ao DailyMind.',
+    offlinePendente: 'Registro salvo neste dispositivo. Enviaremos quando houver conexão.',
+    nomeTamanho: 'Nome deve ter entre 3 e 100 caracteres.', nomeTamanhoArtigo: 'O nome deve ter entre 3 e 100 caracteres.', emailInvalido: 'E-mail inválido.', senhaTamanho: 'A senha deve ter entre 8 e 128 caracteres.',
+    idadeIntervalo: 'A idade deve estar entre 1 e 150 anos.', ocupacaoTamanho: 'A ocupação pode ter no máximo 100 caracteres.', bioTamanho: 'A biografia pode ter no máximo 280 caracteres.', emailCadastrado: 'E-mail já cadastrado.',
+    emailSenhaObrigatorios: 'E-mail e senha são obrigatórios.', credenciaisInvalidas: 'E-mail ou senha incorretos.', contaDesativada: 'Esta conta está desativada.', loginSucesso: 'Login realizado com sucesso!', sessaoEncerrada: 'Sessão encerrada.',
+    usuarioNaoEncontrado: 'Usuário não encontrado.', idUsuarioObrigatorio: 'ID do usuário é obrigatório.', perfilAtualizado: 'Perfil atualizado!', autenticacaoNecessaria: 'Autenticação necessária.', sessaoInvalida: 'Sessão inválida ou expirada.',
+    acessoNegado: 'Você não tem acesso a estes dados.', idUsuarioInvalido: 'ID de usuário inválido.', schemaStatus: 'O schema atual não permite alterar perfil ou status de contas.', naoPodeDesativarPropriaConta: 'Você não pode desativar sua própria conta de administrador.',
+    semCampoValidoStatus: 'Informe ao menos um campo válido para atualizar o status.', statusUsuarioAtualizado: 'Status do usuário atualizado.', naoPodeExcluirPropriaConta: 'Você não pode excluir sua própria conta.', usuarioRemovidoSucesso: 'Usuário removido com sucesso.',
+    humorObrigatorio: 'Usuário e humor são obrigatórios.', humorInvalido: 'Humor inválido.', humorRegistrado: 'Humor registrado!', registroHumorNaoEncontrado: 'Registro de humor não encontrado.', humorRemovido: 'Humor removido!',
+    sonoObrigatorio: 'Usuário e horas de sono são obrigatórios.', horasSonoIntervalo: 'Horas de sono devem ser entre 0 e 24.', qualidadeIntervalo: 'Qualidade deve ser entre 1 e 5.', registroSonoNaoEncontrado: 'Registro de sono não encontrado.', sonoRemovido: 'Sono removido!',
+    energiaObrigatorio: 'Usuário e nível de energia são obrigatórios.', nivelEnergiaIntervalo: 'Nível de energia deve ser entre 1 e 10.', registroEnergiaNaoEncontrado: 'Registro de energia não encontrado.', energiaRemovida: 'Energia removida!',
+    tituloLembreteTamanho: 'O título deve ter entre 1 e 150 caracteres.', iconeInvalido: 'Ícone inválido.', descricaoTipoTexto: 'A descrição deve ser um texto.', descricaoTamanho: 'A descrição deve ter no máximo 1000 caracteres.',
+    informeCampoAtualizar: 'Informe ao menos um campo para atualizar.', lembreteNaoEncontrado: 'Lembrete não encontrado.', lembreteAtualizado: 'Lembrete atualizado!', lembreteConcluido: 'Lembrete concluído!', lembreteReaberto: 'Lembrete reaberto!', usuarioObrigatorio: 'Usuário obrigatório.',
+    tituloTamanho200: 'O título deve ter entre 1 e 200 caracteres.', usuarioTituloDatasObrigatorios: 'Usuário, título, data de início e data de fim são obrigatórios.', dataTerminoPosterior: 'A data de término deve ser posterior à data de início.',
+    metaCriada: 'Meta criada com sucesso!', metaNaoEncontrada: 'Meta não encontrada.', metaAtualizada: 'Meta atualizada com sucesso!', progressoIntervalo: 'Progresso deve ser um número entre 0 e 100.', progressoAtualizado: 'Progresso atualizado com sucesso!',
+    metaConcluida: 'Meta concluída!', metaRemovida: 'Meta removida com sucesso!', tarefaObrigatorio: 'Usuário e título são obrigatórios.', tarefaCriada: 'Tarefa criada com sucesso!', tarefaNaoEncontrada: 'Tarefa não encontrada.',
+    tarefaConcluida: 'Tarefa concluída!', tarefaReaberta: 'Tarefa reaberta!', tarefaAtualizada: 'Tarefa atualizada com sucesso!', tarefaRemovida: 'Tarefa removida com sucesso!'
+  },
+  en: {
+    documentTitulo: 'DailyMind - Care for your mind', heroTitulo: 'A gentle space to notice what you need.', heroDescricao: 'Track mood, sleep, energy and reminders with a gentler, clearer routine that helps your day.',
+    humor: 'Mood', humorFeatureDescricao: 'Record how you feel in seconds.', sonoFeatureDescricao: 'See your rest and how it affects your rhythm.', energiaFeatureDescricao: 'Track your energy levels throughout the day.',
+    recupereRitmo: 'Get back into your rhythm', combustivelHoje: 'Today’s fuel', perfilPadrao: 'Your profile, your way', nomeObrigatorio: 'Enter a name to save the profile.', campoMuitoLongo: 'One or more fields exceed the character limit.', erroImagem: 'This action could not be completed.',
+    saudacao: 'Hello,', roleUsuario: 'User', metricRegistrosNumero: '+1,200', carregandoImagem: 'Loading image...', sonoResumo: 'of sleep', energiaResumo: 'of energy',
+    metricRegistros: 'records', metricDias: '7 days', metricAcompanhamento: 'of tracking', metricAcolhimento: 'focused on care',
+    idadePlaceholder: 'Age', ocupacaoPlaceholder: 'E.g.: Student', abrirNotificacoes: 'Open notifications', fecharNotificacoes: 'Close notifications',
+    painelAdmin: 'Admin panel', painel: 'Panel', areaAdministrativa: 'Administrative area', distribuicaoHumor: 'Mood distribution', cadastrosPorMes: 'Sign-ups by month',
+    relatorios: 'Reports', relatoriosDescricao: 'Engagement and usage over a date range.', filtrar: 'Filter', exportarCsv: 'Export CSV',
+    buscarPlaceholder: 'Search by name or email', buscar: 'Search', colunaNome: 'Name', colunaEmail: 'Email', colunaPerfil: 'Profile', colunaStatus: 'Status', colunaAcoes: 'Actions',
+    nome: 'Name', bannerPerfil: 'Profile banner', biografiaPlaceholder: 'Tell us a little about yourself...', perfilSalvo: 'Profile saved', perfilSalvoDescricao: 'Your changes were confirmed and are now in your account.', entendi: 'Got it',
+    checkinEmocional: 'Emotional check-in', semRespostaCerta: 'There is no right answer. Choose what feels most like now.', sonoDescricaoModal: 'Tell us how your night went, without pressure.', energiaDescricaoModal: 'Record how energetic you really feel today.',
+    noLimite: 'Running low', cheioEnergia: 'Full of energy', lembreteTituloPlaceholder: 'E.g.: Drink water', lembreteObjetoPlaceholder: 'E.g.: Keys, phone',
+    humorPergunta: 'How are you?', humorEscolha: 'Choose an option to record this moment.', usuarioPadrao: 'User', manifestDescricao: 'Daily log of mood, sleep, energy, reminders and self-care.',
+    cadastrosAtivos: 'active accounts', registros30Dias: 'records in 30 days', mediaSono: 'Average sleep', ultimos30Dias: 'last 30 days', mediaGeral: 'overall average',
+    usuarios: 'Users', usuariosNovos: 'New users', registrosHumor: 'Mood records', engajamento: 'Engagement', atividadeRecente: 'Recent activity', semRegistrosIntervalo: 'No records in the selected period.',
+    erroCarregarUsuarios: 'Users could not be loaded.', adminRole: 'Admin', ativo: 'Active', inativo: 'Inactive', desativar: 'Deactivate', ativar: 'Activate', excluir: 'Delete',
+    statusAtualizado: 'Status updated.', erroAtualizarStatus: 'The status could not be updated.', confirmarExclusaoUsuario: 'Do you really want to delete this user?', usuarioRemovido: 'User removed.', erroExcluirUsuario: 'The user could not be deleted.',
+    csvIndicador: 'metric', csvValor: 'value', csvUsuariosNovos: 'new_users', csvRegistrosHumor: 'mood_records', csvEngajamentoTotal: 'engagement_total', csvNomeArquivo: 'dailymind_report.csv',
+    semHumorGrafico: 'No mood records saved yet.', semSonoGrafico: 'No sleep records saved yet.', semEnergiaGrafico: 'No energy records saved yet.',
+    erroSalvarPerfil: 'The profile could not be saved.', acaoFalhou: 'The action could not be completed', conexaoFalhou: 'Could not connect to DailyMind.',
+    offlinePendente: 'Saved on this device. We will send it when you are back online.',
+    nomeTamanho: 'Name must be between 3 and 100 characters.', nomeTamanhoArtigo: 'Name must be between 3 and 100 characters.', emailInvalido: 'Invalid email.', senhaTamanho: 'Password must be between 8 and 128 characters.',
+    idadeIntervalo: 'Age must be between 1 and 150.', ocupacaoTamanho: 'Occupation can have at most 100 characters.', bioTamanho: 'Bio can have at most 280 characters.', emailCadastrado: 'Email already registered.',
+    emailSenhaObrigatorios: 'Email and password are required.', credenciaisInvalidas: 'Incorrect email or password.', contaDesativada: 'This account is deactivated.', loginSucesso: 'Signed in successfully!', sessaoEncerrada: 'Session closed.',
+    usuarioNaoEncontrado: 'User not found.', idUsuarioObrigatorio: 'User ID is required.', perfilAtualizado: 'Profile updated!', autenticacaoNecessaria: 'Authentication required.', sessaoInvalida: 'Session invalid or expired.',
+    acessoNegado: 'You do not have access to this data.', idUsuarioInvalido: 'Invalid user ID.', schemaStatus: 'The current schema does not allow changing account profiles or statuses.', naoPodeDesativarPropriaConta: 'You cannot deactivate your own admin account.',
+    semCampoValidoStatus: 'Provide at least one valid field to update the status.', statusUsuarioAtualizado: 'User status updated.', naoPodeExcluirPropriaConta: 'You cannot delete your own account.', usuarioRemovidoSucesso: 'User removed successfully.',
+    humorObrigatorio: 'User and mood are required.', humorInvalido: 'Invalid mood.', humorRegistrado: 'Mood recorded!', registroHumorNaoEncontrado: 'Mood record not found.', humorRemovido: 'Mood removed!',
+    sonoObrigatorio: 'User and sleep hours are required.', horasSonoIntervalo: 'Sleep hours must be between 0 and 24.', qualidadeIntervalo: 'Quality must be between 1 and 5.', registroSonoNaoEncontrado: 'Sleep record not found.', sonoRemovido: 'Sleep record removed!',
+    energiaObrigatorio: 'User and energy level are required.', nivelEnergiaIntervalo: 'Energy level must be between 1 and 10.', registroEnergiaNaoEncontrado: 'Energy record not found.', energiaRemovida: 'Energy record removed!',
+    tituloLembreteTamanho: 'Title must be between 1 and 150 characters.', iconeInvalido: 'Invalid icon.', descricaoTipoTexto: 'Description must be text.', descricaoTamanho: 'Description can have at most 1000 characters.',
+    informeCampoAtualizar: 'Provide at least one field to update.', lembreteNaoEncontrado: 'Reminder not found.', lembreteAtualizado: 'Reminder updated!', lembreteConcluido: 'Reminder completed!', lembreteReaberto: 'Reminder reopened!', usuarioObrigatorio: 'User is required.',
+    tituloTamanho200: 'Title must be between 1 and 200 characters.', usuarioTituloDatasObrigatorios: 'User, title, start date and end date are required.', dataTerminoPosterior: 'The end date must be after the start date.',
+    metaCriada: 'Goal created successfully!', metaNaoEncontrada: 'Goal not found.', metaAtualizada: 'Goal updated successfully!', progressoIntervalo: 'Progress must be a number between 0 and 100.', progressoAtualizado: 'Progress updated successfully!',
+    metaConcluida: 'Goal completed!', metaRemovida: 'Goal removed successfully!', tarefaObrigatorio: 'User and title are required.', tarefaCriada: 'Task created successfully!', tarefaNaoEncontrada: 'Task not found.',
+    tarefaConcluida: 'Task completed!', tarefaReaberta: 'Task reopened!', tarefaAtualizada: 'Task updated successfully!', tarefaRemovida: 'Task removed successfully!'
+  },
+  es: {
+    documentTitulo: 'DailyMind - Cuida tu mente', heroTitulo: 'Un espacio ligero para descubrir lo que necesitas.', heroDescricao: 'Registra tu ánimo, sueño, energía y recordatorios con una rutina más amable, clara y útil para tu día.',
+    humor: 'Ánimo', humorFeatureDescricao: 'Registra cómo te sientes en segundos.', sonoFeatureDescricao: 'Observa tu descanso y su impacto en tu ritmo.', energiaFeatureDescricao: 'Controla tu nivel de energía durante el día.',
+    recupereRitmo: 'Recupera tu ritmo', combustivelHoje: 'Tu energía de hoy', perfilPadrao: 'Tu perfil, a tu manera', nomeObrigatorio: 'Introduce un nombre para guardar el perfil.', campoMuitoLongo: 'Uno o más campos superan el límite de caracteres.', erroImagem: 'No se pudo completar esta acción.',
+    saudacao: 'Hola,', roleUsuario: 'Usuario', metricRegistrosNumero: '+1.200', carregandoImagem: 'Cargando imagen...', sonoResumo: 'de sueño', energiaResumo: 'de energía',
+    metricRegistros: 'registros', metricDias: '7 días', metricAcompanhamento: 'de seguimiento', metricAcolhimento: 'centrado en el cuidado',
+    idadePlaceholder: 'Edad', ocupacaoPlaceholder: 'Ej.: Estudiante', abrirNotificacoes: 'Abrir notificaciones', fecharNotificacoes: 'Cerrar notificaciones',
+    painelAdmin: 'Panel de administración', painel: 'Panel', areaAdministrativa: 'Área administrativa', distribuicaoHumor: 'Distribución del ánimo', cadastrosPorMes: 'Registros por mes',
+    relatorios: 'Informes', relatoriosDescricao: 'Compromiso y uso en un rango de fechas.', filtrar: 'Filtrar', exportarCsv: 'Exportar CSV',
+    buscarPlaceholder: 'Buscar por nombre o correo electrónico', buscar: 'Buscar', colunaNome: 'Nombre', colunaEmail: 'Correo electrónico', colunaPerfil: 'Perfil', colunaStatus: 'Estado', colunaAcoes: 'Acciones',
+    nome: 'Nombre', bannerPerfil: 'Banner del perfil', biografiaPlaceholder: 'Cuéntanos algo sobre ti...', perfilSalvo: 'Perfil guardado', perfilSalvoDescricao: 'Tus cambios se confirmaron y ya están en tu cuenta.', entendi: 'Entendido',
+    checkinEmocional: 'Registro emocional', semRespostaCerta: 'No hay una respuesta correcta. Elige lo que encaje mejor ahora.', sonoDescricaoModal: 'Cuéntanos cómo fue tu noche, sin presión.', energiaDescricaoModal: 'Registra cómo de energía te sientes hoy.',
+    noLimite: 'Al límite', cheioEnergia: 'Con energía', lembreteTituloPlaceholder: 'Ej.: Beber agua', lembreteObjetoPlaceholder: 'Ej.: Llaves, teléfono',
+    humorPergunta: '¿Cómo estás?', humorEscolha: 'Elige una opción para registrar tu momento.', usuarioPadrao: 'Usuario', manifestDescricao: 'Registro diario de ánimo, sueño, energía, recordatorios y autocuidado.',
+    cadastrosAtivos: 'cuentas activas', registros30Dias: 'registros en 30 días', mediaSono: 'Promedio de sueño', ultimos30Dias: 'últimos 30 días', mediaGeral: 'promedio general',
+    usuarios: 'Usuarios', usuariosNovos: 'Usuarios nuevos', registrosHumor: 'Registros de ánimo', engajamento: 'Compromiso', atividadeRecente: 'Actividad reciente', semRegistrosIntervalo: 'No hay registros en el período indicado.',
+    erroCarregarUsuarios: 'No se pudieron cargar los usuarios.', adminRole: 'Administrador', ativo: 'Activo', inativo: 'Inactivo', desativar: 'Desactivar', ativar: 'Activar', excluir: 'Eliminar',
+    statusAtualizado: 'Estado actualizado.', erroAtualizarStatus: 'No se pudo actualizar el estado.', confirmarExclusaoUsuario: '¿Seguro que quieres eliminar este usuario?', usuarioRemovido: 'Usuario eliminado.', erroExcluirUsuario: 'No se pudo eliminar el usuario.',
+    csvIndicador: 'indicador', csvValor: 'valor', csvUsuariosNovos: 'usuarios_nuevos', csvRegistrosHumor: 'registros_animo', csvEngajamentoTotal: 'compromiso_total', csvNomeArquivo: 'informe_dailymind.csv',
+    semHumorGrafico: 'Aún no hay registros de ánimo.', semSonoGrafico: 'Aún no hay registros de sueño.', semEnergiaGrafico: 'Aún no hay registros de energía.',
+    erroSalvarPerfil: 'No se pudo guardar el perfil.', acaoFalhou: 'No se pudo completar la acción', conexaoFalhou: 'No se pudo conectar con DailyMind.',
+    offlinePendente: 'Guardado en este dispositivo. Lo enviaremos cuando haya conexión.',
+    nomeTamanho: 'El nombre debe tener entre 3 y 100 caracteres.', nomeTamanhoArtigo: 'El nombre debe tener entre 3 y 100 caracteres.', emailInvalido: 'Correo electrónico no válido.', senhaTamanho: 'La contraseña debe tener entre 8 y 128 caracteres.',
+    idadeIntervalo: 'La edad debe estar entre 1 y 150 años.', ocupacaoTamanho: 'La ocupación puede tener como máximo 100 caracteres.', bioTamanho: 'La biografía puede tener como máximo 280 caracteres.', emailCadastrado: 'El correo electrónico ya está registrado.',
+    emailSenhaObrigatorios: 'El correo electrónico y la contraseña son obligatorios.', credenciaisInvalidas: 'Correo electrónico o contraseña incorrectos.', contaDesativada: 'Esta cuenta está desactivada.', loginSucesso: '¡Sesión iniciada correctamente!', sessaoEncerrada: 'Sesión cerrada.',
+    usuarioNaoEncontrado: 'Usuario no encontrado.', idUsuarioObrigatorio: 'El ID del usuario es obligatorio.', perfilAtualizado: '¡Perfil actualizado!', autenticacaoNecessaria: 'Se requiere autenticación.', sessaoInvalida: 'Sesión no válida o caducada.',
+    acessoNegado: 'No tienes acceso a estos datos.', idUsuarioInvalido: 'ID de usuario no válido.', schemaStatus: 'El esquema actual no permite cambiar perfiles ni estados de cuentas.', naoPodeDesativarPropriaConta: 'No puedes desactivar tu propia cuenta de administrador.',
+    semCampoValidoStatus: 'Indica al menos un campo válido para actualizar el estado.', statusUsuarioAtualizado: 'Estado del usuario actualizado.', naoPodeExcluirPropriaConta: 'No puedes eliminar tu propia cuenta.', usuarioRemovidoSucesso: 'Usuario eliminado correctamente.',
+    humorObrigatorio: 'El usuario y el ánimo son obligatorios.', humorInvalido: 'Ánimo no válido.', humorRegistrado: '¡Ánimo registrado!', registroHumorNaoEncontrado: 'No se encontró el registro de ánimo.', humorRemovido: '¡Ánimo eliminado!',
+    sonoObrigatorio: 'El usuario y las horas de sueño son obligatorios.', horasSonoIntervalo: 'Las horas de sueño deben estar entre 0 y 24.', qualidadeIntervalo: 'La calidad debe estar entre 1 y 5.', registroSonoNaoEncontrado: 'No se encontró el registro de sueño.', sonoRemovido: '¡Registro de sueño eliminado!',
+    energiaObrigatorio: 'El usuario y el nivel de energía son obligatorios.', nivelEnergiaIntervalo: 'El nivel de energía debe estar entre 1 y 10.', registroEnergiaNaoEncontrado: 'No se encontró el registro de energía.', energiaRemovida: '¡Registro de energía eliminado!',
+    tituloLembreteTamanho: 'El título debe tener entre 1 y 150 caracteres.', iconeInvalido: 'Icono no válido.', descricaoTipoTexto: 'La descripción debe ser un texto.', descricaoTamanho: 'La descripción puede tener como máximo 1000 caracteres.',
+    informeCampoAtualizar: 'Indica al menos un campo para actualizar.', lembreteNaoEncontrado: 'No se encontró el recordatorio.', lembreteAtualizado: '¡Recordatorio actualizado!', lembreteConcluido: '¡Recordatorio completado!', lembreteReaberto: '¡Recordatorio reabierto!', usuarioObrigatorio: 'El usuario es obligatorio.',
+    tituloTamanho200: 'El título debe tener entre 1 y 200 caracteres.', usuarioTituloDatasObrigatorios: 'El usuario, el título, la fecha de inicio y la fecha de fin son obligatorios.', dataTerminoPosterior: 'La fecha de fin debe ser posterior a la fecha de inicio.',
+    metaCriada: '¡Meta creada correctamente!', metaNaoEncontrada: 'No se encontró la meta.', metaAtualizada: '¡Meta actualizada correctamente!', progressoIntervalo: 'El progreso debe ser un número entre 0 y 100.', progressoAtualizado: '¡Progreso actualizado correctamente!',
+    metaConcluida: '¡Meta completada!', metaRemovida: '¡Meta eliminada correctamente!', tarefaObrigatorio: 'El usuario y el título son obligatorios.', tarefaCriada: '¡Tarea creada correctamente!', tarefaNaoEncontrada: 'No se encontró la tarea.',
+    tarefaConcluida: '¡Tarea completada!', tarefaReaberta: '¡Tarea reabierta!', tarefaAtualizada: '¡Tarea actualizada correctamente!', tarefaRemovida: '¡Tarea eliminada correctamente!'
+  }
+}
+
+Object.keys(traducoesComplementares).forEach(idioma => {
+  Object.assign(traducoes[idioma], traducoesComplementares[idioma])
+})
 
 const traducoesHumor = {
   'pt-BR': {
@@ -106,6 +227,10 @@ const traducoesSugestoes = {
     en: ['Meditate for five minutes', 'Close your eyes, breathe deeply and notice your breathing.'],
     es: ['Medita durante cinco minutos', 'Cierra los ojos, respira profundo y observa tu respiración.']
   },
+  'Meditar por 5 minutos': {
+    en: ['Meditate for five minutes', 'Close your eyes, breathe deeply and focus on your breathing for five minutes.'],
+    es: ['Medita durante cinco minutos', 'Cierra los ojos, respira profundo y céntrate en tu respiración durante cinco minutos.']
+  },
   'Praticar respiração 4-7-8': {
     en: ['Try 4-7-8 breathing', 'Inhale for 4 seconds, hold for 7 and exhale for 8.'],
     es: ['Practica la respiración 4-7-8', 'Inhala 4 segundos, mantén 7 y exhale 8.']
@@ -127,6 +252,10 @@ const traducoesSugestoes = {
     es: ['Date una ducha relajante', 'Una ducha tibia puede ayudar a calmar tu mente y tu cuerpo.']
   },
   'Planejar o restante do dia': {
+    en: ['Plan the rest of your day', 'Organize your next activities into small, possible steps.'],
+    es: ['Planifica el resto del día', 'Organiza tus próximas actividades en pasos pequeños y posibles.']
+  },
+  'Planejar o resto do dia': {
     en: ['Plan the rest of your day', 'Organize your next activities into small, possible steps.'],
     es: ['Planifica el resto del día', 'Organiza tus próximas actividades en pasos pequeños y posibles.']
   },
@@ -192,6 +321,96 @@ const traducoesSugestoes = {
   }
 }
 
+const mensagensApi = {
+  'Nome deve ter entre 3 e 100 caracteres.': 'nomeTamanho',
+  'O nome deve ter entre 3 e 100 caracteres.': 'nomeTamanhoArtigo',
+  'E-mail inválido.': 'emailInvalido',
+  'A senha deve ter entre 8 e 128 caracteres.': 'senhaTamanho',
+  'A idade deve estar entre 1 e 150 anos.': 'idadeIntervalo',
+  'A ocupação pode ter no máximo 100 caracteres.': 'ocupacaoTamanho',
+  'A biografia pode ter no máximo 280 caracteres.': 'bioTamanho',
+  'E-mail já cadastrado.': 'emailCadastrado',
+  'E-mail e senha são obrigatórios.': 'emailSenhaObrigatorios',
+  'E-mail ou senha incorretos.': 'credenciaisInvalidas',
+  'Esta conta está desativada.': 'contaDesativada',
+  'Esta conta foi desativada.': 'contaDesativada',
+  'Conta criada com sucesso!': 'contaCriada',
+  'Login realizado com sucesso!': 'loginSucesso',
+  'Sessão encerrada.': 'sessaoEncerrada',
+  'Usuário não encontrado.': 'usuarioNaoEncontrado',
+  'ID do usuário é obrigatório.': 'idUsuarioObrigatorio',
+  'Perfil atualizado!': 'perfilAtualizado',
+  'Autenticação necessária.': 'autenticacaoNecessaria',
+  'Sessão inválida ou expirada.': 'sessaoInvalida',
+  'Você não tem acesso a estes dados.': 'acessoNegado',
+  'ID de usuário inválido.': 'idUsuarioInvalido',
+  'O schema atual não permite alterar perfil ou status de contas.': 'schemaStatus',
+  'Você não pode desativar sua própria conta de administrador.': 'naoPodeDesativarPropriaConta',
+  'Informe ao menos um campo válido para atualizar o status.': 'semCampoValidoStatus',
+  'Status do usuário atualizado.': 'statusUsuarioAtualizado',
+  'Você não pode excluir sua própria conta.': 'naoPodeExcluirPropriaConta',
+  'Usuário removido com sucesso.': 'usuarioRemovidoSucesso',
+  'Usuário e humor são obrigatórios.': 'humorObrigatorio',
+  'Humor inválido.': 'humorInvalido',
+  'Humor atualizado!': 'humorAtualizado',
+  'Humor registrado!': 'humorRegistrado',
+  'Registro de humor não encontrado.': 'registroHumorNaoEncontrado',
+  'Humor removido!': 'humorRemovido',
+  'Usuário e horas de sono são obrigatórios.': 'sonoObrigatorio',
+  'Horas de sono devem ser entre 0 e 24.': 'horasSonoIntervalo',
+  'Qualidade deve ser entre 1 e 5.': 'qualidadeIntervalo',
+  'Sono atualizado!': 'sonoAtualizado',
+  'Sono registrado!': 'sonoRegistrado',
+  'Registro de sono não encontrado.': 'registroSonoNaoEncontrado',
+  'Sono removido!': 'sonoRemovido',
+  'Usuário e nível de energia são obrigatórios.': 'energiaObrigatorio',
+  'Nível de energia deve ser entre 1 e 10.': 'nivelEnergiaIntervalo',
+  'Energia atualizada!': 'energiaAtualizada',
+  'Energia registrada!': 'energiaRegistrada',
+  'Registro de energia não encontrado.': 'registroEnergiaNaoEncontrado',
+  'Energia removida!': 'energiaRemovida',
+  'O título deve ter entre 1 e 150 caracteres.': 'tituloLembreteTamanho',
+  'Ícone inválido.': 'iconeInvalido',
+  'A descrição deve ser um texto.': 'descricaoTipoTexto',
+  'A descrição deve ter no máximo 1000 caracteres.': 'descricaoTamanho',
+  'Informe ao menos um campo para atualizar.': 'informeCampoAtualizar',
+  'Lembrete não encontrado.': 'lembreteNaoEncontrado',
+  'Lembrete criado!': 'lembreteCriado',
+  'Lembrete atualizado!': 'lembreteAtualizado',
+  'Lembrete concluído!': 'lembreteConcluido',
+  'Lembrete reaberto!': 'lembreteReaberto',
+  'Lembrete removido!': 'lembreteRemovido',
+  'Usuário obrigatório.': 'usuarioObrigatorio',
+  'O título deve ter entre 1 e 200 caracteres.': 'tituloTamanho200',
+  'Usuário e título são obrigatórios.': 'tarefaObrigatorio',
+  'Usuário, título, data de início e data de fim são obrigatórios.': 'usuarioTituloDatasObrigatorios',
+  'A data de término deve ser posterior à data de início.': 'dataTerminoPosterior',
+  'Meta criada com sucesso!': 'metaCriada',
+  'Meta não encontrada.': 'metaNaoEncontrada',
+  'Meta atualizada com sucesso!': 'metaAtualizada',
+  'Progresso deve ser um número entre 0 e 100.': 'progressoIntervalo',
+  'Progresso atualizado com sucesso!': 'progressoAtualizado',
+  'Meta concluída!': 'metaConcluida',
+  'Meta removida com sucesso!': 'metaRemovida',
+  'Tarefa criada com sucesso!': 'tarefaCriada',
+  'Tarefa não encontrada.': 'tarefaNaoEncontrada',
+  'Tarefa concluída!': 'tarefaConcluida',
+  'Tarefa reaberta!': 'tarefaReaberta',
+  'Tarefa reaberida!': 'tarefaReaberta',
+  'Tarefa atualizada com sucesso!': 'tarefaAtualizada',
+  'Tarefa removida com sucesso!': 'tarefaRemovida',
+  'Registro salvo neste dispositivo. Enviaremos quando houver conexão.': 'offlinePendente',
+  'Saved on this device. We will send it when you are back online.': 'offlinePendente',
+  'Guardado en este dispositivo. Lo enviaremos cuando haya conexión.': 'offlinePendente'
+}
+
+function traduzirMensagemApi(mensagem, falha = false) {
+  if (!mensagem) return mensagem
+  const chave = mensagensApi[mensagem]
+  if (chave) return t(chave)
+  return falha && configuracoes.idioma !== 'pt-BR' ? t('acaoFalhou') : mensagem
+}
+
 function t(chave, fallback = chave) {
   const idioma = traducoes[configuracoes.idioma] || traducoes['pt-BR']
   return idioma[chave] || traducoes['pt-BR'][chave] || fallback
@@ -243,11 +462,13 @@ async function api(metodo, endpoint, dados = null) {
         limparSessaoLocal()
         exibirToast(t('erroSessao'), 'erro')
       }
-      return { sucesso: false, status: resposta.status, mensagem: resultado.mensagem || `Não foi possível concluir a ação (${resposta.status}).` }
+      return { sucesso: false, status: resposta.status, mensagem: traduzirMensagemApi(resultado.mensagem, true) || `${t('acaoFalhou')} (${resposta.status}).` }
     }
-    return resultado
+    return resultado.mensagem
+      ? { ...resultado, mensagem: traduzirMensagemApi(resultado.mensagem, resultado.sucesso === false) }
+      : resultado
   } catch (erro) {
-    return { sucesso: false, mensagem: 'Não foi possível conectar ao DailyMind.' }
+    return { sucesso: false, mensagem: t('conexaoFalhou') }
   }
 }
 
@@ -380,7 +601,13 @@ const adminState = {
 }
 
 function formatarNumero(valor) {
-  return Number(valor || 0).toLocaleString('pt-BR')
+  return Number(valor || 0).toLocaleString(configuracoes.idioma)
+}
+
+function formatarMes(mes) {
+  const texto = String(mes || '')
+  if (!/^\d{4}-\d{2}$/.test(texto)) return texto
+  return new Date(`${texto}-01T12:00:00`).toLocaleDateString(configuracoes.idioma, { month: 'short', year: '2-digit' })
 }
 
 async function carregarPainelAdmin() {
@@ -400,24 +627,24 @@ async function carregarPainelAdmin() {
       const dados = metricas.dados
       container.innerHTML = `
         <div class="admin-metric-card">
-          <span class="label">Usuários</span>
+          <span class="label">${t('usuarios')}</span>
           <span class="valor">${formatarNumero(dados.usuarios)}</span>
-          <span class="subvalor">cadastros ativos</span>
+          <span class="subvalor">${t('cadastrosAtivos')}</span>
         </div>
         <div class="admin-metric-card">
-          <span class="label">Humor</span>
+          <span class="label">${t('humor')}</span>
           <span class="valor">${formatarNumero(dados.humor_30_dias)}</span>
-          <span class="subvalor">registros em 30 dias</span>
+          <span class="subvalor">${t('registros30Dias')}</span>
         </div>
         <div class="admin-metric-card">
-          <span class="label">Média de sono</span>
+          <span class="label">${t('mediaSono')}</span>
           <span class="valor">${Number(dados.media_sono || 0).toFixed(1)}h</span>
-          <span class="subvalor">últimos 30 dias</span>
+          <span class="subvalor">${t('ultimos30Dias')}</span>
         </div>
         <div class="admin-metric-card">
-          <span class="label">Energia</span>
+          <span class="label">${t('energia')}</span>
           <span class="valor">${Number(dados.media_energia || 0).toFixed(1)}/10</span>
-          <span class="subvalor">média geral</span>
+          <span class="subvalor">${t('mediaGeral')}</span>
         </div>
       `
     }
@@ -449,7 +676,7 @@ function renderizarGraficosAdmin(dados) {
   }))
 
   const usuariosMes = (dados.usuarios_por_mes || []).map(item => ({
-    label: item.mes,
+    label: formatarMes(item.mes),
     value: Number(item.total || 0)
   }))
 
@@ -477,7 +704,7 @@ function renderizarGraficosAdmin(dados) {
     data: {
       labels: usuariosMes.map(item => item.label),
       datasets: [{
-        label: 'Usuários',
+        label: t('usuarios'),
         data: usuariosMes.map(item => item.value),
         borderRadius: 8,
         backgroundColor: '#8b5cf6'
@@ -500,29 +727,29 @@ function renderizarRelatoriosAdmin(dados) {
 
   const linhas = (dados.engajamento_diario || []).slice(0, 7).map(item => `
     <div class="flex items-center justify-between border-b border-gray-200 py-2">
-      <span class="font-medium text-gray-700">${item.dia}</span>
-      <span class="text-sm text-gray-500">${Number(item.total || 0)} registros</span>
+      <span class="font-medium text-gray-700">${formatarData(item.dia)}</span>
+      <span class="text-sm text-gray-500">${formatarNumero(item.total || 0)} ${t('metricRegistros')}</span>
     </div>
   `).join('')
 
   container.innerHTML = `
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
       <div class="rounded-xl bg-violet-50 p-3">
-        <p class="text-xs uppercase tracking-wider text-violet-700 font-bold">Usuários novos</p>
+        <p class="text-xs uppercase tracking-wider text-violet-700 font-bold">${t('usuariosNovos')}</p>
         <p class="text-2xl font-black text-violet-900 mt-1">${formatarNumero(dados.usuarios_novos)}</p>
       </div>
       <div class="rounded-xl bg-mint-50 p-3">
-        <p class="text-xs uppercase tracking-wider text-mint-700 font-bold">Registros de humor</p>
+        <p class="text-xs uppercase tracking-wider text-mint-700 font-bold">${t('registrosHumor')}</p>
         <p class="text-2xl font-black text-mint-900 mt-1">${formatarNumero(dados.registros_humor)}</p>
       </div>
       <div class="rounded-xl bg-orange-50 p-3">
-        <p class="text-xs uppercase tracking-wider text-orange-700 font-bold">Engajamento</p>
+        <p class="text-xs uppercase tracking-wider text-orange-700 font-bold">${t('engajamento')}</p>
         <p class="text-2xl font-black text-orange-900 mt-1">${formatarNumero((dados.engajamento_diario || []).reduce((total, item) => total + Number(item.total || 0), 0))}</p>
       </div>
     </div>
     <div class="mt-4 rounded-2xl border border-gray-200 bg-white p-4">
-      <h3 class="font-bold text-gray-800 mb-3">Atividade recente</h3>
-      ${linhas || '<p class="text-sm text-gray-500">Nenhum registro no intervalo informado.</p>'}
+      <h3 class="font-bold text-gray-800 mb-3">${t('atividadeRecente')}</h3>
+      ${linhas || `<p class="text-sm text-gray-500">${t('semRegistrosIntervalo')}</p>`}
     </div>
   `
 }
@@ -536,7 +763,7 @@ async function carregarUsuariosAdmin() {
   const paginacao = document.getElementById('admin-paginacao')
 
   if (!resultado.sucesso || !Array.isArray(resultado.dados)) {
-    tabela.innerHTML = '<tr><td colspan="5" class="px-4 py-6 text-center text-gray-500">Não foi possível carregar os usuários.</td></tr>'
+    tabela.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-gray-500">${t('erroCarregarUsuarios')}</td></tr>`
     return
   }
 
@@ -544,12 +771,12 @@ async function carregarUsuariosAdmin() {
     <tr class="border-t border-gray-100">
       <td class="px-4 py-3 font-medium text-gray-800">${escaparHtml(usuario.nome)}</td>
       <td class="px-4 py-3 text-gray-600">${escaparHtml(usuario.email)}</td>
-      <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold ${usuario.role === 'admin' ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-700'}">${usuario.role === 'admin' ? 'Admin' : 'Usuário'}</span></td>
-      <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold ${usuario.ativo ? 'bg-mint-100 text-mint-700' : 'bg-red-100 text-red-700'}">${usuario.ativo ? 'Ativo' : 'Inativo'}</span></td>
+      <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold ${usuario.role === 'admin' ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-700'}">${usuario.role === 'admin' ? t('adminRole') : t('roleUsuario')}</span></td>
+      <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold ${usuario.ativo ? 'bg-mint-100 text-mint-700' : 'bg-red-100 text-red-700'}">${usuario.ativo ? t('ativo') : t('inativo')}</span></td>
       <td class="px-4 py-3">
         <div class="flex gap-2">
-          <button type="button" data-usuario-id="${usuario.id}" data-usuario-ativo="${usuario.ativo ? 0 : 1}" class="toggle-usuario btn-status rounded-lg px-2 py-1 text-xs font-semibold bg-gray-900 text-white">${usuario.ativo ? 'Desativar' : 'Ativar'}</button>
-          <button type="button" data-usuario-id="${usuario.id}" class="delete-usuario rounded-lg px-2 py-1 text-xs font-semibold bg-red-100 text-red-700">Excluir</button>
+          <button type="button" data-usuario-id="${usuario.id}" data-usuario-ativo="${usuario.ativo ? 0 : 1}" class="toggle-usuario btn-status rounded-lg px-2 py-1 text-xs font-semibold bg-gray-900 text-white">${usuario.ativo ? t('desativar') : t('ativar')}</button>
+          <button type="button" data-usuario-id="${usuario.id}" class="delete-usuario rounded-lg px-2 py-1 text-xs font-semibold bg-red-100 text-red-700">${t('excluir')}</button>
         </div>
       </td>
     </tr>
@@ -573,10 +800,10 @@ async function carregarUsuariosAdmin() {
       const ativo = Number(botao.dataset.usuarioAtivo) === 1
       const resposta = await api('PUT', `/admin/usuarios/${id}/status`, { ativo })
       if (resposta.sucesso) {
-        exibirToast(resposta.mensagem || 'Status atualizado.')
+        exibirToast(resposta.mensagem || t('statusAtualizado'))
         carregarPainelAdmin()
       } else {
-        exibirToast(resposta.mensagem || 'Não foi possível atualizar o status.', 'erro')
+        exibirToast(resposta.mensagem || t('erroAtualizarStatus'), 'erro')
       }
     })
   })
@@ -584,13 +811,13 @@ async function carregarUsuariosAdmin() {
   document.querySelectorAll('.delete-usuario').forEach(botao => {
     botao.addEventListener('click', async () => {
       const id = Number(botao.dataset.usuarioId)
-      if (!confirm('Deseja realmente excluir este usuário?')) return
+      if (!confirm(t('confirmarExclusaoUsuario'))) return
       const resposta = await api('DELETE', `/admin/usuarios/${id}`)
       if (resposta.sucesso) {
-        exibirToast(resposta.mensagem || 'Usuário removido.')
+        exibirToast(resposta.mensagem || t('usuarioRemovido'))
         carregarPainelAdmin()
       } else {
-        exibirToast(resposta.mensagem || 'Não foi possível excluir o usuário.', 'erro')
+        exibirToast(resposta.mensagem || t('erroExcluirUsuario'), 'erro')
       }
     })
   })
@@ -613,53 +840,110 @@ function exportarRelatorioCsv() {
   if (!tabela) return
 
   const linhas = [
-    'indicador,valor',
-    `usuarios_novos,${document.getElementById('admin-relatorios').dataset.usuariosNovos || 0}`,
-    `registros_humor,${document.getElementById('admin-relatorios').dataset.registrosHumor || 0}`,
-    `engajamento_total,${document.getElementById('admin-relatorios').dataset.engajamentoTotal || 0}`
+    `${t('csvIndicador')},${t('csvValor')}`,
+    `${t('csvUsuariosNovos')},${tabela.dataset.usuariosNovos || 0}`,
+    `${t('csvRegistrosHumor')},${tabela.dataset.registrosHumor || 0}`,
+    `${t('csvEngajamentoTotal')},${tabela.dataset.engajamentoTotal || 0}`
   ]
 
   const blob = new Blob([linhas.join('\n')], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = 'relatorio_dailymind.csv'
+  link.download = t('csvNomeArquivo')
   link.click()
   URL.revokeObjectURL(url)
 }
 
 function lerConfiguracoes() {
+  let resultado = { ...configuracoes }
   try {
     const salvas = JSON.parse(localStorage.getItem('dailymind_configuracoes') || '{}')
-    return { ...configuracoes, ...salvas }
-  } catch (erro) {
-    return { ...configuracoes }
+    resultado = { ...resultado, ...salvas }
+  } catch (erro) {}
+  if (!traducoes[resultado.idioma]) resultado.idioma = configuracoes.idioma
+  try {
+    const url = new URL(window.location.href)
+    const idiomaUrl = url.searchParams.get('lang')
+    if (traducoes[idiomaUrl]) {
+      resultado.idioma = idiomaUrl
+      localStorage.setItem('dailymind_configuracoes', JSON.stringify(resultado))
+      url.searchParams.delete('lang')
+      window.history.replaceState({}, '', url)
+    }
+  } catch (erro) {}
+  return resultado
+}
+
+let manifestOriginal = null
+let urlManifestTraduzido = null
+
+async function atualizarManifestIdioma() {
+  const link = document.querySelector('link[rel="manifest"]')
+  if (!link) return
+  if (!manifestOriginal) {
+    try {
+      const resposta = await fetch(link.href)
+      if (!resposta.ok) return
+      manifestOriginal = await resposta.json()
+    } catch (_) {
+      return
+    }
   }
+  const manifest = {
+    ...manifestOriginal,
+    lang: configuracoes.idioma,
+    name: t('documentTitulo'),
+    description: t('manifestDescricao')
+  }
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' })
+  const url = URL.createObjectURL(blob)
+  link.href = url
+  if (urlManifestTraduzido) URL.revokeObjectURL(urlManifestTraduzido)
+  urlManifestTraduzido = url
 }
 
 function traduzirInterface() {
-  const idioma = traducoes[configuracoes.idioma] || traducoes['pt-BR']
   document.querySelectorAll('[data-i18n]').forEach(elemento => {
-    const texto = idioma[elemento.dataset.i18n]
+    const texto = t(elemento.dataset.i18n, elemento.textContent)
     if (texto) elemento.textContent = texto
   })
   document.querySelectorAll('[data-i18n-aria]').forEach(elemento => {
-    const texto = idioma[elemento.dataset.i18nAria]
+    const texto = t(elemento.dataset.i18nAria, elemento.getAttribute('aria-label') || '')
     if (texto) elemento.setAttribute('aria-label', texto)
   })
   document.querySelectorAll('[data-i18n-placeholder]').forEach(elemento => {
-    const texto = idioma[elemento.dataset.i18nPlaceholder]
+    const texto = t(elemento.dataset.i18nPlaceholder, elemento.placeholder)
     if (texto) elemento.placeholder = texto
   })
   document.querySelectorAll('[data-i18n-title]').forEach(elemento => {
-    const texto = idioma[elemento.dataset.i18nTitle]
+    const texto = t(elemento.dataset.i18nTitle, elemento.title)
     if (texto) elemento.title = texto
   })
   document.querySelectorAll('.mood-option').forEach(botao => {
     const traducao = traducoesHumor[configuracoes.idioma]?.[botao.dataset.humor]
-    if (traducao) botao.querySelector('span:last-child').textContent = traducao.nome
+    if (traducao) {
+      botao.querySelector('span:last-child').textContent = traducao.nome
+      botao.setAttribute('aria-label', traducao.nome)
+    }
   })
+  const modalSono = document.getElementById('modal-sono')
+  if (modalSono && !modalSono.classList.contains('hidden')) {
+    document.getElementById('modal-sono-titulo').textContent = registroSonoEditando
+      ? `${t('editar')} ${t('sono').toLowerCase()}`
+      : t('horasSono')
+    document.getElementById('btn-salvar-sono').textContent = registroSonoEditando ? t('salvarAlteracoes') : t('confirmar')
+  }
+  const modalEnergia = document.getElementById('modal-energia')
+  if (modalEnergia && !modalEnergia.classList.contains('hidden')) {
+    document.getElementById('modal-energia-titulo').textContent = registroEnergiaEditando
+      ? `${t('editar')} ${t('energia').toLowerCase()}`
+      : t('nivelEnergia')
+    document.getElementById('btn-salvar-energia').textContent = registroEnergiaEditando ? t('salvarAlteracoes') : t('confirmar')
+  }
   document.documentElement.lang = configuracoes.idioma
+  document.title = t('documentTitulo')
+  atualizarManifestIdioma()
 }
 
 function aplicarConfiguracoes() {
@@ -684,6 +968,8 @@ function atualizarConteudoDinamico() {
   })
   if (!document.getElementById('tela-graficos').classList.contains('hidden')) carregarGraficos()
   if (!document.getElementById('tela-lembretes').classList.contains('hidden')) carregarTodosLembretes()
+  if (!document.getElementById('tela-perfil').classList.contains('hidden')) atualizarPreviaPerfil()
+  if (!document.getElementById('tela-admin').classList.contains('hidden')) carregarPainelAdmin()
   if (notificacoesAbertas) carregarNotificacoes()
 }
 
@@ -721,8 +1007,7 @@ function salvarConfiguracoes() {
   atualizarConteudoDinamico()
   const status = document.getElementById('configuracoes-status')
   if (status) {
-    const idioma = traducoes[configuracoes.idioma] || traducoes['pt-BR']
-    status.textContent = idioma.salvoConfiguracoes
+    status.textContent = t('salvoConfiguracoes')
     setTimeout(() => { status.textContent = '' }, 2500)
   }
 }
@@ -828,25 +1113,29 @@ function fecharModal(id) {
 
 // ==================== HUMOR ====================
 
-const informacoesHumor = {
-  '😊': { nome: 'Feliz', descricao: 'Tem algo bom brilhando por aí. Aproveite no seu ritmo.', classe: 'mood-feliz' },
-  '😔': { nome: 'Triste', descricao: 'Tudo bem desacelerar e acolher o que você está sentindo.', classe: 'mood-triste' },
-  '😰': { nome: 'Ansioso', descricao: 'Vamos por partes. Um respiro pequeno também é progresso.', classe: 'mood-ansioso' },
-  '😫': { nome: 'Cansado', descricao: 'Seu corpo está pedindo cuidado. Faça o próximo passo possível.', classe: 'mood-cansado' },
-  '😤': { nome: 'Irritado', descricao: 'Você pode dar espaço para esse sentimento sem se cobrar.', classe: 'mood-irritado' },
-  '😐': { nome: 'Neutro', descricao: 'Um momento estável também merece ser percebido.', classe: 'mood-neutro' }
+const classesHumor = {
+  '😊': 'mood-feliz',
+  '😔': 'mood-triste',
+  '😰': 'mood-ansioso',
+  '😫': 'mood-cansado',
+  '😤': 'mood-irritado',
+  '😐': 'mood-neutro'
+}
+
+function informacaoHumor(emoji) {
+  const traducao = traducoesHumor[configuracoes.idioma] || traducoesHumor['pt-BR']
+  return traducao[emoji] || traducao['😐']
 }
 
 function atualizarVisualHumor(emoji, registrado = true) {
-  const informacaoBase = informacoesHumor[emoji] || informacoesHumor['😐']
-  const informacao = { ...informacaoBase, ...(traducoesHumor[configuracoes.idioma]?.[emoji] || {}) }
+  const informacao = informacaoHumor(emoji)
   const card = document.getElementById('card-humor')
-  card.className = `mood-card ${informacao.classe} bg-white p-6 rounded-2xl shadow-md border cursor-pointer hover:shadow-lg transition`
+  card.className = `mood-card ${classesHumor[emoji] || classesHumor['😐']} bg-white p-6 rounded-2xl shadow-md border cursor-pointer hover:shadow-lg transition`
   document.getElementById('humor-atual').textContent = emoji
-  document.getElementById('humor-texto').textContent = registrado ? informacao.nome : 'Como você está?'
+  document.getElementById('humor-texto').textContent = registrado ? informacao.nome : t('humorPergunta')
   document.getElementById('humor-descricao').textContent = registrado
     ? informacao.descricao
-    : 'Escolha uma opção para registrar seu momento.'
+    : t('humorEscolha')
   document.getElementById('humor-status').textContent = registrado ? t('registradoHoje') : t('aindaNaoRegistrado')
   document.querySelectorAll('.mood-option').forEach(botao => {
     botao.classList.toggle('selected', registrado && botao.dataset.humor === emoji)
@@ -857,7 +1146,7 @@ async function registrarHumor(emoji) {
   const resultado = await api('POST', '/humor', { usuario_id: usuarioAtual.id, emoji })
   if (resultado.sucesso) {
     atualizarVisualHumor(emoji)
-    exibirToast(`${t('humorAtualizado')}: ${(traducoesHumor[configuracoes.idioma]?.[emoji] || informacoesHumor[emoji]).nome}!`)
+    exibirToast(`${t('humorAtualizado')}: ${informacaoHumor(emoji).nome}!`)
     fecharModal('modal-humor')
     carregarSugestoes()
     carregarHistoricoBemEstar()
@@ -904,7 +1193,7 @@ async function registrarSono() {
     exibirToast(`${editando ? t('sonoAtualizado') : t('sonoRegistrado')} 😴`)
     fecharModal('modal-sono')
     registroSonoEditando = null
-    document.getElementById('sono-texto').textContent = `${horas}h de sono`
+    document.getElementById('sono-texto').textContent = `${horas}h ${t('sonoResumo')}`
     atualizarBarraSono(horas)
     carregarHistoricoBemEstar()
     carregarGraficos()
@@ -932,7 +1221,7 @@ async function registrarEnergia() {
     exibirToast(`${editando ? t('energiaAtualizada') : t('energiaRegistrada')} ⚡`)
     fecharModal('modal-energia')
     registroEnergiaEditando = null
-    document.getElementById('energia-texto').textContent = `${nivel}/10 de energia`
+    document.getElementById('energia-texto').textContent = `${nivel}/10 ${t('energiaResumo')}`
     atualizarBarraEnergia(nivel)
     carregarHistoricoBemEstar()
     carregarGraficos()
@@ -1037,7 +1326,7 @@ async function carregarTodosLembretes() {
 async function alternarLembrete(id) {
   const resultado = await api('PUT', `/lembretes/${id}/toggle`)
   if (!resultado.sucesso) {
-    exibirToast(resultado.mensagem || t('naoFoiPossivel'), 'erro')
+    exibirToast(resultado.mensagem || t('acaoFalhou'), 'erro')
     return
   }
   carregarLembretes()
@@ -1049,7 +1338,7 @@ async function removerLembrete(id) {
   if (confirm(t('removerLembrete'))) {
     const resultado = await api('DELETE', `/lembretes/${id}`)
     if (!resultado.sucesso) {
-      exibirToast(resultado.mensagem || t('naoFoiPossivel'), 'erro')
+      exibirToast(resultado.mensagem || t('acaoFalhou'), 'erro')
       return
     }
     exibirToast(t('lembreteRemovido'))
@@ -1233,7 +1522,7 @@ function renderizarHistoricoBemEstar() {
         <div class="flex items-center gap-3 min-w-0">
           <span class="text-xl">🌙</span>
           <div class="min-w-0">
-            <p class="font-semibold text-gray-700">${registro.horas_sono}h ${t('sono').toLowerCase()}</p>
+            <p class="font-semibold text-gray-700">${registro.horas_sono}h ${t('sonoResumo')}</p>
             <p class="text-xs text-gray-400">${formatarData(registro.data_registro)} · ${t('qualidade')} ${registro.qualidade}/5</p>
           </div>
         </div>
@@ -1297,9 +1586,9 @@ async function carregarGraficos() {
   limparEstadoGraficoVazio('grafico-sono')
   limparEstadoGraficoVazio('grafico-energia')
 
-  if (humorVazio) resetarCanvasVazio('grafico-humor', 'Nenhum registro de humor salvo ainda.')
-  if (sonoVazio) resetarCanvasVazio('grafico-sono', 'Nenhum registro de sono salvo ainda.')
-  if (energiaVazia) resetarCanvasVazio('grafico-energia', 'Nenhum registro de energia salvo ainda.')
+  if (humorVazio) resetarCanvasVazio('grafico-humor', t('semHumorGrafico'))
+  if (sonoVazio) resetarCanvasVazio('grafico-sono', t('semSonoGrafico'))
+  if (energiaVazia) resetarCanvasVazio('grafico-energia', t('semEnergiaGrafico'))
 
   if (humorVazio && sonoVazio && energiaVazia) return
 
@@ -1347,14 +1636,14 @@ async function carregarGraficos() {
   const mapaEmoji = { '😊': 5, '😔': 2, '😰': 3, '😫': 2, '😤': 1, '😐': 3 }
 
   if (!humorVazio) {
-    const labelsHumor = dadosHumor.dados.map(d => d.data_registro).reverse()
+    const labelsHumor = dadosHumor.dados.map(d => formatarData(d.data_registro)).reverse()
     const valoresHumor = dadosHumor.dados.map(d => mapaEmoji[d.emoji] || 3).reverse()
     graficoHumor = new Chart(document.getElementById('grafico-humor'), {
       type: 'line',
       data: {
         labels: labelsHumor,
         datasets: [{
-          label: t('humorHoje'),
+          label: t('humor'),
           data: valoresHumor,
           borderColor: '#34d399',
           borderWidth: 3,
@@ -1384,7 +1673,7 @@ async function carregarGraficos() {
   }
 
   if (!sonoVazio) {
-    const labelsSono = dadosSono.dados.map(d => d.data_registro).reverse()
+    const labelsSono = dadosSono.dados.map(d => formatarData(d.data_registro)).reverse()
     const valoresSono = dadosSono.dados.map(d => d.horas_sono).reverse()
     graficoSono = new Chart(document.getElementById('grafico-sono'), {
       type: 'bar',
@@ -1416,7 +1705,7 @@ async function carregarGraficos() {
   }
 
   if (!energiaVazia) {
-    const labelsEnergia = dadosEnergia.dados.map(d => d.data_registro).reverse()
+    const labelsEnergia = dadosEnergia.dados.map(d => formatarData(d.data_registro)).reverse()
     const valoresEnergia = dadosEnergia.dados.map(d => d.nivel_energia).reverse()
     graficoEnergia = new Chart(document.getElementById('grafico-energia'), {
       type: 'line',
@@ -1478,7 +1767,7 @@ async function carregarPerfil() {
 }
 
 function atualizarPreviaPerfil() {
-  const nome = document.getElementById('perfil-nome').value.trim() || 'Usuário'
+  const nome = document.getElementById('perfil-nome').value.trim() || t('usuarioPadrao')
   const idade = document.getElementById('perfil-idade').value
   const ocupacao = document.getElementById('perfil-ocupacao').value.trim()
   const bio = document.getElementById('perfil-bio').value.trim()
@@ -1487,7 +1776,7 @@ function atualizarPreviaPerfil() {
   const bannerImagem = document.getElementById('perfil-banner-imagem')
 
   document.getElementById('perfil-nome-preview').textContent = nome
-  document.getElementById('perfil-idade-preview').textContent = idade ? `${idade} ${t('anos')}` : t('perfilDescricao')
+  document.getElementById('perfil-idade-preview').textContent = idade ? `${idade} ${t('anos')}` : t('perfilPadrao')
   document.getElementById('perfil-ocupacao-preview').textContent = ocupacao || 'DailyMind'
   document.getElementById('perfil-bio-preview').textContent = bio
   document.getElementById('perfil-bio-contador').textContent = `${bio.length}/280`
@@ -1575,14 +1864,14 @@ async function carregarImagemPerfil(input, campo) {
   if (!arquivo) return
   if (!arquivo.type.startsWith('image/')) {
     input.value = ''
-    exibirToast(t('naoFoiPossivel'), 'erro')
+    exibirToast(t('erroImagem'), 'erro')
     return
   }
 
   const idSessao = sessaoPerfil
   const usuarioId = usuarioAtual?.id
   imagensPerfilCarregando += 1
-  atualizarStatusPerfil(`${t('carregando')}...`, 'saving')
+  atualizarStatusPerfil(t('carregandoImagem'), 'saving')
   try {
     const imagemProcessada = await prepararImagemPerfil(arquivo)
     imagensPerfilCarregando -= 1
@@ -1594,8 +1883,8 @@ async function carregarImagemPerfil(input, campo) {
   } catch (erro) {
     imagensPerfilCarregando -= 1
     if (idSessao !== sessaoPerfil) return
-    atualizarStatusPerfil(t('naoFoiPossivel'), 'error')
-    exibirToast(t('naoFoiPossivel'), 'erro')
+    atualizarStatusPerfil(t('erroImagem'), 'error')
+    exibirToast(t('erroImagem'), 'erro')
   }
 }
 
@@ -1629,7 +1918,7 @@ document.getElementById('form-perfil').addEventListener('submit', async (e) => {
   const botaoSalvar = e.submitter
 
   if (!nome) {
-    exibirToast(`${t('nomeCompleto')}: ${t('salvarAlteracoes').toLowerCase()}.`, 'erro')
+    exibirToast(t('nomeObrigatorio'), 'erro')
     return
   }
 
@@ -1639,7 +1928,7 @@ document.getElementById('form-perfil').addEventListener('submit', async (e) => {
   }
 
   if (nome.length > 100 || ocupacao.length > 100 || bio.length > 280) {
-    exibirToast(t('ate280'), 'erro')
+    exibirToast(t('campoMuitoLongo'), 'erro')
     return
   }
 
@@ -1671,11 +1960,11 @@ document.getElementById('form-perfil').addEventListener('submit', async (e) => {
       document.getElementById('modal-confirmacao-perfil').classList.remove('hidden')
     } else {
       atualizarStatusPerfil(t('naoSalvo'), 'error')
-      exibirToast(resultado.mensagem || 'Não foi possível salvar o perfil.', 'erro')
+      exibirToast(resultado.mensagem || t('erroSalvarPerfil'), 'erro')
     }
   } catch (erro) {
     atualizarStatusPerfil(t('naoSalvo'), 'error')
-    exibirToast(t('naoFoiPossivel'), 'erro')
+    exibirToast(t('erroSalvarPerfil'), 'erro')
   } finally {
     botaoSalvar.disabled = false
     botaoSalvar.textContent = t('salvarAlteracoes')
@@ -1704,14 +1993,14 @@ async function carregarDados() {
   }
 
   if (sono.dado) {
-    document.getElementById('sono-texto').textContent = `${sono.dado.horas_sono}h ${t('sono').toLowerCase()}`
+    document.getElementById('sono-texto').textContent = `${sono.dado.horas_sono}h ${t('sonoResumo')}`
     document.getElementById('input-sono').value = sono.dado.horas_sono
     document.getElementById('sono-valor').textContent = sono.dado.horas_sono
     atualizarBarraSono(sono.dado.horas_sono)
   }
 
   if (energia.dado) {
-    document.getElementById('energia-texto').textContent = `${energia.dado.nivel_energia}/10 ${t('energia').toLowerCase()}`
+    document.getElementById('energia-texto').textContent = `${energia.dado.nivel_energia}/10 ${t('energiaResumo')}`
     document.getElementById('input-energia').value = energia.dado.nivel_energia
     document.getElementById('energia-valor').textContent = energia.dado.nivel_energia
     atualizarBarraEnergia(energia.dado.nivel_energia)

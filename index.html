@@ -74,11 +74,39 @@
   <main>
     <div class="emoji">🧠</div>
     <h1>DailyMind</h1>
-    <p>Redirecionando para o aplicativo...</p>
-    <a href="https://dailymind.onrender.com">Abrir DailyMind</a>
+    <p id="texto-redirecionamento">Redirecionando para o aplicativo...</p>
+    <a id="link-abir" href="https://dailymind.onrender.com">Abrir DailyMind</a>
   </main>
   <script>
-    window.location.replace('https://dailymind.onrender.com')
+    const textos = {
+      'pt-BR': { titulo: 'DailyMind - Cuide da sua mente', redirecionando: 'Redirecionando para o aplicativo...', abrir: 'Abrir DailyMind' },
+      en: { titulo: 'DailyMind - Care for your mind', redirecionando: 'Redirecting to the app...', abrir: 'Open DailyMind' },
+      es: { titulo: 'DailyMind - Cuida tu mente', redirecionando: 'Redirigiendo a la aplicación...', abrir: 'Abrir DailyMind' }
+    }
+    const idiomas = ['pt-BR', 'en', 'es']
+    let idioma = null
+    try {
+      const salvo = JSON.parse(localStorage.getItem('dailymind_configuracoes') || '{}')
+      if (idiomas.includes(salvo.idioma)) {
+        idioma = salvo.idioma
+      }
+    } catch (_) {}
+    if (!idiomas.includes(idioma)) {
+      const navegador = (navigator.language || '').toLowerCase()
+      idioma = navegador.startsWith('es') ? 'es' : navegador.startsWith('en') ? 'en' : 'pt-BR'
+    }
+    const destino = new URL('https://dailymind.onrender.com')
+    destino.searchParams.set('lang', idioma)
+    const texto = textos[idioma]
+    document.documentElement.lang = idioma
+    document.title = texto.titulo
+    document.getElementById('texto-redirecionamento').textContent = texto.redirecionando
+    const link = document.getElementById('link-abir')
+    link.textContent = texto.abrir
+    link.href = destino.href
+    const meta = document.querySelector('meta[http-equiv="refresh"]')
+    if (meta) meta.content = `0; url=${destino.href}`
+    window.location.replace(destino.href)
   </script>
 </body>
 </html>

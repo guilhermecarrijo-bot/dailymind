@@ -11,7 +11,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/icon.svg">
-  <title>DailyMind - Cuide da sua mente</title>
+  <title data-i18n="documentTitulo">DailyMind - Cuide da sua mente</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
@@ -44,43 +44,43 @@
             <div class="text-4xl">🧠</div>
             <h1 class="logo-marca text-4xl font-black bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</h1>
           </div>
-          <h2 class="text-3xl font-black text-slate-800 leading-tight mb-4">Seu espaço leve para perceber o que você precisa.</h2>
-          <p class="text-base text-slate-600 mb-6">Acompanhe humor, sono, energia e lembretes com uma rotina mais gentil, clara e útil para o seu dia.</p>
+          <h2 class="text-3xl font-black text-slate-800 leading-tight mb-4" data-i18n="heroTitulo">Seu espaço leve para perceber o que você precisa.</h2>
+          <p class="text-base text-slate-600 mb-6" data-i18n="heroDescricao">Acompanhe humor, sono, energia e lembretes com uma rotina mais gentil, clara e útil para o seu dia.</p>
           <div class="feature-grid">
             <article class="feature-card">
               <span class="feature-emoji">😊</span>
               <div>
-                <h3>Humor</h3>
-                <p>Registre como você está em poucos segundos.</p>
+                <h3 data-i18n="humor">Humor</h3>
+                <p data-i18n="humorFeatureDescricao">Registre como você está em poucos segundos.</p>
               </div>
             </article>
             <article class="feature-card">
               <span class="feature-emoji">🌙</span>
               <div>
-                <h3>Sono</h3>
-                <p>Veja seu descanso e o impacto no seu ritmo.</p>
+                <h3 data-i18n="sono">Sono</h3>
+                <p data-i18n="sonoFeatureDescricao">Veja seu descanso e o impacto no seu ritmo.</p>
               </div>
             </article>
             <article class="feature-card">
               <span class="feature-emoji">⚡</span>
               <div>
-                <h3>Energia</h3>
-                <p>Monitore o nível de disposição ao longo do dia.</p>
+                <h3 data-i18n="energia">Energia</h3>
+                <p data-i18n="energiaFeatureDescricao">Monitore o nível de disposição ao longo do dia.</p>
               </div>
             </article>
           </div>
           <div class="preview-metrics">
             <div>
-              <strong>+1.200</strong>
-              <span>registros</span>
+              <strong data-i18n="metricRegistrosNumero">+1.200</strong>
+              <span data-i18n="metricRegistros">registros</span>
             </div>
             <div>
-              <strong>7 dias</strong>
-              <span>de acompanhamento</span>
+              <strong data-i18n="metricDias">7 dias</strong>
+              <span data-i18n="metricAcompanhamento">de acompanhamento</span>
             </div>
             <div>
               <strong>100%</strong>
-              <span>focado em acolhimento</span>
+              <span data-i18n="metricAcolhimento">focado em acolhimento</span>
             </div>
           </div>
         </div>
@@ -134,11 +134,11 @@
               <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="idadeOpcional">Idade (opcional)</label>
-                  <input type="number" id="cadastro-idade" min="1" max="150" placeholder="Idade" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                  <input type="number" id="cadastro-idade" min="1" max="150" placeholder="Idade" data-i18n-placeholder="idadePlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="ocupacaoOpcional">Ocupação (opcional)</label>
-                  <input type="text" id="cadastro-ocupacao" placeholder="Ex: Estudante" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                  <input type="text" id="cadastro-ocupacao" placeholder="Ex: Estudante" data-i18n-placeholder="ocupacaoPlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
                 </div>
               </div>
               <button type="submit" id="btn-cadastro" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
@@ -165,7 +165,7 @@
           </div>
           <div class="flex items-center gap-4">
             <!-- Badge de notificação -->
-            <button id="btn-notificacoes" type="button" aria-label="Abrir notificações" aria-expanded="false" class="relative p-2 text-gray-600 hover:text-mint-600 transition">
+            <button id="btn-notificacoes" type="button" aria-label="Abrir notificações" data-i18n-aria="abrirNotificacoes" aria-expanded="false" class="relative p-2 text-gray-600 hover:text-mint-600 transition">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
               </svg>
@@ -174,7 +174,7 @@
             <div id="painel-notificacoes" class="notification-panel hidden" role="status" aria-live="polite">
               <div class="flex items-center justify-between gap-4 mb-3">
                 <h2 class="font-bold text-gray-800" data-i18n="notificacoes">Notificações</h2>
-                <button type="button" onclick="fecharNotificacoes()" class="text-gray-400 hover:text-gray-700 text-xl" aria-label="Fechar notificações">&times;</button>
+                <button type="button" onclick="fecharNotificacoes()" class="text-gray-400 hover:text-gray-700 text-xl" aria-label="Fechar notificações" data-i18n-aria="fecharNotificacoes">&times;</button>
               </div>
               <div id="lista-notificacoes">
                 <p class="text-sm text-gray-400 py-3" data-i18n="nenhumaNotificacao">Nenhuma notificação pendente.</p>
@@ -182,7 +182,7 @@
             </div>
             <button id="nav-admin" type="button" onclick="mostrarTela('admin')" class="hidden items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-700 transition hover:bg-violet-100">
               <span>⚙️</span>
-              <span>Painel Admin</span>
+              <span data-i18n="painelAdmin">Painel Admin</span>
             </button>
             <!-- Perfil -->
             <button id="btn-perfil" class="w-10 h-10 bg-gradient-to-r from-mint-400 to-lavender-400 rounded-full flex items-center justify-center text-white font-bold" onclick="mostrarPerfil()">
@@ -197,7 +197,7 @@
         
         <!-- Saudação -->
         <div class="mb-8">
-          <h1 class="text-2xl font-bold text-gray-800"><span data-i18n="bomDia">Bom dia,</span> <span id="nome-usuario">Usuário</span>! ☀️</h1>
+          <h1 class="text-2xl font-bold text-gray-800"><span data-i18n="saudacao">Olá,</span> <span id="nome-usuario" data-i18n="usuarioPadrao">Usuário</span>! ☀️</h1>
           <p class="text-gray-500" data-i18n="comoVoceEsta">Como você está hoje?</p>
         </div>
 
@@ -209,14 +209,14 @@
               <div>
                 <div class="flex items-center gap-2">
                   <span class="text-sm font-bold uppercase tracking-widest text-gray-500" data-i18n="humorHoje">Humor de hoje</span>
-                  <span id="humor-status" class="mood-status">Ainda não registrado</span>
+                  <span id="humor-status" class="mood-status" data-i18n="aindaNaoRegistrado">Ainda não registrado</span>
                 </div>
                 <p class="text-xs text-gray-500 mt-2" data-i18n="humorCheckin">Um check-in rápido para se escutar.</p>
               </div>
               <div id="humor-bolha" class="mood-bubble"><span id="humor-atual">😊</span></div>
             </div>
-            <p class="text-xl font-bold text-gray-800" id="humor-texto">Como você está?</p>
-            <p class="text-sm text-gray-500 mt-1" id="humor-descricao">Escolha uma opção para registrar seu momento.</p>
+            <p class="text-xl font-bold text-gray-800" id="humor-texto" data-i18n="humorPergunta">Como você está?</p>
+            <p class="text-sm text-gray-500 mt-1" id="humor-descricao" data-i18n="humorEscolha">Escolha uma opção para registrar seu momento.</p>
             <div class="flex items-center justify-between gap-3 mt-5 pt-4 border-t border-black/5">
               <span class="text-xs font-semibold text-gray-400" data-i18n="humorMuda">Seu registro pode mudar ao longo do dia.</span>
               <span class="text-sm font-bold text-mint-600" data-i18n="atualizar">Atualizar →</span>
@@ -228,12 +228,12 @@
             <div class="flex items-start justify-between mb-4">
               <div>
                 <span class="text-sm font-medium text-gray-500" data-i18n="sono">Sono</span>
-                <p class="text-xs text-lavender-600 mt-1" data-i18n="ritmoDescanso">Recupere seu ritmo</p>
+                <p class="text-xs text-lavender-600 mt-1" data-i18n="recupereRitmo">Recupere seu ritmo</p>
               </div>
               <span class="text-3xl">😴</span>
             </div>
             <div class="flex items-end justify-between gap-3">
-              <p class="text-gray-700 font-semibold" id="sono-texto">Toque para registrar</p>
+              <p class="text-gray-700 font-semibold" id="sono-texto" data-i18n="registrar">Toque para registrar</p>
               <span class="text-xs text-gray-400" data-i18n="editar">Editar</span>
             </div>
             <div class="mt-3">
@@ -248,12 +248,12 @@
             <div class="flex items-start justify-between mb-4">
               <div>
                 <span class="text-sm font-medium text-gray-500" data-i18n="energia">Energia</span>
-                <p class="text-xs text-orange-600 mt-1" data-i18n="disposicaoDiaria">Seu combustível de hoje</p>
+                <p class="text-xs text-orange-600 mt-1" data-i18n="combustivelHoje">Seu combustível de hoje</p>
               </div>
               <span class="text-3xl">⚡</span>
             </div>
             <div class="flex items-end justify-between gap-3">
-              <p class="text-gray-700 font-semibold" id="energia-texto">Toque para registrar</p>
+              <p class="text-gray-700 font-semibold" id="energia-texto" data-i18n="registrar">Toque para registrar</p>
               <span class="text-xs text-gray-400" data-i18n="editar">Editar</span>
             </div>
             <div class="mt-3">
@@ -276,7 +276,7 @@
               <span class="text-3xl">🌙</span>
             </div>
             <div id="historico-sono" class="space-y-2">
-              <p class="text-sm text-gray-400">Carregando registros...</p>
+              <p class="text-sm text-gray-400" data-i18n="carregando">Carregando registros...</p>
             </div>
           </div>
           <div class="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border border-orange-100 shadow-sm">
@@ -289,7 +289,7 @@
               <span class="text-3xl">⚡</span>
             </div>
             <div id="historico-energia" class="space-y-2">
-              <p class="text-sm text-gray-400">Carregando registros...</p>
+              <p class="text-sm text-gray-400" data-i18n="carregando">Carregando registros...</p>
             </div>
           </div>
         </section>
@@ -301,7 +301,7 @@
             <button onclick="abrirModalLembrete()" class="text-mint-600 hover:text-mint-700 font-semibold text-sm" data-i18n="novo">+ Novo</button>
           </div>
           <div id="lista-lembretes" class="space-y-3">
-            <p class="text-gray-400 text-center py-4">Nenhum lembrete ainda</p>
+            <p class="text-gray-400 text-center py-4" data-i18n="semLembretes">Nenhum lembrete ainda</p>
           </div>
         </div>
 
@@ -321,7 +321,7 @@
             </div>
           </div>
           <div id="lista-sugestoes" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <p class="text-gray-400 text-center py-4 col-span-3">Registre seu humor para ver sugestões</p>
+            <p class="text-gray-400 text-center py-4 col-span-3" data-i18n="carregarSugestoes">Registre seu humor para ver sugestões</p>
           </div>
         </div>
 
@@ -362,7 +362,7 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="font-semibold">Voltar</span>
+            <span class="font-semibold" data-i18n="voltar">Voltar</span>
           </button>
           <div class="flex items-center gap-2">
             <span class="text-2xl">🧠</span>
@@ -373,8 +373,8 @@
       </header>
 
       <div class="mb-6">
-        <p class="text-xs font-bold uppercase tracking-widest text-violet-600">Painel</p>
-        <h1 class="text-3xl font-bold text-gray-800 mt-1">Área administrativa</h1>
+        <p class="text-xs font-bold uppercase tracking-widest text-violet-600" data-i18n="painel">Painel</p>
+        <h1 class="text-3xl font-bold text-gray-800 mt-1" data-i18n="areaAdministrativa">Área administrativa</h1>
       </div>
 
       <div id="admin-metricas" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6"></div>
@@ -382,8 +382,8 @@
       <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
         <div class="chart-panel">
           <div class="chart-header">
-            <h3 class="font-semibold text-gray-700">Distribuição de humor</h3>
-            <span class="chart-pill">Humor</span>
+            <h3 class="font-semibold text-gray-700" data-i18n="distribuicaoHumor">Distribuição de humor</h3>
+            <span class="chart-pill" data-i18n="humor">Humor</span>
           </div>
           <div class="chart-area" style="height: 260px;">
             <canvas id="grafico-admin-humor" height="220"></canvas>
@@ -392,8 +392,8 @@
 
         <div class="chart-panel">
           <div class="chart-header">
-            <h3 class="font-semibold text-gray-700">Cadastros por mês</h3>
-            <span class="chart-pill purple">Usuários</span>
+            <h3 class="font-semibold text-gray-700" data-i18n="cadastrosPorMes">Cadastros por mês</h3>
+            <span class="chart-pill purple" data-i18n="usuarios">Usuários</span>
           </div>
           <div class="chart-area" style="height: 260px;">
             <canvas id="grafico-admin-usuarios" height="220"></canvas>
@@ -404,14 +404,14 @@
       <section class="admin-section mb-6">
         <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-4">
           <div>
-            <h2 class="text-xl font-bold text-gray-800">Relatórios</h2>
-            <p class="text-sm text-gray-500">Engajamento e uso em um intervalo de datas.</p>
+            <h2 class="text-xl font-bold text-gray-800" data-i18n="relatorios">Relatórios</h2>
+            <p class="text-sm text-gray-500" data-i18n="relatoriosDescricao">Engajamento e uso em um intervalo de datas.</p>
           </div>
           <div class="flex flex-col sm:flex-row gap-3">
             <input id="admin-data-inicio" type="date" class="border border-gray-300 rounded-lg px-3 py-2">
             <input id="admin-data-fim" type="date" class="border border-gray-300 rounded-lg px-3 py-2">
-            <button id="btn-admin-filtrar" type="button" class="bg-violet-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-violet-700 transition">Filtrar</button>
-            <button id="btn-exportar-csv" type="button" class="bg-mint-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-mint-600 transition">Exportar CSV</button>
+            <button id="btn-admin-filtrar" type="button" class="bg-violet-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-violet-700 transition" data-i18n="filtrar">Filtrar</button>
+            <button id="btn-exportar-csv" type="button" class="bg-mint-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-mint-600 transition" data-i18n="exportarCsv">Exportar CSV</button>
           </div>
         </div>
 
@@ -420,10 +420,10 @@
 
       <section class="admin-section">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-gray-800">Usuários</h2>
+          <h2 class="text-xl font-bold text-gray-800" data-i18n="usuarios">Usuários</h2>
           <div class="flex items-center gap-2">
-            <input id="admin-busca-usuarios" type="search" placeholder="Buscar por nome ou e-mail" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-            <button id="btn-admin-busca" type="button" class="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm font-semibold">Buscar</button>
+            <input id="admin-busca-usuarios" type="search" placeholder="Buscar por nome ou e-mail" data-i18n-placeholder="buscarPlaceholder" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+            <button id="btn-admin-busca" type="button" class="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm font-semibold" data-i18n="buscar">Buscar</button>
           </div>
         </div>
 
@@ -431,11 +431,11 @@
           <table class="min-w-full text-left">
             <thead class="bg-gray-50 text-gray-600">
               <tr>
-                <th class="px-4 py-3 font-semibold">Nome</th>
-                <th class="px-4 py-3 font-semibold">E-mail</th>
-                <th class="px-4 py-3 font-semibold">Perfil</th>
-                <th class="px-4 py-3 font-semibold">Status</th>
-                <th class="px-4 py-3 font-semibold">Ações</th>
+                <th class="px-4 py-3 font-semibold" data-i18n="colunaNome">Nome</th>
+                <th class="px-4 py-3 font-semibold" data-i18n="colunaEmail">E-mail</th>
+                <th class="px-4 py-3 font-semibold" data-i18n="colunaPerfil">Perfil</th>
+                <th class="px-4 py-3 font-semibold" data-i18n="colunaStatus">Status</th>
+                <th class="px-4 py-3 font-semibold" data-i18n="colunaAcoes">Ações</th>
               </tr>
             </thead>
             <tbody id="admin-usuarios-tabela"></tbody>
@@ -468,7 +468,7 @@
       <div class="chart-panel chart-card mb-6">
         <div class="chart-header">
           <h3 class="font-semibold text-gray-700" data-i18n="humor30">Humor nos últimos 30 dias</h3>
-          <span class="chart-pill">Humor</span>
+          <span class="chart-pill" data-i18n="humor">Humor</span>
         </div>
         <div class="chart-area">
           <canvas id="grafico-humor" height="220"></canvas>
@@ -477,7 +477,7 @@
       <div class="chart-panel chart-card">
         <div class="chart-header">
           <h3 class="font-semibold text-gray-700" data-i18n="sono30">Sono nos últimos 30 dias</h3>
-          <span class="chart-pill purple">Sono</span>
+          <span class="chart-pill purple" data-i18n="sono">Sono</span>
         </div>
         <div class="chart-area">
           <canvas id="grafico-sono" height="220"></canvas>
@@ -486,7 +486,7 @@
       <div class="chart-panel chart-card mt-6">
         <div class="chart-header">
           <h3 class="font-semibold text-gray-700" data-i18n="energia30">Energia nos últimos 30 dias</h3>
-          <span class="chart-pill orange">Energia</span>
+          <span class="chart-pill orange" data-i18n="energia">Energia</span>
         </div>
         <div class="chart-area">
           <canvas id="grafico-energia" height="220"></canvas>
@@ -517,7 +517,7 @@
         <button onclick="abrirModalLembrete()" class="bg-mint-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-mint-600 transition" data-i18n="novo">+ Novo</button>
       </div>
       <div id="lista-lembretes-tela" class="space-y-3">
-        <p class="text-gray-400 text-center py-8">Nenhum lembrete criado</p>
+        <p class="text-gray-400 text-center py-8" data-i18n="nenhumLembrete">Nenhum lembrete criado</p>
       </div>
     </div>
 
@@ -547,7 +547,7 @@
         <span id="perfil-status" class="profile-save-status" aria-live="polite" data-i18n="sincronizado">Sincronizado</span>
       </div>
       <div class="profile-card bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden mb-6">
-        <div id="perfil-banner-preview" class="profile-banner" role="img" aria-label="Banner do perfil">
+        <div id="perfil-banner-preview" class="profile-banner" role="img" aria-label="Banner do perfil" data-i18n-aria="bannerPerfil">
           <img id="perfil-banner-imagem" class="profile-banner-image" alt="" aria-hidden="true">
           <label for="perfil-banner" class="profile-media-button" title="Alterar banner" data-i18n-title="alterarBanner">📷 <span data-i18n="alterarBanner">Alterar banner</span></label>
           <input type="file" id="perfil-banner" accept="image/*" class="sr-only">
@@ -559,8 +559,8 @@
             <input type="file" id="perfil-foto" accept="image/*" class="sr-only">
           </div>
           <div class="profile-summary-copy">
-            <h2 id="perfil-nome-preview">Usuário</h2>
-            <p id="perfil-idade-preview">Seu perfil, do seu jeito</p>
+            <h2 id="perfil-nome-preview" data-i18n="usuarioPadrao">Usuário</h2>
+            <p id="perfil-idade-preview" data-i18n="perfilPadrao">Seu perfil, do seu jeito</p>
             <span id="perfil-ocupacao-preview" class="profile-tag">DailyMind</span>
             <p id="perfil-bio-preview" class="profile-bio-preview"></p>
           </div>
@@ -569,7 +569,7 @@
       <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
         <form id="form-perfil" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="nomeCompleto">Nome</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="nome">Nome</label>
             <input type="text" id="perfil-nome" maxlength="100" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
           </div>
           <div>
@@ -588,7 +588,7 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="biografia">Biografia</label>
-            <textarea id="perfil-bio" rows="4" maxlength="280" placeholder="Conte um pouco sobre você..." class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition resize-y"></textarea>
+            <textarea id="perfil-bio" rows="4" maxlength="280" placeholder="Conte um pouco sobre você..." data-i18n-placeholder="biografiaPlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition resize-y"></textarea>
             <p class="flex justify-between text-xs text-gray-400 mt-1"><span data-i18n="ate280">Até 280 caracteres</span><span id="perfil-bio-contador">0/280</span></p>
           </div>
           <button id="btn-salvar-perfil" type="submit" class="profile-save-button w-full bg-mint-500 text-white font-bold py-3 rounded-lg hover:bg-mint-600 transition shadow-md">
@@ -626,7 +626,7 @@
           <label for="seletor-tema" class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="tema">Tema</label>
           <select id="seletor-tema" class="settings-select w-full border border-gray-300 rounded-xl px-4 py-3 bg-white outline-none focus:ring-2 focus:ring-mint-500">
             <option value="claro" data-i18n="temaClaro">Claro</option>
-            <option value="escuro" data-i18n="temaPreto">Preto</option>
+            <option value="escuro" data-i18n="temaEscuro">Escuro</option>
           </select>
         </section>
 
@@ -634,7 +634,7 @@
           <div class="flex items-start gap-4 mb-5"><span class="settings-icon">🌐</span><div><h2 class="text-lg font-bold text-gray-800" data-i18n="idiomaTitulo">Idioma</h2><p class="text-sm text-gray-500" data-i18n="idiomaDescricao">Altere os textos principais da interface.</p></div></div>
           <label for="seletor-idioma" class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="idioma">Idioma</label>
           <select id="seletor-idioma" class="settings-select w-full border border-gray-300 rounded-xl px-4 py-3 bg-white outline-none focus:ring-2 focus:ring-mint-500">
-            <option value="pt-BR">Brasil (Português)</option>
+            <option value="pt-BR">Português (Brasil)</option>
             <option value="en">English</option>
             <option value="es">Español</option>
           </select>
@@ -656,9 +656,9 @@
   <div id="modal-confirmacao-perfil" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-7 w-full max-w-sm text-center shadow-2xl">
       <div class="profile-save-check mx-auto mb-4">✓</div>
-      <h3 class="text-xl font-bold text-gray-800">Perfil salvo</h3>
-      <p class="text-gray-500 mt-2">Suas alterações foram confirmadas e já estão na sua conta.</p>
-      <button type="button" onclick="fecharModal('modal-confirmacao-perfil')" class="w-full mt-6 bg-mint-500 text-white font-bold py-3 rounded-lg hover:bg-mint-600 transition">Entendi</button>
+      <h3 class="text-xl font-bold text-gray-800" data-i18n="perfilSalvo">Perfil salvo</h3>
+      <p class="text-gray-500 mt-2" data-i18n="perfilSalvoDescricao">Suas alterações foram confirmadas e já estão na sua conta.</p>
+      <button type="button" onclick="fecharModal('modal-confirmacao-perfil')" class="w-full mt-6 bg-mint-500 text-white font-bold py-3 rounded-lg hover:bg-mint-600 transition" data-i18n="entendi">Entendi</button>
     </div>
   </div>
 
@@ -668,9 +668,9 @@
     <div class="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl">
       <div class="flex items-start justify-between gap-4 mb-6">
         <div>
-          <p class="text-xs font-bold uppercase tracking-widest text-mint-600">Check-in emocional</p>
+          <p class="text-xs font-bold uppercase tracking-widest text-mint-600" data-i18n="checkinEmocional">Check-in emocional</p>
           <h3 class="text-2xl font-bold text-gray-800 mt-1" data-i18n="comoVoceEsta">Como você está hoje?</h3>
-          <p class="text-sm text-gray-500 mt-1">Não existe resposta certa. Escolha o que mais combina com agora.</p>
+          <p class="text-sm text-gray-500 mt-1" data-i18n="semRespostaCerta">Não existe resposta certa. Escolha o que mais combina com agora.</p>
         </div>
         <span class="text-3xl">🫶</span>
       </div>
@@ -690,7 +690,7 @@
   <div id="modal-sono" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
       <h3 id="modal-sono-titulo" class="text-xl font-bold text-gray-800 mb-1 text-center" data-i18n="horasSono">Horas de sono</h3>
-      <p class="text-sm text-gray-500 text-center mb-5">Conte como foi sua noite, sem cobrança.</p>
+      <p class="text-sm text-gray-500 text-center mb-5" data-i18n="sonoDescricaoModal">Conte como foi sua noite, sem cobrança.</p>
       <div class="mb-6">
         <input type="range" id="input-sono" min="0" max="24" step="0.5" value="7" class="w-full accent-lavender-500">
         <div class="text-center mt-2">
@@ -714,14 +714,14 @@
   <div id="modal-energia" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
       <h3 id="modal-energia-titulo" class="text-xl font-bold text-gray-800 mb-1 text-center" data-i18n="nivelEnergia">Nível de energia</h3>
-      <p class="text-sm text-gray-500 text-center mb-5">Registre sua disposição real para o dia.</p>
+      <p class="text-sm text-gray-500 text-center mb-5" data-i18n="energiaDescricaoModal">Registre sua disposição real para o dia.</p>
       <div class="mb-6">
         <input type="range" id="input-energia" min="1" max="10" step="1" value="5" class="w-full accent-peach-500">
         <div class="text-center mt-2">
           <span id="energia-valor" class="text-3xl font-bold text-peach-600">5</span>
           <span class="text-gray-500"> / 10</span>
         </div>
-        <div class="flex justify-between text-xs text-gray-400 mt-2"><span>No limite</span><span>Cheio de energia</span></div>
+        <div class="flex justify-between text-xs text-gray-400 mt-2"><span data-i18n="noLimite">No limite</span><span data-i18n="cheioEnergia">Cheio de energia</span></div>
       </div>
       <button id="btn-salvar-energia" onclick="registrarEnergia()" class="w-full bg-peach-500 text-white font-bold py-3 rounded-lg hover:bg-peach-600 transition mb-3">
         <span data-i18n="confirmar">Confirmar</span>
@@ -737,11 +737,11 @@
       <form id="form-lembrete" class="space-y-4">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="titulo">Título</label>
-          <input type="text" id="lembrete-titulo" required placeholder="Ex: Beber água" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+          <input type="text" id="lembrete-titulo" required placeholder="Ex: Beber água" data-i18n-placeholder="lembreteTituloPlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="objetoDeixado">Objeto deixado (opcional)</label>
-          <input type="text" id="lembrete-objeto" placeholder="Ex: Chaves, celular" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+          <input type="text" id="lembrete-objeto" placeholder="Ex: Chaves, celular" data-i18n-placeholder="lembreteObjetoPlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="horarioDeixado">Que horas deixou? (opcional)</label>
@@ -771,8 +771,8 @@
   <!-- Toast de feedback -->
   <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white font-semibold hidden transition-all duration-300 z-50"></div>
 
-  <script src="js/pwa-offline.js?v=20261127-pwa"></script>
-  <script src="js/app.js?v=20261103-autenticacao"></script>
+  <script src="js/pwa-offline.js?v=20261127-i18n2"></script>
+  <script src="js/app.js?v=20261127-i18n2"></script>
   <script>
     if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
       window.addEventListener('load', () => {

@@ -9,6 +9,12 @@ const RECURSOS_SINCRONIZAVEIS = [
   '/api/usuarios/perfil'
 ]
 const METODOS_SINCRONIZAVEIS = ['POST', 'PUT', 'PATCH', 'DELETE']
+const IDIOMAS_DISPONIVEIS = ['pt-BR', 'en', 'es']
+const MENSAGENS_OFFLINE = {
+  'pt-BR': 'Registro salvo neste dispositivo. Enviaremos quando houver conexão.',
+  en: 'Saved on this device. We will send it when you are back online.',
+  es: 'Guardado en este dispositivo. Lo enviaremos cuando haya conexión.'
+}
 
 const fetchOriginal = window.fetch.bind(window)
 let sincronizando = false
@@ -109,11 +115,20 @@ async function removerFila(id) {
   }
 }
 
+function idiomaOffline() {
+  try {
+    const salvo = JSON.parse(window.localStorage.getItem('dailymind_configuracoes') || '{}')
+    return IDIOMAS_DISPONIVEIS.includes(salvo.idioma) ? salvo.idioma : 'pt-BR'
+  } catch (_) {
+    return 'pt-BR'
+  }
+}
+
 function respostaPendente() {
   const corpo = JSON.stringify({
     sucesso: true,
     pendente: true,
-    mensagem: 'Registro salvo neste dispositivo. Enviaremos quando houver conexão.'
+    mensagem: MENSAGENS_OFFLINE[idiomaOffline()]
   })
   return new Response(corpo, {
     status: 202,

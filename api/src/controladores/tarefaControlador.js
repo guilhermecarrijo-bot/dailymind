@@ -84,7 +84,7 @@ function alternarTarefa(req, res) {
 
   res.json({
     sucesso: true,
-    mensagem: novoStatus ? 'Tarefa concluída!' : 'Tarefa reaberida!',
+    mensagem: novoStatus ? 'Tarefa concluída!' : 'Tarefa reaberta!',
     tarefa: tarefaAtualizada
   })
 }

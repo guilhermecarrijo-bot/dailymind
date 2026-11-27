@@ -1,12 +1,8 @@
 const banco = require('../repositorio')
-const crypto = require('crypto')
-const { promisify } = require('util')
 const validator = require('validator')
 const { criarSessao, encerrarSessao } = require('../seguranca/sessoes')
+const { hashSenha, verificarSenha } = require('../seguranca/senhas')
 const configuracao = require('../config/ambiente')
-
-const scrypt = promisify(crypto.scrypt)
-const PARAMETROS_SCRYPT = { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 }
 
 function camposAcessoUsuario() {
   return `${banco.temColuna('usuarios', 'role') ? 'role' : "'user' AS role"}, ${banco.temColuna('usuarios', 'ativo') ? 'ativo' : '1 AS ativo'}`
@@ -18,34 +14,6 @@ function aplicarPapelAdmin(usuario) {
     usuario.role = 'admin'
   }
   return usuario
-}
-
-async function hashSenha(senha) {
-  const salt = crypto.randomBytes(16)
-  const hash = await scrypt(senha, salt, 64, PARAMETROS_SCRYPT)
-  return `scrypt$${PARAMETROS_SCRYPT.N}$${PARAMETROS_SCRYPT.r}$${PARAMETROS_SCRYPT.p}$${salt.toString('hex')}$${hash.toString('hex')}`
-}
-
-async function verificarSenha(senha, armazenada) {
-  if (armazenada.startsWith('scrypt$')) {
-    const [algoritmo, custo, blocos, paralelismo, saltHex, hashHex] = armazenada.split('$')
-    if (algoritmo !== 'scrypt' || Number(custo) !== PARAMETROS_SCRYPT.N || Number(blocos) !== PARAMETROS_SCRYPT.r || Number(paralelismo) !== PARAMETROS_SCRYPT.p) {
-      return { valida: false, legado: false }
-    }
-    const hashArmazenado = Buffer.from(hashHex, 'hex')
-    const hashRecebido = await scrypt(senha, Buffer.from(saltHex, 'hex'), hashArmazenado.length, PARAMETROS_SCRYPT)
-    return {
-      valida: hashArmazenado.length === hashRecebido.length && crypto.timingSafeEqual(hashArmazenado, hashRecebido),
-      legado: false
-    }
-  }
-
-  const hashLegado = crypto.createHash('sha256').update(senha).digest()
-  const hashArmazenado = Buffer.from(armazenada, 'hex')
-  return {
-    valida: hashArmazenado.length === hashLegado.length && crypto.timingSafeEqual(hashArmazenado, hashLegado),
-    legado: true
-  }
 }
 
 function selecionarUsuario(id) {

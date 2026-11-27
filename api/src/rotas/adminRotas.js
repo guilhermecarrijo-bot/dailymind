@@ -1,11 +1,10 @@
 const { Router } = require('express')
 const { exigirAutenticacao } = require('../seguranca/sessoes')
 const {
-  dashboardMetricas,
+  resumo,
   listarUsuarios,
   atualizarStatusUsuario,
-  excluirUsuario,
-  relatorios
+  excluirUsuario
 } = require('../controladores/adminControlador')
 
 const rotas = Router()
@@ -38,10 +37,9 @@ rotas.use(exigirAutenticacao)
 rotas.use(aplicarRateLimit)
 rotas.use(requerAdmin)
 
-rotas.get('/dashboard/metricas', dashboardMetricas)
+rotas.get('/resumo', resumo)
 rotas.get('/usuarios', listarUsuarios)
 rotas.put('/usuarios/:id/status', atualizarStatusUsuario)
 rotas.delete('/usuarios/:id', excluirUsuario)
-rotas.get('/relatorios', relatorios)
 
 module.exports = rotas

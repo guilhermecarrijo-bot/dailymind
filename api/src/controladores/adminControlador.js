@@ -1,198 +1,223 @@
 const banco = require('../repositorio')
-const configuracao = require('../config/ambiente')
+const { dataLocal } = require('../utilitarios/data')
 
-function normalizarLista(value, padrao) {
-  const numero = Number(value)
-  if (!Number.isFinite(numero) || numero <= 0) return padrao
-  return numero
+const FORMATO_DATA = /^\d{4}-\d{2}-\d{2}$/
+const DIA_MS = 24 * 60 * 60 * 1000
+const MAXIMO_DIAS_PERIODO = 366
+
+// O painel analisa apenas as contas comuns; a conta administradora fica de fora.
+const USUARIOS_COMUNS = "SELECT id FROM usuarios WHERE COALESCE(role, 'user') <> 'admin'"
+
+// Registros antigos podem ter o humor salvo por nome; todos viram emoji.
+const HUMOR_NORMALIZADO = `CASE emoji
+  WHEN 'feliz' THEN '😊' WHEN 'triste' THEN '😔' WHEN 'ansioso' THEN '😰'
+  WHEN 'cansado' THEN '😫' WHEN 'irritado' THEN '😤' WHEN 'neutro' THEN '😐'
+  ELSE emoji END`
+
+function somarDias(data, dias) {
+  return new Date(Date.parse(`${data}T00:00:00Z`) + dias * DIA_MS).toISOString().slice(0, 10)
 }
 
-function montarListaUsuarios(usuario, filtros, total) {
-  return {
-    id: usuario.id,
-    nome: usuario.nome,
-    email: usuario.email,
-    role: usuario.role || 'user',
-    ativo: Number(usuario.ativo ?? 1),
-    data_cadastro: usuario.data_cadastro
-  }
+function dataValida(texto) {
+  return FORMATO_DATA.test(texto) && new Date(`${texto}T00:00:00Z`).toISOString().slice(0, 10) === texto
 }
 
-function dashboardMetricas(req, res) {
-  const metricas = {
-    usuarios: banco.prepare('SELECT COUNT(*) AS total FROM usuarios').get().total,
-    humor_30_dias: banco.prepare("SELECT COUNT(*) AS total FROM humor WHERE data_registro >= date('now', '-30 days')").get().total,
-    media_sono: banco.prepare("SELECT AVG(horas_sono) AS media FROM sono WHERE data_registro >= date('now', '-30 days')").get().media || 0,
-    media_energia: banco.prepare("SELECT AVG(nivel_energia) AS media FROM energia WHERE data_registro >= date('now', '-30 days')").get().media || 0,
-    lembretes_concluidos: banco.prepare('SELECT COUNT(*) AS total FROM lembretes WHERE concluido = 1').get().total,
-    lembretes_pendentes: banco.prepare('SELECT COUNT(*) AS total FROM lembretes WHERE concluido = 0').get().total
-  }
+function lerPeriodo(query) {
+  const fim = String(query.fim || dataLocal()).trim()
+  const inicio = String(query.inicio || somarDias(fim, -29)).trim()
+  if (!dataValida(inicio) || !dataValida(fim)) return null
 
-  return res.json({ sucesso: true, dados: metricas })
+  const dias = Math.round((Date.parse(`${fim}T00:00:00Z`) - Date.parse(`${inicio}T00:00:00Z`)) / DIA_MS) + 1
+  if (dias < 1 || dias > MAXIMO_DIAS_PERIODO) return null
+  return { inicio, fim, dias }
 }
 
-function listarUsuarios(req, res) {
-  const pagina = normalizarLista(req.query.page, 1)
-  const limite = Math.min(normalizarLista(req.query.limit, 10), 100)
-  const offset = (pagina - 1) * limite
-  const pesquisa = String(req.query.search || '').trim()
-  const inicio = String(req.query.inicio || '').trim()
-  const fim = String(req.query.fim || '').trim()
+function periodoInvalido(res) {
+  return res.status(422).json({ sucesso: false, mensagem: 'Período inválido.' })
+}
 
-  const condicoes = []
-  const parametros = []
+function contar(sql, ...parametros) {
+  return Number(banco.prepare(sql).get(...parametros).total || 0)
+}
 
-  if (pesquisa) {
-    condicoes.push('(nome LIKE ? OR email LIKE ?)')
-    parametros.push(`%${pesquisa}%`, `%${pesquisa}%`)
+function media(sql, ...parametros) {
+  const valor = banco.prepare(sql).get(...parametros).media
+  return valor === null || valor === undefined ? null : Math.round(Number(valor) * 10) / 10
+}
+
+function resumo(req, res) {
+  const periodo = lerPeriodo(req.query)
+  if (!periodo) return periodoInvalido(res)
+  const { inicio, fim } = periodo
+  const noPeriodo = coluna => `date(${coluna}) BETWEEN date(?) AND date(?)`
+  const deUsuarioComum = `usuario_id IN (${USUARIOS_COMUNS})`
+
+  const totais = {
+    usuarios: contar(`SELECT COUNT(*) AS total FROM (${USUARIOS_COMUNS})`),
+    usuarios_inativos: contar(`SELECT COUNT(*) AS total FROM usuarios WHERE COALESCE(role, 'user') <> 'admin' AND ativo = 0`),
+    usuarios_novos: contar(`SELECT COUNT(*) AS total FROM usuarios WHERE COALESCE(role, 'user') <> 'admin' AND ${noPeriodo('data_cadastro')}`, inicio, fim),
+    usuarios_ativos: contar(`SELECT COUNT(DISTINCT usuario_id) AS total FROM acessos WHERE ${deUsuarioComum} AND ${noPeriodo('data_hora')}`, inicio, fim),
+    acessos: contar(`SELECT COUNT(*) AS total FROM acessos WHERE ${deUsuarioComum} AND ${noPeriodo('data_hora')}`, inicio, fim),
+    registros_humor: contar(`SELECT COUNT(*) AS total FROM humor WHERE ${deUsuarioComum} AND ${noPeriodo('data_registro')}`, inicio, fim),
+    registros_sono: contar(`SELECT COUNT(*) AS total FROM sono WHERE ${deUsuarioComum} AND ${noPeriodo('data_registro')}`, inicio, fim),
+    registros_energia: contar(`SELECT COUNT(*) AS total FROM energia WHERE ${deUsuarioComum} AND ${noPeriodo('data_registro')}`, inicio, fim),
+    media_sono: media(`SELECT AVG(horas_sono) AS media FROM sono WHERE ${deUsuarioComum} AND ${noPeriodo('data_registro')}`, inicio, fim),
+    media_energia: media(`SELECT AVG(nivel_energia) AS media FROM energia WHERE ${deUsuarioComum} AND ${noPeriodo('data_registro')}`, inicio, fim)
   }
 
-  if (inicio) {
-    condicoes.push('date(data_cadastro) >= date(?)')
-    parametros.push(inicio)
-  }
+  const distribuicaoHumor = banco.prepare(
+    `SELECT ${HUMOR_NORMALIZADO} AS emoji, COUNT(*) AS total, COUNT(DISTINCT usuario_id) AS usuarios
+     FROM humor WHERE ${deUsuarioComum} AND ${noPeriodo('data_registro')}
+     GROUP BY 1 ORDER BY total DESC, emoji`
+  ).all(inicio, fim)
 
-  if (fim) {
-    condicoes.push('date(data_cadastro) <= date(?)')
-    parametros.push(fim)
-  }
+  const maisUsada = distribuicaoHumor[0]
+  const emocaoMaisUsada = maisUsada
+    ? { ...maisUsada, percentual: Math.round((maisUsada.total / totais.registros_humor) * 100) }
+    : null
 
-  const filtro = condicoes.length ? `WHERE ${condicoes.join(' AND ')}` : ''
-  const totalSql = `SELECT COUNT(*) AS total FROM usuarios ${filtro}`
-  const total = banco.prepare(totalSql).get(...parametros).total
-
-  const roleCampo = banco.temColuna('usuarios', 'role') ? 'role' : "'user' AS role"
-  const ativoCampo = banco.temColuna('usuarios', 'ativo') ? 'ativo' : '1 AS ativo'
-  const sqlUsuarios = `SELECT id, nome, email, ${roleCampo}, ${ativoCampo}, data_cadastro FROM usuarios ${filtro} ORDER BY data_cadastro DESC LIMIT ? OFFSET ?`
-  const usuarios = banco.prepare(sqlUsuarios).all(...parametros, limite, offset)
-
-  return res.json({
-    sucesso: true,
-    dados: usuarios.map(usuario => montarListaUsuarios({
-      ...usuario,
-      role: !banco.temColuna('usuarios', 'role') && usuario.email.toLowerCase() === configuracao.adminEmail.toLowerCase()
-        ? 'admin'
-        : usuario.role
-    })),
-    pagina,
-    limite,
-    total,
-    totalPaginas: Math.max(1, Math.ceil(total / limite))
+  // Cadastros nos 12 meses que terminam no mês final do período.
+  const mesFinal = fim.slice(0, 7)
+  const meses = Array.from({ length: 12 }, (_, indice) => {
+    const data = new Date(`${mesFinal}-01T00:00:00Z`)
+    data.setUTCMonth(data.getUTCMonth() - (11 - indice))
+    return data.toISOString().slice(0, 7)
   })
-}
-
-function atualizarStatusUsuario(req, res) {
-  const id = Number(req.params.id)
-  if (!Number.isInteger(id) || id <= 0) {
-    return res.status(400).json({ sucesso: false, mensagem: 'ID de usuário inválido.' })
-  }
-
-  if (!banco.temColuna('usuarios', 'ativo') && !banco.temColuna('usuarios', 'role')) {
-    return res.status(409).json({ sucesso: false, mensagem: 'O schema atual não permite alterar perfil ou status de contas.' })
-  }
-
-  if (req.usuario.id === id && req.body.ativo === false) {
-    return res.status(403).json({ sucesso: false, mensagem: 'Você não pode desativar sua própria conta de administrador.' })
-  }
-
-  const atual = banco.prepare('SELECT id, nome, email, role, ativo FROM usuarios WHERE id = ?').get(id)
-  if (!atual) {
-    return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' })
-  }
-
-  const campos = []
-  const valores = []
-
-  if (req.body.ativo !== undefined) {
-    campos.push('ativo = ?')
-    valores.push(req.body.ativo === true || req.body.ativo === 1 || req.body.ativo === 'true' ? 1 : 0)
-  }
-
-  if (req.body.role !== undefined && ['user', 'admin'].includes(String(req.body.role))) {
-    campos.push('role = ?')
-    valores.push(String(req.body.role))
-  }
-
-  if (campos.length === 0) {
-    return res.status(422).json({ sucesso: false, mensagem: 'Informe ao menos um campo válido para atualizar o status.' })
-  }
-
-  banco.prepare(`UPDATE usuarios SET ${campos.join(', ')} WHERE id = ?`).run(...valores, id)
-
-  const usuarioAtualizado = banco.prepare('SELECT id, nome, email, role, ativo, data_cadastro FROM usuarios WHERE id = ?').get(id)
-  return res.json({ sucesso: true, mensagem: 'Status do usuário atualizado.', usuario: montarListaUsuarios(usuarioAtualizado) })
-}
-
-function excluirUsuario(req, res) {
-  const id = Number(req.params.id)
-  if (!Number.isInteger(id) || id <= 0) {
-    return res.status(400).json({ sucesso: false, mensagem: 'ID de usuário inválido.' })
-  }
-
-  if (req.usuario.id === id) {
-    return res.status(403).json({ sucesso: false, mensagem: 'Você não pode excluir sua própria conta.' })
-  }
-
-  const usuario = banco.prepare('SELECT id FROM usuarios WHERE id = ?').get(id)
-  if (!usuario) {
-    return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' })
-  }
-
-  banco.prepare('DELETE FROM usuarios WHERE id = ?').run(id)
-  return res.json({ sucesso: true, mensagem: 'Usuário removido com sucesso.' })
-}
-
-function relatorios(req, res) {
-  const hoje = new Date()
-  const dataFim = new Date(hoje)
-  const dataInicio = new Date(hoje)
-  dataInicio.setDate(dataFim.getDate() - 30)
-
-  const inicio = String(req.query.inicio || dataInicio.toISOString().slice(0, 10)).trim()
-  const fim = String(req.query.fim || dataFim.toISOString().slice(0, 10)).trim()
-
-  const usuariosNovos = banco.prepare('SELECT COUNT(*) AS total FROM usuarios WHERE date(data_cadastro) BETWEEN date(?) AND date(?)').get(inicio, fim).total
-  const registrosHumor = banco.prepare('SELECT COUNT(*) AS total FROM humor WHERE date(data_registro) BETWEEN date(?) AND date(?)').get(inicio, fim).total
-  const registrosSono = banco.prepare('SELECT COUNT(*) AS total FROM sono WHERE date(data_registro) BETWEEN date(?) AND date(?)').get(inicio, fim).total
-  const registrosEnergia = banco.prepare('SELECT COUNT(*) AS total FROM energia WHERE date(data_registro) BETWEEN date(?) AND date(?)').get(inicio, fim).total
-  const humorDist = banco.prepare('SELECT emoji, COUNT(*) AS total FROM humor WHERE date(data_registro) BETWEEN date(?) AND date(?) GROUP BY emoji ORDER BY total DESC').all(inicio, fim)
-  const engajamento = banco.prepare(`SELECT date(data_registro) AS dia, COUNT(*) AS total FROM (
-      SELECT data_registro FROM humor WHERE date(data_registro) BETWEEN date(?) AND date(?)
-      UNION ALL
-      SELECT data_registro FROM sono WHERE date(data_registro) BETWEEN date(?) AND date(?)
-      UNION ALL
-      SELECT data_registro FROM energia WHERE date(data_registro) BETWEEN date(?) AND date(?)
-    ) GROUP BY dia ORDER BY dia DESC`).all(inicio, fim, inicio, fim, inicio, fim)
-
-  const inicioDezembro = new Date(`${fim}T12:00:00Z`)
-  inicioDezembro.setMonth(inicioDezembro.getMonth() - 11)
-  const usersPorMes = banco.prepare(
+  const cadastrosPorMes = new Map(banco.prepare(
     `SELECT strftime('%Y-%m', data_cadastro) AS mes, COUNT(*) AS total
-      FROM usuarios
-      WHERE date(data_cadastro) BETWEEN date(?) AND date(?)
-      GROUP BY strftime('%Y-%m', data_cadastro)
-      ORDER BY mes ASC`
-  ).all(inicioDezembro.toISOString().slice(0, 10), fim)
+     FROM usuarios
+     WHERE COALESCE(role, 'user') <> 'admin' AND strftime('%Y-%m', data_cadastro) BETWEEN ? AND ?
+     GROUP BY 1`
+  ).all(meses[0], mesFinal).map(linha => [linha.mes, linha.total]))
+
+  const porDia = (sql) => new Map(banco.prepare(sql).all(inicio, fim).map(linha => [linha.dia, linha]))
+  const acessosPorDia = porDia(
+    `SELECT date(data_hora) AS dia, COUNT(*) AS acessos, COUNT(DISTINCT usuario_id) AS usuarios
+     FROM acessos WHERE ${deUsuarioComum} AND ${noPeriodo('data_hora')} GROUP BY 1`
+  )
+  const registrosPorDia = new Map()
+  for (const tabela of ['humor', 'sono', 'energia']) {
+    for (const linha of banco.prepare(
+      `SELECT date(data_registro) AS dia, COUNT(*) AS total FROM ${tabela}
+       WHERE ${deUsuarioComum} AND ${noPeriodo('data_registro')} GROUP BY 1`
+    ).all(inicio, fim)) {
+      registrosPorDia.set(linha.dia, (registrosPorDia.get(linha.dia) || 0) + linha.total)
+    }
+  }
+  const atividadeDiaria = Array.from({ length: periodo.dias }, (_, indice) => {
+    const dia = somarDias(inicio, indice)
+    return {
+      dia,
+      acessos: acessosPorDia.get(dia)?.acessos || 0,
+      usuarios_ativos: acessosPorDia.get(dia)?.usuarios || 0,
+      registros: registrosPorDia.get(dia) || 0
+    }
+  })
 
   return res.json({
     sucesso: true,
     dados: {
       periodo: { inicio, fim },
-      usuarios_novos: usuariosNovos,
-      registros_humor: registrosHumor,
-      registros_sono: registrosSono,
-      registros_energia: registrosEnergia,
-      distribuicao_humor: humorDist,
-      engajamento_diario: engajamento,
-      usuarios_por_mes: usersPorMes
+      totais,
+      emocao_mais_usada: emocaoMaisUsada,
+      distribuicao_humor: distribuicaoHumor,
+      usuarios_por_mes: meses.map(mes => ({ mes, total: cadastrosPorMes.get(mes) || 0 })),
+      atividade_diaria: atividadeDiaria
     }
   })
 }
 
+function numeroPositivo(valor, padrao) {
+  const numero = Number(valor)
+  return Number.isInteger(numero) && numero > 0 ? numero : padrao
+}
+
+function listarUsuarios(req, res) {
+  const limite = Math.min(numeroPositivo(req.query.limit, 10), 50)
+  const pesquisa = String(req.query.search || '').trim().slice(0, 100)
+
+  const condicoes = ["COALESCE(u.role, 'user') <> 'admin'"]
+  const parametros = []
+  if (pesquisa) {
+    const termo = `%${pesquisa.replace(/[\\%_]/g, caractere => `\\${caractere}`)}%`
+    condicoes.push("(u.nome LIKE ? ESCAPE '\\' OR u.email LIKE ? ESCAPE '\\')")
+    parametros.push(termo, termo)
+  }
+  const filtro = `WHERE ${condicoes.join(' AND ')}`
+
+  const total = contar(`SELECT COUNT(*) AS total FROM usuarios u ${filtro}`, ...parametros)
+  const totalPaginas = Math.max(1, Math.ceil(total / limite))
+  const pagina = Math.min(numeroPositivo(req.query.page, 1), totalPaginas)
+
+  const usuarios = banco.prepare(
+    `SELECT u.id, u.nome, u.email, COALESCE(u.ativo, 1) AS ativo, u.data_cadastro,
+       (SELECT MAX(data_hora) FROM acessos WHERE usuario_id = u.id) AS ultimo_acesso,
+       (SELECT COUNT(*) FROM acessos WHERE usuario_id = u.id) AS total_acessos,
+       (SELECT COUNT(*) FROM humor WHERE usuario_id = u.id)
+         + (SELECT COUNT(*) FROM sono WHERE usuario_id = u.id)
+         + (SELECT COUNT(*) FROM energia WHERE usuario_id = u.id) AS total_registros,
+       (SELECT ${HUMOR_NORMALIZADO} FROM humor WHERE usuario_id = u.id
+         GROUP BY 1 ORDER BY COUNT(*) DESC, MAX(data_registro) DESC LIMIT 1) AS emocao_mais_usada
+     FROM usuarios u ${filtro}
+     ORDER BY COALESCE(ultimo_acesso, u.data_cadastro) DESC, u.id DESC
+     LIMIT ? OFFSET ?`
+  ).all(...parametros, limite, (pagina - 1) * limite)
+
+  return res.json({
+    sucesso: true,
+    dados: usuarios.map(usuario => ({ ...usuario, ativo: Number(usuario.ativo) })),
+    pagina,
+    limite,
+    total,
+    totalPaginas
+  })
+}
+
+function buscarUsuarioGerenciavel(req, res) {
+  const id = Number(req.params.id)
+  if (!Number.isInteger(id) || id <= 0) {
+    res.status(400).json({ sucesso: false, mensagem: 'ID de usuário inválido.' })
+    return null
+  }
+
+  const usuario = banco.prepare("SELECT id, COALESCE(role, 'user') AS role FROM usuarios WHERE id = ?").get(id)
+  if (!usuario) {
+    res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' })
+    return null
+  }
+  if (usuario.role === 'admin' || usuario.id === req.usuario.id) {
+    res.status(403).json({ sucesso: false, mensagem: 'A conta administradora não pode ser alterada pelo painel.' })
+    return null
+  }
+  return usuario
+}
+
+function atualizarStatusUsuario(req, res) {
+  if (typeof req.body?.ativo !== 'boolean') {
+    return res.status(422).json({ sucesso: false, mensagem: 'Informe ao menos um campo válido para atualizar o status.' })
+  }
+  const usuario = buscarUsuarioGerenciavel(req, res)
+  if (!usuario) return undefined
+
+  banco.transacao(() => {
+    banco.prepare('UPDATE usuarios SET ativo = ? WHERE id = ?').run(req.body.ativo ? 1 : 0, usuario.id)
+    // Uma conta desativada sai imediatamente de todos os dispositivos.
+    if (!req.body.ativo) banco.prepare('DELETE FROM sessoes WHERE usuario_id = ?').run(usuario.id)
+  })()
+  return res.json({ sucesso: true, mensagem: 'Status do usuário atualizado.' })
+}
+
+function excluirUsuario(req, res) {
+  const usuario = buscarUsuarioGerenciavel(req, res)
+  if (!usuario) return undefined
+
+  banco.prepare('DELETE FROM usuarios WHERE id = ?').run(usuario.id)
+  return res.json({ sucesso: true, mensagem: 'Usuário removido com sucesso.' })
+}
+
 module.exports = {
-  dashboardMetricas,
+  resumo,
   listarUsuarios,
   atualizarStatusUsuario,
-  excluirUsuario,
-  relatorios
+  excluirUsuario
 }

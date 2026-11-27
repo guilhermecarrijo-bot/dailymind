@@ -252,9 +252,12 @@ O cadastro recebe `nome`, `email`, `senha` (8 a 128 caracteres) e, opcionalmente
 
 ### Conta administrativa
 
-Na pasta `api`, execute `npm run admin:setup` para criar a conta configurada por `ADMIN_EMAIL` (padrão: `admin@dailymind.com.br`). A senha aleatória fica somente em `api/.env`, na variável `ADMIN_PASSWORD`; consulte esse arquivo localmente para entrar e nunca o envie ao GitHub. Para trocar a senha, execute `npm run admin:setup -- --rotate`.
+A área administrativa usa uma conta própria, definida pelas variáveis `ADMIN_EMAIL` (padrão: `administrador@dailymind.com.br`) e `ADMIN_PASSWORD` (mínimo de 12 caracteres). Sempre que o banco é inicializado, o servidor cria ou atualiza essa conta; qualquer outra conta perde o papel de administrador. Ao trocar a senha, as sessões abertas do administrador são encerradas.
 
-O schema existente não tem as colunas `role` e `ativo`. Nesse banco, o email configurado identifica o administrador e o painel oferece métricas/listagem; alterar papel ou ativar/desativar contas exige colunas que não serão criadas automaticamente.
+- **Localmente:** na pasta `api`, execute `npm run admin:setup`. A senha é gerada e salva em `api/.env` (nunca envie esse arquivo ao GitHub). Para gerar outra, use `npm run admin:setup -- --rotate`.
+- **No Render:** defina `ADMIN_PASSWORD` em **Environment**. O `render.yaml` já define `ADMIN_EMAIL`.
+
+Ao entrar com essa conta pela tela de login, o painel abre automaticamente. Ele mostra, para o período escolhido: usuários cadastrados e ativos, acessos, emoção mais usada, médias de sono e energia, gráficos de humor, cadastros por mês e atividade diária. A lista de usuários traz data de cadastro, último acesso, número de acessos e registros e a emoção mais usada de cada pessoa, com opções para desativar ou excluir contas. O relatório pode ser exportado em CSV.
 
 ---
 

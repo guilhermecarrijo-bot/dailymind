@@ -190,8 +190,138 @@ const traducoesComplementares = {
   }
 }
 
+// Textos da área administrativa.
+const traducoesAdmin = {
+  'pt-BR': {
+    adminSubtitulo: 'Acompanhe quem usa o DailyMind e como as pessoas estão se sentindo.',
+    dataInicial: 'Data inicial',
+    dataFinal: 'Data final',
+    usuariosCadastrados: 'Usuários cadastrados',
+    novosNoPeriodo: '{n} novos no período',
+    usuariosAtivos: 'Usuários ativos',
+    acessosNoPeriodo: '{n} acessos no período',
+    emocaoMaisUsada: 'Emoção mais usada',
+    percentualRegistrosHumor: '{n}% dos registros de humor',
+    semHumorPeriodo: 'Nenhum registro de humor no período.',
+    noPeriodo: 'no período',
+    energiaMedia: 'Energia média',
+    semDadosPeriodo: 'sem dados no período',
+    registrosContagem: '{n} registros',
+    pessoasContagem: '{n} pessoas',
+    atividadeDiaria: 'Atividade diária',
+    atividadeDescricao: 'Acessos, pessoas ativas e registros feitos por dia.',
+    serieAcessos: 'Acessos',
+    semAtividadePeriodo: 'Nenhuma atividade no período.',
+    colunaUsuario: 'Usuário',
+    colunaCadastro: 'Cadastro',
+    colunaUltimoAcesso: 'Último acesso',
+    colunaAcessos: 'Acessos',
+    colunaRegistros: 'Registros',
+    colunaEmocao: 'Emoção mais usada',
+    nuncaAcessou: 'Ainda não entrou',
+    nenhumUsuarioEncontrado: 'Nenhum usuário encontrado.',
+    usuariosEncontrados: '{n} usuários',
+    paginaDe: 'Página {pagina} de {total}',
+    anterior: 'Anterior',
+    proxima: 'Próxima',
+    confirmarExclusaoUsuarioNome: 'Excluir a conta de {nome}? Todos os registros dessa pessoa serão apagados.',
+    erroCarregarPainel: 'Não foi possível carregar o painel.',
+    periodoInvalido: 'Período inválido.',
+    contaAdminProtegida: 'A conta administradora não pode ser alterada pelo painel.',
+    acessoRestritoAdmin: 'Acesso restrito ao painel administrativo.',
+    csvDia: 'Dia',
+    csvIndicador: 'Indicador',
+    csvValor: 'Valor',
+    csvNomeArquivo: 'relatorio_dailymind.csv'
+  },
+  en: {
+    adminSubtitulo: 'See who uses DailyMind and how people are feeling.',
+    dataInicial: 'Start date',
+    dataFinal: 'End date',
+    usuariosCadastrados: 'Registered users',
+    novosNoPeriodo: '{n} new in this period',
+    usuariosAtivos: 'Active users',
+    acessosNoPeriodo: '{n} sign-ins in this period',
+    emocaoMaisUsada: 'Most used emotion',
+    percentualRegistrosHumor: '{n}% of mood records',
+    semHumorPeriodo: 'No mood records in this period.',
+    noPeriodo: 'in this period',
+    energiaMedia: 'Average energy',
+    semDadosPeriodo: 'no data in this period',
+    registrosContagem: '{n} records',
+    pessoasContagem: '{n} people',
+    atividadeDiaria: 'Daily activity',
+    atividadeDescricao: 'Sign-ins, active people and records per day.',
+    serieAcessos: 'Sign-ins',
+    semAtividadePeriodo: 'No activity in this period.',
+    colunaUsuario: 'User',
+    colunaCadastro: 'Signed up',
+    colunaUltimoAcesso: 'Last sign-in',
+    colunaAcessos: 'Sign-ins',
+    colunaRegistros: 'Records',
+    colunaEmocao: 'Most used emotion',
+    nuncaAcessou: 'Never signed in',
+    nenhumUsuarioEncontrado: 'No users found.',
+    usuariosEncontrados: '{n} users',
+    paginaDe: 'Page {pagina} of {total}',
+    anterior: 'Previous',
+    proxima: 'Next',
+    confirmarExclusaoUsuarioNome: 'Delete the account of {nome}? All of their records will be erased.',
+    erroCarregarPainel: 'The panel could not be loaded.',
+    periodoInvalido: 'Invalid period.',
+    contaAdminProtegida: 'The administrator account cannot be changed from the panel.',
+    acessoRestritoAdmin: 'Access restricted to the admin panel.',
+    csvDia: 'Day',
+    csvIndicador: 'Indicator',
+    csvValor: 'Value',
+    csvNomeArquivo: 'dailymind_report.csv'
+  },
+  es: {
+    adminSubtitulo: 'Sigue quién usa DailyMind y cómo se sienten las personas.',
+    dataInicial: 'Fecha inicial',
+    dataFinal: 'Fecha final',
+    usuariosCadastrados: 'Usuarios registrados',
+    novosNoPeriodo: '{n} nuevos en el período',
+    usuariosAtivos: 'Usuarios activos',
+    acessosNoPeriodo: '{n} accesos en el período',
+    emocaoMaisUsada: 'Emoción más usada',
+    percentualRegistrosHumor: '{n}% de los registros de ánimo',
+    semHumorPeriodo: 'No hay registros de ánimo en el período.',
+    noPeriodo: 'en el período',
+    energiaMedia: 'Energía media',
+    semDadosPeriodo: 'sin datos en el período',
+    registrosContagem: '{n} registros',
+    pessoasContagem: '{n} personas',
+    atividadeDiaria: 'Actividad diaria',
+    atividadeDescricao: 'Accesos, personas activas y registros por día.',
+    serieAcessos: 'Accesos',
+    semAtividadePeriodo: 'No hay actividad en el período.',
+    colunaUsuario: 'Usuario',
+    colunaCadastro: 'Registro',
+    colunaUltimoAcesso: 'Último acceso',
+    colunaAcessos: 'Accesos',
+    colunaRegistros: 'Registros',
+    colunaEmocao: 'Emoción más usada',
+    nuncaAcessou: 'Aún no ha entrado',
+    nenhumUsuarioEncontrado: 'No se encontraron usuarios.',
+    usuariosEncontrados: '{n} usuarios',
+    paginaDe: 'Página {pagina} de {total}',
+    anterior: 'Anterior',
+    proxima: 'Siguiente',
+    confirmarExclusaoUsuarioNome: '¿Eliminar la cuenta de {nome}? Se borrarán todos sus registros.',
+    erroCarregarPainel: 'No se pudo cargar el panel.',
+    periodoInvalido: 'Período no válido.',
+    contaAdminProtegida: 'La cuenta de administrador no se puede cambiar desde el panel.',
+    acessoRestritoAdmin: 'Acceso restringido al panel de administración.',
+    csvDia: 'Día',
+    csvIndicador: 'Indicador',
+    csvValor: 'Valor',
+    csvNomeArquivo: 'informe_dailymind.csv'
+  }
+}
+
 Object.keys(traducoesComplementares).forEach(idioma => {
-  Object.assign(traducoes[idioma], traducoesComplementares[idioma])
+  Object.assign(traducoes[idioma], traducoesComplementares[idioma], traducoesAdmin[idioma])
 })
 
 const traducoesHumor = {
@@ -343,6 +473,9 @@ const mensagensApi = {
   'Autenticação necessária.': 'autenticacaoNecessaria',
   'Sessão inválida ou expirada.': 'sessaoInvalida',
   'Você não tem acesso a estes dados.': 'acessoNegado',
+  'Período inválido.': 'periodoInvalido',
+  'A conta administradora não pode ser alterada pelo painel.': 'contaAdminProtegida',
+  'Acesso restrito ao painel administrativo.': 'acessoRestritoAdmin',
   'ID de usuário inválido.': 'idUsuarioInvalido',
   'O schema atual não permite alterar perfil ou status de contas.': 'schemaStatus',
   'Você não pode desativar sua própria conta de administrador.': 'naoPodeDesativarPropriaConta',
@@ -567,6 +700,14 @@ function entrarApp() {
   iniciarAtualizacaoSugestoes()
   carregarPerfil()
   carregarDados()
+  if (usuarioAtual.role === 'admin') {
+    adminState.inicio = ''
+    adminState.fim = ''
+    adminState.pesquisa = ''
+    adminState.pagina = 1
+    document.getElementById('admin-busca-usuarios').value = ''
+    mostrarTela('admin')
+  }
 }
 
 // ==================== NAVEGAÇÃO ====================
@@ -594,11 +735,16 @@ function mostrarPerfil() {
 
 const adminState = {
   pagina: 1,
-  limite: 8,
+  limite: 10,
   pesquisa: '',
   inicio: '',
-  fim: ''
+  fim: '',
+  resumo: null,
+  requisicaoResumo: 0,
+  requisicaoUsuarios: 0
 }
+
+const CORES_HUMOR = { '😊': '#34d399', '😔': '#60a5fa', '😰': '#fbbf24', '😫': '#a78bfa', '😤': '#f87171', '😐': '#94a3b8' }
 
 function formatarNumero(valor) {
   return Number(valor || 0).toLocaleString(configuracoes.idioma)
@@ -610,182 +756,223 @@ function formatarMes(mes) {
   return new Date(`${texto}-01T12:00:00`).toLocaleDateString(configuracoes.idioma, { month: 'short', year: '2-digit' })
 }
 
+// Substitui {chave} pelos valores informados em um texto traduzido.
+function tf(chave, valores) {
+  return t(chave).replace(/\{(\w+)\}/g, (_, nome) => (valores[nome] ?? ''))
+}
+
+function nomeHumor(emoji) {
+  return traducoesHumor[configuracoes.idioma]?.[emoji]?.nome || traducoesHumor['pt-BR'][emoji]?.nome || emoji
+}
+
+function lerDataHoraBanco(texto) {
+  const valor = String(texto || '')
+  if (!/^\d{4}-\d{2}-\d{2}/.test(valor)) return null
+  const data = new Date(valor.length > 10 ? valor.replace(' ', 'T') : `${valor}T12:00:00`)
+  return Number.isNaN(data.getTime()) ? null : data
+}
+
+function formatarDataAdmin(texto, comHora = false) {
+  const data = lerDataHoraBanco(texto)
+  if (!data) return '—'
+  return data.toLocaleString(configuracoes.idioma, comHora
+    ? { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }
+    : { day: '2-digit', month: 'short', year: 'numeric' })
+}
+
 async function carregarPainelAdmin() {
   if (!usuarioAtual || usuarioAtual.role !== 'admin') {
     mostrarTela('dashboard')
     return
   }
+  await Promise.all([carregarResumoAdmin(), carregarUsuariosAdmin()])
+}
 
-  try {
-    const [metricas, relatorios] = await Promise.all([
-      api('GET', '/admin/dashboard/metricas'),
-      api('GET', '/admin/relatorios')
-    ])
+async function carregarResumoAdmin() {
+  const requisicao = ++adminState.requisicaoResumo
+  const parametros = new URLSearchParams()
+  if (adminState.inicio) parametros.set('inicio', adminState.inicio)
+  if (adminState.fim) parametros.set('fim', adminState.fim)
+  const resultado = await api('GET', `/admin/resumo?${parametros}`)
+  if (requisicao !== adminState.requisicaoResumo) return
 
-    if (metricas.sucesso && metricas.dados) {
-      const container = document.getElementById('admin-metricas')
-      const dados = metricas.dados
-      container.innerHTML = `
-        <div class="admin-metric-card">
-          <span class="label">${t('usuarios')}</span>
-          <span class="valor">${formatarNumero(dados.usuarios)}</span>
-          <span class="subvalor">${t('cadastrosAtivos')}</span>
-        </div>
-        <div class="admin-metric-card">
-          <span class="label">${t('humor')}</span>
-          <span class="valor">${formatarNumero(dados.humor_30_dias)}</span>
-          <span class="subvalor">${t('registros30Dias')}</span>
-        </div>
-        <div class="admin-metric-card">
-          <span class="label">${t('mediaSono')}</span>
-          <span class="valor">${Number(dados.media_sono || 0).toFixed(1)}h</span>
-          <span class="subvalor">${t('ultimos30Dias')}</span>
-        </div>
-        <div class="admin-metric-card">
-          <span class="label">${t('energia')}</span>
-          <span class="valor">${Number(dados.media_energia || 0).toFixed(1)}/10</span>
-          <span class="subvalor">${t('mediaGeral')}</span>
-        </div>
-      `
-    }
-
-    if (relatorios.sucesso && relatorios.dados) {
-      document.getElementById('admin-data-inicio').value = relatorios.dados.periodo.inicio
-      document.getElementById('admin-data-fim').value = relatorios.dados.periodo.fim
-      renderizarRelatoriosAdmin(relatorios.dados)
-    }
-
-    await carregarUsuariosAdmin()
-    renderizarGraficosAdmin(relatorios.sucesso ? relatorios.dados : null)
-  } catch (erro) {
-    console.error('Erro ao carregar painel admin:', erro)
+  if (!resultado.sucesso || !resultado.dados) {
+    exibirToast(resultado.mensagem || t('erroCarregarPainel'), 'erro')
+    return
   }
+
+  adminState.resumo = resultado.dados
+  adminState.inicio = resultado.dados.periodo.inicio
+  adminState.fim = resultado.dados.periodo.fim
+  document.getElementById('admin-data-inicio').value = adminState.inicio
+  document.getElementById('admin-data-fim').value = adminState.fim
+  renderizarMetricasAdmin(resultado.dados)
+  renderizarGraficosAdmin(resultado.dados)
+}
+
+function cartaoMetricaAdmin(rotulo, valor, detalhe) {
+  return `
+    <div class="admin-metric-card">
+      <span class="label">${escaparHtml(rotulo)}</span>
+      <span class="valor">${valor}</span>
+      <span class="subvalor">${escaparHtml(detalhe)}</span>
+    </div>`
+}
+
+function renderizarMetricasAdmin(dados) {
+  const container = document.getElementById('admin-metricas')
+  const totais = dados.totais
+  const emocao = dados.emocao_mais_usada
+  const valorEmocao = emocao
+    ? `<span class="flex items-center gap-2"><span>${escaparHtml(emocao.emoji)}</span><span class="text-xl">${escaparHtml(nomeHumor(emocao.emoji))}</span></span>`
+    : '—'
+
+  container.innerHTML = [
+    cartaoMetricaAdmin(t('usuariosCadastrados'), formatarNumero(totais.usuarios), tf('novosNoPeriodo', { n: formatarNumero(totais.usuarios_novos) })),
+    cartaoMetricaAdmin(t('usuariosAtivos'), formatarNumero(totais.usuarios_ativos), tf('acessosNoPeriodo', { n: formatarNumero(totais.acessos) })),
+    cartaoMetricaAdmin(t('emocaoMaisUsada'), valorEmocao, emocao ? tf('percentualRegistrosHumor', { n: emocao.percentual }) : t('semHumorPeriodo')),
+    cartaoMetricaAdmin(t('registrosHumor'), formatarNumero(totais.registros_humor), t('noPeriodo')),
+    cartaoMetricaAdmin(t('mediaSono'), totais.media_sono === null ? '—' : `${Number(totais.media_sono).toLocaleString(configuracoes.idioma)}h`, totais.media_sono === null ? t('semDadosPeriodo') : tf('registrosContagem', { n: formatarNumero(totais.registros_sono) })),
+    cartaoMetricaAdmin(t('energiaMedia'), totais.media_energia === null ? '—' : `${Number(totais.media_energia).toLocaleString(configuracoes.idioma)}/10`, totais.media_energia === null ? t('semDadosPeriodo') : tf('registrosContagem', { n: formatarNumero(totais.registros_energia) }))
+  ].join('')
+}
+
+function desenharGraficoAdmin(nomeGlobal, idCanvas, vazio, mensagemVazio, configuracao) {
+  if (window[nomeGlobal]) {
+    window[nomeGlobal].destroy()
+    window[nomeGlobal] = null
+  }
+  if (vazio) {
+    resetarCanvasVazio(idCanvas, mensagemVazio)
+    return
+  }
+  limparEstadoGraficoVazio(idCanvas)
+  window[nomeGlobal] = new Chart(document.getElementById(idCanvas), configuracao)
 }
 
 function renderizarGraficosAdmin(dados) {
-  if (!dados) return
+  if (!dados || typeof Chart === 'undefined') return
 
-  const humorCanvas = document.getElementById('grafico-admin-humor')
-  const usuariosCanvas = document.getElementById('grafico-admin-usuarios')
-
-  if (!humorCanvas || !usuariosCanvas || typeof Chart === 'undefined') return
-
-  const humorDistribuicao = (dados.distribuicao_humor || []).map(item => ({
-    label: item.emoji,
-    value: Number(item.total || 0)
-  }))
-
-  const usuariosMes = (dados.usuarios_por_mes || []).map(item => ({
-    label: formatarMes(item.mes),
-    value: Number(item.total || 0)
-  }))
-
-  if (window.graficoAdminHumor) window.graficoAdminHumor.destroy()
-  if (window.graficoAdminUsuarios) window.graficoAdminUsuarios.destroy()
-
-  window.graficoAdminHumor = new Chart(humorCanvas, {
+  const humor = dados.distribuicao_humor || []
+  desenharGraficoAdmin('graficoAdminHumor', 'grafico-admin-humor', humor.length === 0, t('semHumorPeriodo'), {
     type: 'doughnut',
     data: {
-      labels: humorDistribuicao.map(item => item.label),
+      labels: humor.map(item => `${item.emoji} ${nomeHumor(item.emoji)}`),
       datasets: [{
-        data: humorDistribuicao.map(item => item.value),
-        backgroundColor: ['#34d399', '#a78bfa', '#fbbf24', '#f97316', '#f87171', '#60a5fa']
+        data: humor.map(item => item.total),
+        backgroundColor: humor.map(item => CORES_HUMOR[item.emoji] || '#cbd5e1'),
+        borderWidth: 0
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom' } }
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            label: contexto => {
+              const item = humor[contexto.dataIndex]
+              return ` ${tf('registrosContagem', { n: formatarNumero(item.total) })} · ${tf('pessoasContagem', { n: formatarNumero(item.usuarios) })}`
+            }
+          }
+        }
+      }
     }
   })
 
-  window.graficoAdminUsuarios = new Chart(usuariosCanvas, {
+  const meses = dados.usuarios_por_mes || []
+  desenharGraficoAdmin('graficoAdminUsuarios', 'grafico-admin-usuarios', false, '', {
     type: 'bar',
     data: {
-      labels: usuariosMes.map(item => item.label),
-      datasets: [{
-        label: t('usuarios'),
-        data: usuariosMes.map(item => item.value),
-        borderRadius: 8,
-        backgroundColor: '#8b5cf6'
-      }]
+      labels: meses.map(item => formatarMes(item.mes)),
+      datasets: [{ label: t('usuariosNovos'), data: meses.map(item => item.total), borderRadius: 8, backgroundColor: '#8b5cf6' }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: true, ticks: { precision: 0 } }
-      }
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  })
+
+  const atividade = dados.atividade_diaria || []
+  const semAtividade = atividade.every(item => !item.acessos && !item.registros)
+  const serie = (rotulo, campo, cor) => ({
+    label: rotulo,
+    data: atividade.map(item => item[campo]),
+    borderColor: cor,
+    backgroundColor: cor,
+    tension: 0.3,
+    pointRadius: atividade.length > 45 ? 0 : 3
+  })
+  desenharGraficoAdmin('graficoAdminAtividade', 'grafico-admin-atividade', semAtividade, t('semAtividadePeriodo'), {
+    type: 'line',
+    data: {
+      labels: atividade.map(item => formatarData(item.dia)),
+      datasets: [
+        serie(t('serieAcessos'), 'acessos', '#8b5cf6'),
+        serie(t('usuariosAtivos'), 'usuarios_ativos', '#22c55e'),
+        serie(t('colunaRegistros'), 'registros', '#f97316')
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { position: 'bottom' } },
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
     }
   })
 }
 
-function renderizarRelatoriosAdmin(dados) {
-  const container = document.getElementById('admin-relatorios')
-  if (!container || !dados) return
-
-  const linhas = (dados.engajamento_diario || []).slice(0, 7).map(item => `
-    <div class="flex items-center justify-between border-b border-gray-200 py-2">
-      <span class="font-medium text-gray-700">${formatarData(item.dia)}</span>
-      <span class="text-sm text-gray-500">${formatarNumero(item.total || 0)} ${t('metricRegistros')}</span>
-    </div>
-  `).join('')
-
-  container.innerHTML = `
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-      <div class="rounded-xl bg-violet-50 p-3">
-        <p class="text-xs uppercase tracking-wider text-violet-700 font-bold">${t('usuariosNovos')}</p>
-        <p class="text-2xl font-black text-violet-900 mt-1">${formatarNumero(dados.usuarios_novos)}</p>
-      </div>
-      <div class="rounded-xl bg-mint-50 p-3">
-        <p class="text-xs uppercase tracking-wider text-mint-700 font-bold">${t('registrosHumor')}</p>
-        <p class="text-2xl font-black text-mint-900 mt-1">${formatarNumero(dados.registros_humor)}</p>
-      </div>
-      <div class="rounded-xl bg-orange-50 p-3">
-        <p class="text-xs uppercase tracking-wider text-orange-700 font-bold">${t('engajamento')}</p>
-        <p class="text-2xl font-black text-orange-900 mt-1">${formatarNumero((dados.engajamento_diario || []).reduce((total, item) => total + Number(item.total || 0), 0))}</p>
-      </div>
-    </div>
-    <div class="mt-4 rounded-2xl border border-gray-200 bg-white p-4">
-      <h3 class="font-bold text-gray-800 mb-3">${t('atividadeRecente')}</h3>
-      ${linhas || `<p class="text-sm text-gray-500">${t('semRegistrosIntervalo')}</p>`}
-    </div>
-  `
-}
-
 async function carregarUsuariosAdmin() {
-  const pesquisa = encodeURIComponent(adminState.pesquisa)
-  const inicio = adminState.inicio ? `&inicio=${encodeURIComponent(adminState.inicio)}` : ''
-  const fim = adminState.fim ? `&fim=${encodeURIComponent(adminState.fim)}` : ''
-  const resultado = await api('GET', `/admin/usuarios?page=${adminState.pagina}&limit=${adminState.limite}&search=${pesquisa}${inicio}${fim}`)
+  const requisicao = ++adminState.requisicaoUsuarios
+  const parametros = new URLSearchParams({ page: adminState.pagina, limit: adminState.limite, search: adminState.pesquisa })
+  const resultado = await api('GET', `/admin/usuarios?${parametros}`)
+  if (requisicao !== adminState.requisicaoUsuarios) return
+
   const tabela = document.getElementById('admin-usuarios-tabela')
   const paginacao = document.getElementById('admin-paginacao')
+  const total = document.getElementById('admin-usuarios-total')
 
   if (!resultado.sucesso || !Array.isArray(resultado.dados)) {
-    tabela.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-gray-500">${t('erroCarregarUsuarios')}</td></tr>`
+    tabela.innerHTML = `<tr><td colspan="8" class="px-4 py-6 text-center text-gray-500">${t('erroCarregarUsuarios')}</td></tr>`
+    paginacao.innerHTML = ''
+    total.textContent = ''
     return
   }
 
-  tabela.innerHTML = resultado.dados.map((usuario) => `
-    <tr class="border-t border-gray-100">
-      <td class="px-4 py-3 font-medium text-gray-800">${escaparHtml(usuario.nome)}</td>
-      <td class="px-4 py-3 text-gray-600">${escaparHtml(usuario.email)}</td>
-      <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold ${usuario.role === 'admin' ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-700'}">${usuario.role === 'admin' ? t('adminRole') : t('roleUsuario')}</span></td>
+  adminState.pagina = resultado.pagina
+  total.textContent = tf('usuariosEncontrados', { n: formatarNumero(resultado.total) })
+
+  tabela.innerHTML = resultado.dados.length === 0
+    ? `<tr><td colspan="8" class="px-4 py-6 text-center text-gray-500">${t('nenhumUsuarioEncontrado')}</td></tr>`
+    : resultado.dados.map(usuario => `
+    <tr class="border-t border-gray-100 align-middle">
+      <td class="px-4 py-3">
+        <div class="font-medium text-gray-800">${escaparHtml(usuario.nome)}</div>
+        <div class="text-xs text-gray-500">${escaparHtml(usuario.email)}</div>
+      </td>
+      <td class="px-4 py-3 text-gray-600 whitespace-nowrap">${formatarDataAdmin(usuario.data_cadastro)}</td>
+      <td class="px-4 py-3 text-gray-600 whitespace-nowrap">${usuario.ultimo_acesso ? formatarDataAdmin(usuario.ultimo_acesso, true) : t('nuncaAcessou')}</td>
+      <td class="px-4 py-3 text-gray-700 text-right">${formatarNumero(usuario.total_acessos)}</td>
+      <td class="px-4 py-3 text-gray-700 text-right">${formatarNumero(usuario.total_registros)}</td>
+      <td class="px-4 py-3 text-gray-700 whitespace-nowrap">${usuario.emocao_mais_usada ? `${escaparHtml(usuario.emocao_mais_usada)} ${escaparHtml(nomeHumor(usuario.emocao_mais_usada))}` : '—'}</td>
       <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold ${usuario.ativo ? 'bg-mint-100 text-mint-700' : 'bg-red-100 text-red-700'}">${usuario.ativo ? t('ativo') : t('inativo')}</span></td>
       <td class="px-4 py-3">
         <div class="flex gap-2">
-          <button type="button" data-usuario-id="${usuario.id}" data-usuario-ativo="${usuario.ativo ? 0 : 1}" class="toggle-usuario btn-status rounded-lg px-2 py-1 text-xs font-semibold bg-gray-900 text-white">${usuario.ativo ? t('desativar') : t('ativar')}</button>
-          <button type="button" data-usuario-id="${usuario.id}" class="delete-usuario rounded-lg px-2 py-1 text-xs font-semibold bg-red-100 text-red-700">${t('excluir')}</button>
+          <button type="button" data-usuario-id="${usuario.id}" data-usuario-ativo="${usuario.ativo ? 0 : 1}" class="toggle-usuario rounded-lg px-2 py-1 text-xs font-semibold bg-gray-900 text-white">${usuario.ativo ? t('desativar') : t('ativar')}</button>
+          <button type="button" data-usuario-id="${usuario.id}" data-usuario-nome="${escaparHtml(usuario.nome)}" class="delete-usuario rounded-lg px-2 py-1 text-xs font-semibold bg-red-100 text-red-700">${t('excluir')}</button>
         </div>
       </td>
-    </tr>
-  `).join('')
+    </tr>`).join('')
 
-  paginacao.innerHTML = Array.from({ length: Math.max(1, Math.ceil(resultado.total / resultado.limite)) }, (_, indice) => {
-    const pagina = indice + 1
-    return `<button type="button" data-pagina="${pagina}" class="rounded-lg px-3 py-1.5 text-sm font-semibold ${adminState.pagina === pagina ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-700'}">${pagina}</button>`
-  }).join('')
+  const botaoPagina = (rotulo, destino, ativo) => `<button type="button" data-pagina="${destino}" ${ativo ? '' : 'disabled'} class="rounded-lg px-3 py-1.5 text-sm font-semibold bg-gray-100 text-gray-700 disabled:opacity-40">${rotulo}</button>`
+  paginacao.innerHTML = resultado.totalPaginas > 1 ? `
+    ${botaoPagina(t('anterior'), resultado.pagina - 1, resultado.pagina > 1)}
+    <span class="text-sm text-gray-500">${tf('paginaDe', { pagina: resultado.pagina, total: resultado.totalPaginas })}</span>
+    ${botaoPagina(t('proxima'), resultado.pagina + 1, resultado.pagina < resultado.totalPaginas)}` : ''
 
   paginacao.querySelectorAll('button[data-pagina]').forEach(botao => {
     botao.addEventListener('click', () => {
@@ -794,65 +981,87 @@ async function carregarUsuariosAdmin() {
     })
   })
 
-  document.querySelectorAll('.toggle-usuario').forEach(botao => {
+  tabela.querySelectorAll('.toggle-usuario').forEach(botao => {
     botao.addEventListener('click', async () => {
-      const id = Number(botao.dataset.usuarioId)
+      botao.disabled = true
       const ativo = Number(botao.dataset.usuarioAtivo) === 1
-      const resposta = await api('PUT', `/admin/usuarios/${id}/status`, { ativo })
-      if (resposta.sucesso) {
-        exibirToast(resposta.mensagem || t('statusAtualizado'))
-        carregarPainelAdmin()
-      } else {
-        exibirToast(resposta.mensagem || t('erroAtualizarStatus'), 'erro')
-      }
+      const resposta = await api('PUT', `/admin/usuarios/${botao.dataset.usuarioId}/status`, { ativo })
+      exibirToast(resposta.mensagem || t(resposta.sucesso ? 'statusAtualizado' : 'erroAtualizarStatus'), resposta.sucesso ? 'sucesso' : 'erro')
+      if (resposta.sucesso) carregarPainelAdmin()
+      else botao.disabled = false
     })
   })
 
-  document.querySelectorAll('.delete-usuario').forEach(botao => {
+  tabela.querySelectorAll('.delete-usuario').forEach(botao => {
     botao.addEventListener('click', async () => {
-      const id = Number(botao.dataset.usuarioId)
-      if (!confirm(t('confirmarExclusaoUsuario'))) return
-      const resposta = await api('DELETE', `/admin/usuarios/${id}`)
-      if (resposta.sucesso) {
-        exibirToast(resposta.mensagem || t('usuarioRemovido'))
-        carregarPainelAdmin()
-      } else {
-        exibirToast(resposta.mensagem || t('erroExcluirUsuario'), 'erro')
-      }
+      if (!confirm(tf('confirmarExclusaoUsuarioNome', { nome: botao.dataset.usuarioNome }))) return
+      botao.disabled = true
+      const resposta = await api('DELETE', `/admin/usuarios/${botao.dataset.usuarioId}`)
+      exibirToast(resposta.mensagem || t(resposta.sucesso ? 'usuarioRemovido' : 'erroExcluirUsuario'), resposta.sucesso ? 'sucesso' : 'erro')
+      if (resposta.sucesso) carregarPainelAdmin()
+      else botao.disabled = false
     })
   })
 }
 
-async function aplicarFiltroAdmin() {
-  adminState.inicio = document.getElementById('admin-data-inicio').value
-  adminState.fim = document.getElementById('admin-data-fim').value
-  adminState.pagina = 1
-
-  const resultado = await api('GET', `/admin/relatorios?inicio=${encodeURIComponent(adminState.inicio)}&fim=${encodeURIComponent(adminState.fim)}`)
-  if (resultado.sucesso && resultado.dados) {
-    renderizarRelatoriosAdmin(resultado.dados)
-    renderizarGraficosAdmin(resultado.dados)
+function aplicarFiltroAdmin() {
+  const inicio = document.getElementById('admin-data-inicio').value
+  const fim = document.getElementById('admin-data-fim').value
+  if (!inicio || !fim || inicio > fim) {
+    exibirToast(t('periodoInvalido'), 'erro')
+    return
   }
+  adminState.inicio = inicio
+  adminState.fim = fim
+  carregarResumoAdmin()
+}
+
+function buscarUsuariosAdmin(evento) {
+  evento.preventDefault()
+  adminState.pagina = 1
+  adminState.pesquisa = document.getElementById('admin-busca-usuarios').value.trim()
+  carregarUsuariosAdmin()
 }
 
 function exportarRelatorioCsv() {
-  const tabela = document.getElementById('admin-relatorios')
-  if (!tabela) return
+  const dados = adminState.resumo
+  if (!dados) return
+
+  const celula = valor => {
+    const texto = String(valor ?? '')
+    return /[";,\n]/.test(texto) ? `"${texto.replace(/"/g, '""')}"` : texto
+  }
+  const linha = valores => valores.map(celula).join(',')
+  const totais = dados.totais
+  const emocao = dados.emocao_mais_usada
 
   const linhas = [
-    `${t('csvIndicador')},${t('csvValor')}`,
-    `${t('csvUsuariosNovos')},${tabela.dataset.usuariosNovos || 0}`,
-    `${t('csvRegistrosHumor')},${tabela.dataset.registrosHumor || 0}`,
-    `${t('csvEngajamentoTotal')},${tabela.dataset.engajamentoTotal || 0}`
+    linha([t('csvIndicador'), t('csvValor')]),
+    linha([t('dataInicial'), dados.periodo.inicio]),
+    linha([t('dataFinal'), dados.periodo.fim]),
+    linha([t('usuariosCadastrados'), totais.usuarios]),
+    linha([t('usuariosNovos'), totais.usuarios_novos]),
+    linha([t('usuariosAtivos'), totais.usuarios_ativos]),
+    linha([t('serieAcessos'), totais.acessos]),
+    linha([t('emocaoMaisUsada'), emocao ? `${emocao.emoji} ${nomeHumor(emocao.emoji)} (${emocao.percentual}%)` : '']),
+    linha([t('registrosHumor'), totais.registros_humor]),
+    linha([t('mediaSono'), totais.media_sono ?? '']),
+    linha([t('energiaMedia'), totais.media_energia ?? '']),
+    '',
+    linha([t('humor'), t('colunaRegistros'), t('usuarios')]),
+    ...(dados.distribuicao_humor || []).map(item => linha([`${item.emoji} ${nomeHumor(item.emoji)}`, item.total, item.usuarios])),
+    '',
+    linha([t('csvDia'), t('serieAcessos'), t('usuariosAtivos'), t('colunaRegistros')]),
+    ...(dados.atividade_diaria || []).map(item => linha([item.dia, item.acessos, item.usuarios_ativos, item.registros]))
   ]
 
-  const blob = new Blob([linhas.join('\n')], { type: 'text/csv;charset=utf-8;' })
+  const blob = new Blob(['\ufeff' + linhas.join('\r\n')], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
   link.download = t('csvNomeArquivo')
   link.click()
-  URL.revokeObjectURL(url)
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 function lerConfiguracoes() {
@@ -1069,19 +1278,8 @@ document.getElementById('btn-atualizar-sugestoes').addEventListener('click', () 
 })
 
 document.getElementById('btn-admin-filtrar').addEventListener('click', aplicarFiltroAdmin)
+document.getElementById('form-admin-busca').addEventListener('submit', buscarUsuariosAdmin)
 document.getElementById('btn-exportar-csv').addEventListener('click', exportarRelatorioCsv)
-document.getElementById('btn-admin-busca').addEventListener('click', () => {
-  adminState.pagina = 1
-  adminState.pesquisa = document.getElementById('admin-busca-usuarios').value.trim()
-  carregarUsuariosAdmin()
-})
-document.getElementById('admin-busca-usuarios').addEventListener('keydown', (evento) => {
-  if (evento.key === 'Enter') {
-    adminState.pagina = 1
-    adminState.pesquisa = document.getElementById('admin-busca-usuarios').value.trim()
-    carregarUsuariosAdmin()
-  }
-})
 
 // ==================== MODAIS ====================
 

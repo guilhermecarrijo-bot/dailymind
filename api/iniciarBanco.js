@@ -114,6 +114,23 @@ banco.exec(`
   CREATE INDEX IF NOT EXISTS idx_sessoes_usuario ON sessoes(usuario_id);
 `)
 
+// Histórico de entradas (login ou cadastro), usado pelo painel administrativo.
+const tabelaAcessosExistia = Boolean(banco.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'acessos'").get())
+banco.exec(`
+  CREATE TABLE IF NOT EXISTS acessos (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id      INTEGER NOT NULL,
+    data_hora       TEXT    NOT NULL DEFAULT (datetime('now','localtime')),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS idx_acessos_usuario ON acessos(usuario_id);
+  CREATE INDEX IF NOT EXISTS idx_acessos_data ON acessos(data_hora);
+`)
+if (!tabelaAcessosExistia) {
+  // Aproveita as sessões já existentes como histórico inicial.
+  banco.exec("INSERT INTO acessos (usuario_id, data_hora) SELECT usuario_id, datetime(criada_em, 'localtime') FROM sessoes")
+}
+
 // Campos opcionais adicionados depois da primeira versão do perfil.
 for (const coluna of [
   ['bio', 'TEXT DEFAULT NULL'],
@@ -205,5 +222,7 @@ const inserirAdicionaisEmLote = banco.transaction((items) => {
   }
 })
 inserirAdicionaisEmLote(sugestoesAdicionais)
+
+require('./src/seguranca/administrador').garantirAdministrador()
 
 console.log('Banco de dados do DailyMind inicializado com sucesso.')

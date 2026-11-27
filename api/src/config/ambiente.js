@@ -60,7 +60,8 @@ module.exports = Object.freeze({
   ambiente,
   porta,
   chaveSessao,
-  adminEmail: process.env.ADMIN_EMAIL || 'admin@dailymind.com.br',
+  adminEmail: (process.env.ADMIN_EMAIL || 'administrador@dailymind.com.br').trim().toLowerCase(),
+  adminSenha: process.env.ADMIN_PASSWORD || '',
   caminhoBanco: dbPath,
   frontendOrigin: frontendOrigin,
   origensPermitidas

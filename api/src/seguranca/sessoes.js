@@ -28,6 +28,7 @@ function criarSessao(usuarioId, res) {
   banco.prepare('INSERT INTO sessoes (id, usuario_id, token_hash, expira_em) VALUES (?, ?, ?, ?)')
     .run(id, usuarioId, resumirToken(token), expiraEm)
 
+  banco.prepare('INSERT INTO acessos (usuario_id) VALUES (?)').run(usuarioId)
   definirCookie(res, `${id}.${token}`, DURACAO_SESSAO_MS)
 }
 

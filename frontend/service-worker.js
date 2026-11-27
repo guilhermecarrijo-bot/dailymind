@@ -1,11 +1,11 @@
-const CACHE_NAME = 'dailymind-shell-v9-tailwind'
+const CACHE_NAME = 'dailymind-shell-v10-admin'
 const ARQUIVOS_DE_CACHE = [
   '/',
   '/index.html',
   '/css/estilo.css',
   '/css/tailwind.css',
-  '/js/app.js?v=20261127-i18n2',
-  '/js/pwa-offline.js?v=20261127-i18n2',
+  '/js/app.js?v=20261127-admin',
+  '/js/pwa-offline.js?v=20261127-admin',
   '/manifest.webmanifest',
   '/icons/icon.svg',
   '/icons/icon-192.png',

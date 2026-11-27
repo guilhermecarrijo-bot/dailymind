@@ -354,16 +354,31 @@
             <span class="text-2xl">🧠</span>
             <span class="logo-marca text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span>
           </div>
-          <div class="w-20"></div>
+          <button type="button" onclick="fazerLogout()" class="rounded-lg px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 transition" data-i18n="sair">Sair da conta</button>
         </div>
       </header>
 
-      <div class="mb-6">
-        <p class="text-xs font-bold uppercase tracking-widest text-violet-600" data-i18n="painel">Painel</p>
-        <h1 class="text-3xl font-bold text-gray-800 mt-1" data-i18n="areaAdministrativa">Área administrativa</h1>
+      <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-violet-600" data-i18n="painel">Painel</p>
+          <h1 class="text-3xl font-bold text-gray-800 mt-1" data-i18n="areaAdministrativa">Área administrativa</h1>
+          <p class="text-sm text-gray-500 mt-1" data-i18n="adminSubtitulo">Acompanhe quem usa o DailyMind e como as pessoas estão se sentindo.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-end gap-3">
+          <label class="flex flex-col gap-1 text-xs font-semibold text-gray-500">
+            <span data-i18n="dataInicial">Data inicial</span>
+            <input id="admin-data-inicio" type="date" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-semibold text-gray-500">
+            <span data-i18n="dataFinal">Data final</span>
+            <input id="admin-data-fim" type="date" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white">
+          </label>
+          <button id="btn-admin-filtrar" type="button" class="bg-violet-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-violet-700 transition" data-i18n="filtrar">Filtrar</button>
+          <button id="btn-exportar-csv" type="button" class="bg-mint-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-mint-600 transition" data-i18n="exportarCsv">Exportar CSV</button>
+        </div>
       </div>
 
-      <div id="admin-metricas" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6"></div>
+      <div id="admin-metricas" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-6"></div>
 
       <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
         <div class="chart-panel">
@@ -387,39 +402,41 @@
         </div>
       </div>
 
-      <section class="admin-section mb-6">
-        <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-4">
+      <div class="chart-panel mb-6">
+        <div class="chart-header">
           <div>
-            <h2 class="text-xl font-bold text-gray-800" data-i18n="relatorios">Relatórios</h2>
-            <p class="text-sm text-gray-500" data-i18n="relatoriosDescricao">Engajamento e uso em um intervalo de datas.</p>
+            <h3 class="font-semibold text-gray-700" data-i18n="atividadeDiaria">Atividade diária</h3>
+            <p class="text-xs text-gray-500" data-i18n="atividadeDescricao">Acessos, pessoas ativas e registros feitos por dia.</p>
           </div>
-          <div class="flex flex-col sm:flex-row gap-3">
-            <input id="admin-data-inicio" type="date" class="border border-gray-300 rounded-lg px-3 py-2">
-            <input id="admin-data-fim" type="date" class="border border-gray-300 rounded-lg px-3 py-2">
-            <button id="btn-admin-filtrar" type="button" class="bg-violet-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-violet-700 transition" data-i18n="filtrar">Filtrar</button>
-            <button id="btn-exportar-csv" type="button" class="bg-mint-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-mint-600 transition" data-i18n="exportarCsv">Exportar CSV</button>
-          </div>
+          <span class="chart-pill orange" data-i18n="engajamento">Engajamento</span>
         </div>
-
-        <div id="admin-relatorios" class="space-y-3"></div>
-      </section>
+        <div class="chart-area" style="height: 280px;">
+          <canvas id="grafico-admin-atividade" height="240"></canvas>
+        </div>
+      </div>
 
       <section class="admin-section">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-gray-800" data-i18n="usuarios">Usuários</h2>
-          <div class="flex items-center gap-2">
-            <input id="admin-busca-usuarios" type="search" placeholder="Buscar por nome ou e-mail" data-i18n-placeholder="buscarPlaceholder" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-            <button id="btn-admin-busca" type="button" class="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm font-semibold" data-i18n="buscar">Buscar</button>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800" data-i18n="usuarios">Usuários</h2>
+            <p id="admin-usuarios-total" class="text-sm text-gray-500"></p>
           </div>
+          <form id="form-admin-busca" class="flex items-center gap-2">
+            <input id="admin-busca-usuarios" type="search" maxlength="100" placeholder="Buscar por nome ou e-mail" data-i18n-placeholder="buscarPlaceholder" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white">
+            <button id="btn-admin-busca" type="submit" class="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm font-semibold" data-i18n="buscar">Buscar</button>
+          </form>
         </div>
 
         <div class="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-          <table class="min-w-full text-left">
+          <table class="min-w-full text-left text-sm">
             <thead class="bg-gray-50 text-gray-600">
               <tr>
-                <th class="px-4 py-3 font-semibold" data-i18n="colunaNome">Nome</th>
-                <th class="px-4 py-3 font-semibold" data-i18n="colunaEmail">E-mail</th>
-                <th class="px-4 py-3 font-semibold" data-i18n="colunaPerfil">Perfil</th>
+                <th class="px-4 py-3 font-semibold" data-i18n="colunaUsuario">Usuário</th>
+                <th class="px-4 py-3 font-semibold whitespace-nowrap" data-i18n="colunaCadastro">Cadastro</th>
+                <th class="px-4 py-3 font-semibold whitespace-nowrap" data-i18n="colunaUltimoAcesso">Último acesso</th>
+                <th class="px-4 py-3 font-semibold text-right" data-i18n="colunaAcessos">Acessos</th>
+                <th class="px-4 py-3 font-semibold text-right" data-i18n="colunaRegistros">Registros</th>
+                <th class="px-4 py-3 font-semibold whitespace-nowrap" data-i18n="colunaEmocao">Emoção mais usada</th>
                 <th class="px-4 py-3 font-semibold" data-i18n="colunaStatus">Status</th>
                 <th class="px-4 py-3 font-semibold" data-i18n="colunaAcoes">Ações</th>
               </tr>
@@ -428,7 +445,7 @@
           </table>
         </div>
 
-        <div id="admin-paginacao" class="flex justify-end gap-2 mt-4"></div>
+        <div id="admin-paginacao" class="flex items-center justify-end gap-3 mt-4"></div>
       </section>
     </div>
 
@@ -757,8 +774,8 @@
   <!-- Toast de feedback -->
   <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white font-semibold hidden transition-all duration-300 z-50"></div>
 
-  <script src="js/pwa-offline.js?v=20261127-i18n2"></script>
-  <script src="js/app.js?v=20261127-i18n2"></script>
+  <script src="js/pwa-offline.js?v=20261127-admin"></script>
+  <script src="js/app.js?v=20261127-admin"></script>
   <script>
     if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
       window.addEventListener('load', () => {

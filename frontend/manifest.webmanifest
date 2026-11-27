@@ -2,6 +2,7 @@
   "name": "DailyMind - Cuide da sua mente",
   "short_name": "DailyMind",
   "description": "Registro diário de humor, sono, energia, lembretes e autocuidado.",
+  "id": "/",
   "lang": "pt-BR",
   "start_url": "/",
   "scope": "/",

@@ -34,6 +34,12 @@ Principais rotas usadas pela interface:
 
 As rotas privadas exigem uma sessão válida. O backend determina o usuário pela sessão; o identificador enviado pelo cliente não concede acesso a dados de outra conta.
 
+## Recursos PWA
+
+O `manifest.webmanifest` e o `service-worker.js` permitem instalar o DailyMind e abrir a interface em modo autônomo. O Service Worker guarda localmente o HTML, o CSS, os scripts, o manifesto e os ícones; requisições `/api` não são armazenadas em cache.
+
+O módulo `js/pwa-offline.js` enfileira no IndexedDB (com fallback para `localStorage`) somente escritas de humor, sono, energia, lembretes e perfil quando a rede falha. Ao recuperar a conexão, a fila é reenviada com a sessão atual e a interface é atualizada. Login, cadastro, logout e ações administrativas nunca são enfileirados.
+
 ## Executar
 
 Na raiz do projeto, inicie o backend com `api/iniciar-dailymind.bat` no Windows ou `bash api/iniciar-dailymind.sh` no Linux. O backend prepara `api/.env` quando necessário e serve os arquivos estáticos do frontend. Abra o endereço `http://localhost:3000` (ou a porta configurada em `api/.env`).

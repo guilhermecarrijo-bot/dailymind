@@ -1,9 +1,10 @@
-const CACHE_NAME = 'dailymind-shell-v5'
+const CACHE_NAME = 'dailymind-shell-v6'
 const ARQUIVOS_DE_CACHE = [
   '/',
   '/index.html',
   '/css/estilo.css',
   '/js/app.js?v=20261103-autenticacao',
+  '/js/pwa-offline.js?v=20261127-pwa',
   '/manifest.webmanifest',
   '/icons/icon.svg',
   '/icons/icon-192.png',
@@ -29,11 +30,18 @@ self.addEventListener('fetch', (evento) => {
 
   evento.respondWith(
     fetch(evento.request).then((resposta) => {
-      if (resposta.ok) {
+      if (resposta.ok || resposta.type === 'opaque') {
         const copia = resposta.clone()
-        caches.open(CACHE_NAME).then((cache) => cache.put(evento.request, copia))
+        caches.open(CACHE_NAME)
+          .then((cache) => cache.put(evento.request, copia))
+          .catch(() => {})
       }
       return resposta
-    }).catch(() => caches.match(evento.request).then((recurso) => recurso || caches.match('/index.html')))
+    }).catch(async () => {
+      const recurso = await caches.match(evento.request)
+      if (recurso) return recurso
+      if (evento.request.mode === 'navigate') return caches.match('/index.html')
+      return Response.error()
+    })
   )
 })

@@ -559,7 +559,7 @@ function traduzirSugestao(sugestao) {
 function exibirToast(mensagem, tipo = 'sucesso') {
   const toast = document.getElementById('toast')
   toast.textContent = mensagem
-  toast.className = `fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white font-semibold transition-all duration-300 z-50 ${tipo === 'sucesso' ? 'bg-mint-500' : 'bg-red-500'}`
+  toast.className = `dm-toast ${tipo === 'sucesso' ? 'dm-toast-sucesso' : 'dm-toast-erro'}`
   toast.classList.remove('hidden')
   setTimeout(() => toast.classList.add('hidden'), 3000)
 }
@@ -628,7 +628,7 @@ document.getElementById('form-login').querySelector('form').addEventListener('su
   if (resultado.sucesso) {
     sessaoPerfil += 1
     usuarioAtual = resultado.usuario
-    exibirToast(`${t('bemVindo')}, ${usuarioAtual.nome}! 🧠`)
+    exibirToast(`${t('bemVindo')}, ${usuarioAtual.nome}!`)
     entrarApp()
   } else {
     exibirToast(resultado.mensagem, 'erro')
@@ -653,7 +653,7 @@ document.getElementById('form-cadastro').querySelector('form').addEventListener(
   if (resultado.sucesso) {
     sessaoPerfil += 1
     usuarioAtual = resultado.usuario
-    exibirToast(`${t('contaCriada')} 🎉`)
+    exibirToast(t('contaCriada'))
     entrarApp()
   } else {
     exibirToast(resultado.mensagem, 'erro')
@@ -744,7 +744,40 @@ const adminState = {
   requisicaoUsuarios: 0
 }
 
-const CORES_HUMOR = { '😊': '#34d399', '😔': '#60a5fa', '😰': '#fbbf24', '😫': '#a78bfa', '😤': '#f87171', '😐': '#94a3b8' }
+// Cores da paleta DailyMind para cada humor (distintas entre si e legíveis nos dois temas)
+const CORES_HUMOR = { '😊': '#849E16', '😔': '#6675B5', '😰': '#D27186', '😫': '#E0A487', '😤': '#A13D57', '😐': '#B9A3B2' }
+
+// Cores de apoio dos gráficos conforme o tema ativo
+function coresGraficos() {
+  const escuro = configuracoes.tema === 'escuro'
+  return {
+    texto: escuro ? '#CBC8D8' : '#575266',
+    grade: escuro ? 'rgba(174, 170, 190, 0.16)' : 'rgba(87, 82, 102, 0.12)',
+    superficie: escuro ? '#1B1E29' : '#FFFFFF',
+    tooltipFundo: escuro ? '#232736' : '#FFFFFF',
+    tooltipBorda: escuro ? '#474D64' : '#E6E1EC',
+    tooltipTexto: escuro ? '#EEEDF5' : '#2B2838',
+    rosa: escuro ? '#E595A7' : '#D27186',
+    azul: escuro ? '#9FB4E8' : '#6675B5',
+    azulClaro: escuro ? '#B9CDF1' : '#B9CDF1',
+    verde: escuro ? '#CAD384' : '#849E16',
+    pessego: escuro ? '#EBC6B4' : '#D99A7E'
+  }
+}
+
+function tooltipGraficos(cores) {
+  return {
+    backgroundColor: cores.tooltipFundo,
+    titleColor: cores.tooltipTexto,
+    bodyColor: cores.tooltipTexto,
+    borderColor: cores.tooltipBorda,
+    borderWidth: 1,
+    padding: 10,
+    cornerRadius: 12,
+    titleFont: { weight: '800' },
+    bodyFont: { weight: '600' }
+  }
+}
 
 function formatarNumero(valor) {
   return Number(valor || 0).toLocaleString(configuracoes.idioma)
@@ -824,7 +857,7 @@ function renderizarMetricasAdmin(dados) {
   const totais = dados.totais
   const emocao = dados.emocao_mais_usada
   const valorEmocao = emocao
-    ? `<span class="flex items-center gap-2"><span>${escaparHtml(emocao.emoji)}</span><span class="text-xl">${escaparHtml(nomeHumor(emocao.emoji))}</span></span>`
+    ? `<span class="flex items-center gap-2">${imagemHumorAdmin(emocao.emoji, 'admin-humor-ico admin-humor-ico-grande')}<span class="text-xl">${escaparHtml(nomeHumor(emocao.emoji))}</span></span>`
     : '—'
 
   container.innerHTML = [
@@ -853,23 +886,31 @@ function desenharGraficoAdmin(nomeGlobal, idCanvas, vazio, mensagemVazio, config
 function renderizarGraficosAdmin(dados) {
   if (!dados || typeof Chart === 'undefined') return
 
+  const cores = coresGraficos()
+  const animacao = (configuracoes.reduzirMovimento || window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? false : { duration: 600, easing: 'easeOutCubic' }
+  const legenda = { position: 'bottom', labels: { color: cores.texto, usePointStyle: true, pointStyle: 'circle', padding: 16, font: { weight: '700' } } }
   const humor = dados.distribuicao_humor || []
   desenharGraficoAdmin('graficoAdminHumor', 'grafico-admin-humor', humor.length === 0, t('semHumorPeriodo'), {
     type: 'doughnut',
     data: {
-      labels: humor.map(item => `${item.emoji} ${nomeHumor(item.emoji)}`),
+      labels: humor.map(item => nomeHumor(item.emoji)),
       datasets: [{
         data: humor.map(item => item.total),
-        backgroundColor: humor.map(item => CORES_HUMOR[item.emoji] || '#cbd5e1'),
-        borderWidth: 0
+        backgroundColor: humor.map(item => CORES_HUMOR[item.emoji] || '#D3C0CC'),
+        borderColor: cores.superficie,
+        borderWidth: 3,
+        hoverOffset: 6
       }]
     },
     options: {
       responsive: true,
+      animation: animacao,
       maintainAspectRatio: false,
+      cutout: '62%',
       plugins: {
-        legend: { position: 'bottom' },
+        legend: legenda,
         tooltip: {
+          ...tooltipGraficos(cores),
           callbacks: {
             label: contexto => {
               const item = humor[contexto.dataIndex]
@@ -886,13 +927,17 @@ function renderizarGraficosAdmin(dados) {
     type: 'bar',
     data: {
       labels: meses.map(item => formatarMes(item.mes)),
-      datasets: [{ label: t('usuariosNovos'), data: meses.map(item => item.total), borderRadius: 8, backgroundColor: '#8b5cf6' }]
+      datasets: [{ label: t('usuariosNovos'), data: meses.map(item => item.total), borderRadius: 10, borderSkipped: false, backgroundColor: cores.azul, hoverBackgroundColor: cores.azulClaro, maxBarThickness: 48 }]
     },
     options: {
       responsive: true,
+      animation: animacao,
       maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+      plugins: { legend: { display: false }, tooltip: tooltipGraficos(cores) },
+      scales: {
+        x: { grid: { display: false }, border: { display: false }, ticks: { color: cores.texto, font: { weight: '700' } } },
+        y: { beginAtZero: true, grid: { color: cores.grade }, border: { display: false }, ticks: { precision: 0, color: cores.texto, font: { weight: '700' } } }
+      }
     }
   })
 
@@ -903,25 +948,32 @@ function renderizarGraficosAdmin(dados) {
     data: atividade.map(item => item[campo]),
     borderColor: cor,
     backgroundColor: cor,
-    tension: 0.3,
-    pointRadius: atividade.length > 45 ? 0 : 3
+    borderWidth: 2.5,
+    tension: 0.35,
+    cubicInterpolationMode: 'monotone',
+    pointRadius: atividade.length > 45 ? 0 : 3,
+    pointHoverRadius: 5
   })
   desenharGraficoAdmin('graficoAdminAtividade', 'grafico-admin-atividade', semAtividade, t('semAtividadePeriodo'), {
     type: 'line',
     data: {
       labels: atividade.map(item => formatarData(item.dia)),
       datasets: [
-        serie(t('serieAcessos'), 'acessos', '#8b5cf6'),
-        serie(t('usuariosAtivos'), 'usuarios_ativos', '#22c55e'),
-        serie(t('colunaRegistros'), 'registros', '#f97316')
+        serie(t('serieAcessos'), 'acessos', cores.azul),
+        serie(t('usuariosAtivos'), 'usuarios_ativos', cores.verde),
+        serie(t('colunaRegistros'), 'registros', cores.rosa)
       ]
     },
     options: {
       responsive: true,
+      animation: animacao,
       maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { position: 'bottom' } },
-      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+      plugins: { legend: legenda, tooltip: tooltipGraficos(cores) },
+      scales: {
+        x: { grid: { display: false }, border: { display: false }, ticks: { color: cores.texto, font: { weight: '700' } } },
+        y: { beginAtZero: true, grid: { color: cores.grade }, border: { display: false }, ticks: { precision: 0, color: cores.texto, font: { weight: '700' } } }
+      }
     }
   })
 }
@@ -937,7 +989,7 @@ async function carregarUsuariosAdmin() {
   const total = document.getElementById('admin-usuarios-total')
 
   if (!resultado.sucesso || !Array.isArray(resultado.dados)) {
-    tabela.innerHTML = `<tr><td colspan="8" class="px-4 py-6 text-center text-gray-500">${t('erroCarregarUsuarios')}</td></tr>`
+    tabela.innerHTML = `<tr><td colspan="8" class="admin-tabela-vazia">${t('erroCarregarUsuarios')}</td></tr>`
     paginacao.innerHTML = ''
     total.textContent = ''
     return
@@ -947,31 +999,31 @@ async function carregarUsuariosAdmin() {
   total.textContent = tf('usuariosEncontrados', { n: formatarNumero(resultado.total) })
 
   tabela.innerHTML = resultado.dados.length === 0
-    ? `<tr><td colspan="8" class="px-4 py-6 text-center text-gray-500">${t('nenhumUsuarioEncontrado')}</td></tr>`
+    ? `<tr><td colspan="8" class="admin-tabela-vazia">${t('nenhumUsuarioEncontrado')}</td></tr>`
     : resultado.dados.map(usuario => `
-    <tr class="border-t border-gray-100 align-middle">
-      <td class="px-4 py-3">
-        <div class="font-medium text-gray-800">${escaparHtml(usuario.nome)}</div>
-        <div class="text-xs text-gray-500">${escaparHtml(usuario.email)}</div>
+    <tr>
+      <td>
+        <div class="admin-usuario-nome">${escaparHtml(usuario.nome)}</div>
+        <div class="admin-usuario-email">${escaparHtml(usuario.email)}</div>
       </td>
-      <td class="px-4 py-3 text-gray-600 whitespace-nowrap">${formatarDataAdmin(usuario.data_cadastro)}</td>
-      <td class="px-4 py-3 text-gray-600 whitespace-nowrap">${usuario.ultimo_acesso ? formatarDataAdmin(usuario.ultimo_acesso, true) : t('nuncaAcessou')}</td>
-      <td class="px-4 py-3 text-gray-700 text-right">${formatarNumero(usuario.total_acessos)}</td>
-      <td class="px-4 py-3 text-gray-700 text-right">${formatarNumero(usuario.total_registros)}</td>
-      <td class="px-4 py-3 text-gray-700 whitespace-nowrap">${usuario.emocao_mais_usada ? `${escaparHtml(usuario.emocao_mais_usada)} ${escaparHtml(nomeHumor(usuario.emocao_mais_usada))}` : '—'}</td>
-      <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold ${usuario.ativo ? 'bg-mint-100 text-mint-700' : 'bg-red-100 text-red-700'}">${usuario.ativo ? t('ativo') : t('inativo')}</span></td>
-      <td class="px-4 py-3">
+      <td class="whitespace-nowrap">${formatarDataAdmin(usuario.data_cadastro)}</td>
+      <td class="whitespace-nowrap">${usuario.ultimo_acesso ? formatarDataAdmin(usuario.ultimo_acesso, true) : t('nuncaAcessou')}</td>
+      <td class="text-right">${formatarNumero(usuario.total_acessos)}</td>
+      <td class="text-right">${formatarNumero(usuario.total_registros)}</td>
+      <td class="whitespace-nowrap">${usuario.emocao_mais_usada ? `<span class="admin-humor">${imagemHumorAdmin(usuario.emocao_mais_usada)}${escaparHtml(nomeHumor(usuario.emocao_mais_usada))}</span>` : '—'}</td>
+      <td><span class="admin-status ${usuario.ativo ? 'admin-status-ativo' : 'admin-status-inativo'}">${usuario.ativo ? t('ativo') : t('inativo')}</span></td>
+      <td>
         <div class="flex gap-2">
-          <button type="button" data-usuario-id="${usuario.id}" data-usuario-ativo="${usuario.ativo ? 0 : 1}" class="toggle-usuario rounded-lg px-2 py-1 text-xs font-semibold bg-gray-900 text-white">${usuario.ativo ? t('desativar') : t('ativar')}</button>
-          <button type="button" data-usuario-id="${usuario.id}" data-usuario-nome="${escaparHtml(usuario.nome)}" class="delete-usuario rounded-lg px-2 py-1 text-xs font-semibold bg-red-100 text-red-700">${t('excluir')}</button>
+          <button type="button" data-usuario-id="${usuario.id}" data-usuario-ativo="${usuario.ativo ? 0 : 1}" class="toggle-usuario admin-acao admin-acao-status">${usuario.ativo ? t('desativar') : t('ativar')}</button>
+          <button type="button" data-usuario-id="${usuario.id}" data-usuario-nome="${escaparHtml(usuario.nome)}" class="delete-usuario admin-acao admin-acao-excluir">${t('excluir')}</button>
         </div>
       </td>
     </tr>`).join('')
 
-  const botaoPagina = (rotulo, destino, ativo) => `<button type="button" data-pagina="${destino}" ${ativo ? '' : 'disabled'} class="rounded-lg px-3 py-1.5 text-sm font-semibold bg-gray-100 text-gray-700 disabled:opacity-40">${rotulo}</button>`
+  const botaoPagina = (rotulo, destino, ativo) => `<button type="button" data-pagina="${destino}" ${ativo ? '' : 'disabled'} class="admin-pagina-btn">${rotulo}</button>`
   paginacao.innerHTML = resultado.totalPaginas > 1 ? `
     ${botaoPagina(t('anterior'), resultado.pagina - 1, resultado.pagina > 1)}
-    <span class="text-sm text-gray-500">${tf('paginaDe', { pagina: resultado.pagina, total: resultado.totalPaginas })}</span>
+    <span>${tf('paginaDe', { pagina: resultado.pagina, total: resultado.totalPaginas })}</span>
     ${botaoPagina(t('proxima'), resultado.pagina + 1, resultado.pagina < resultado.totalPaginas)}` : ''
 
   paginacao.querySelectorAll('button[data-pagina]').forEach(botao => {
@@ -1132,7 +1184,7 @@ async function atualizarManifestIdioma() {
 function traduzirInterface() {
   document.querySelectorAll('[data-i18n]').forEach(elemento => {
     const texto = t(elemento.dataset.i18n, elemento.textContent)
-    if (texto) elemento.textContent = texto
+    if (texto) elemento.textContent = semEmoji(texto)
   })
   document.querySelectorAll('[data-i18n-aria]').forEach(elemento => {
     const texto = t(elemento.dataset.i18nAria, elemento.getAttribute('aria-label') || '')
@@ -1180,8 +1232,10 @@ function aplicarConfiguracoes() {
   traduzirInterface()
 
   if (typeof Chart !== 'undefined') {
-    Chart.defaults.color = configuracoes.tema === 'escuro' ? '#d1d5db' : '#526c6e'
-    Chart.defaults.borderColor = configuracoes.tema === 'escuro' ? '#374151' : '#e5e7eb'
+    const cores = coresGraficos()
+    Chart.defaults.color = cores.texto
+    Chart.defaults.borderColor = cores.grade
+    Chart.defaults.font.family = "'Nunito', ui-rounded, 'Segoe UI', system-ui, sans-serif"
   }
 }
 
@@ -1345,7 +1399,7 @@ function informacaoHumor(emoji) {
 function atualizarVisualHumor(emoji, registrado = true) {
   const informacao = informacaoHumor(emoji)
   const card = document.getElementById('card-humor')
-  card.className = `mood-card ${classesHumor[emoji] || classesHumor['😐']} bg-white p-6 rounded-2xl shadow-md border cursor-pointer hover:shadow-lg transition`
+  card.className = `mood-card ${classesHumor[emoji] || classesHumor['😐']} dm-card dm-card-interativo`
   document.getElementById('humor-atual').textContent = emoji
   document.getElementById('humor-texto').textContent = registrado ? informacao.nome : t('humorPergunta')
   document.getElementById('humor-descricao').textContent = registrado
@@ -1405,7 +1459,7 @@ async function registrarSono() {
     qualidade
   })
   if (resultado.sucesso) {
-    exibirToast(`${editando ? t('sonoAtualizado') : t('sonoRegistrado')} 😴`)
+    exibirToast(editando ? t('sonoAtualizado') : t('sonoRegistrado'))
     fecharModal('modal-sono')
     registroSonoEditando = null
     document.getElementById('sono-texto').textContent = `${horas}h ${t('sonoResumo')}`
@@ -1433,7 +1487,7 @@ async function registrarEnergia() {
     nivel_energia: nivel
   })
   if (resultado.sucesso) {
-    exibirToast(`${editando ? t('energiaAtualizada') : t('energiaRegistrada')} ⚡`)
+    exibirToast(editando ? t('energiaAtualizada') : t('energiaRegistrada'))
     fecharModal('modal-energia')
     registroEnergiaEditando = null
     document.getElementById('energia-texto').textContent = `${nivel}/10 ${t('energiaResumo')}`
@@ -1472,7 +1526,7 @@ document.getElementById('form-lembrete').addEventListener('submit', async (e) =>
   })
 
   if (resultado.sucesso) {
-    exibirToast(`${t('lembreteCriado')} ⏰`)
+    exibirToast(t('lembreteCriado'))
     fecharModal('modal-lembrete')
     document.getElementById('lembrete-titulo').value = ''
     document.getElementById('lembrete-objeto').value = ''
@@ -1487,23 +1541,23 @@ async function carregarLembretes() {
   const container = document.getElementById('lista-lembretes')
 
   if (!resultado.sucesso || !Array.isArray(resultado.dados) || resultado.dados.length === 0) {
-    container.innerHTML = `<p class="text-gray-400 text-center py-4">${t('semLembretes')}</p>`
+    container.innerHTML = `<div class="dm-vazio"><img src="img/mimo/mimo.svg" alt="Mimo" class="dm-vazio-mimo" width="200" height="250"><p>${t('semLembretes')}</p></div>`
     return
   }
 
   container.innerHTML = resultado.dados.map(l => `
-    <div class="flex items-center gap-3 p-3 rounded-xl ${l.concluido ? 'bg-gray-50 opacity-60' : 'bg-mint-50'}">
-      <button onclick="alternarLembrete(${l.id})" class="w-6 h-6 rounded-full border-2 ${l.concluido ? 'bg-mint-500 border-mint-500' : 'border-mint-400'} flex items-center justify-center flex-shrink-0">
-        ${l.concluido ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : ''}
+    <div class="dm-lembrete ${l.concluido ? 'concluido' : ''}">
+      <button type="button" onclick="alternarLembrete(${l.id})" aria-pressed="${l.concluido ? 'true' : 'false'}" aria-label="${escaparHtml(l.titulo)}" class="dm-lembrete-check ${l.concluido ? 'marcado' : ''}">
+        ${l.concluido ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>' : ''}
       </button>
-      <span class="text-xl flex-shrink-0">${escaparHtml(l.icone)}</span>
+      <span class="dm-lembrete-icone">${imagemIcone(l.icone)}</span>
       <div class="flex-1 min-w-0">
-        <span class="${l.concluido ? 'line-through text-gray-400' : 'text-gray-700'} block">${escaparHtml(l.titulo)}</span>
-        ${l.objeto_deixado ? `<span class="text-xs text-gray-500">📦 ${t('objeto')}: ${escaparHtml(l.objeto_deixado)}</span>` : ''}
-        ${l.hora_deixado ? `<span class="text-xs text-gray-500">⏰ ${t('horario')}: ${escaparHtml(l.hora_deixado)}</span>` : ''}
+        <span class="dm-lembrete-texto">${escaparHtml(l.titulo)}</span>
+        ${l.objeto_deixado ? `<span class="dm-lembrete-detalhe">${imagemIcone('caixa', 'dm-ico-inline', true)} ${t('objeto')}: ${escaparHtml(l.objeto_deixado)}</span>` : ''}
+        ${l.hora_deixado ? `<span class="dm-lembrete-detalhe">${imagemIcone('relogio', 'dm-ico-inline', true)} ${t('horario')}: ${escaparHtml(l.hora_deixado)}</span>` : ''}
       </div>
-      <button onclick="removerLembrete(${l.id})" class="text-gray-400 hover:text-red-500 transition flex-shrink-0">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      <button type="button" onclick="removerLembrete(${l.id})" aria-label="${t('excluir')}: ${escaparHtml(l.titulo)}" class="dm-lembrete-remover">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
     </div>
   `).join('')
@@ -1514,25 +1568,25 @@ async function carregarTodosLembretes() {
   const container = document.getElementById('lista-lembretes-tela')
 
   if (!resultado.sucesso || !Array.isArray(resultado.dados) || resultado.dados.length === 0) {
-    container.innerHTML = `<p class="text-gray-400 text-center py-8">${t('nenhumLembrete')}</p>`
+    container.innerHTML = `<div class="dm-vazio"><img src="img/mimo/mimo.svg" alt="Mimo" class="dm-vazio-mimo" width="200" height="250"><p>${t('nenhumLembrete')}</p></div>`
     return
   }
 
   container.innerHTML = resultado.dados.map(l => `
-    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+    <div class="dm-lembrete dm-lembrete-tela ${l.concluido ? 'concluido' : ''}">
       <div class="flex items-center gap-3">
-        <button onclick="alternarLembrete(${l.id})" class="w-6 h-6 rounded-full border-2 ${l.concluido ? 'bg-mint-500 border-mint-500' : 'border-mint-400'} flex items-center justify-center flex-shrink-0">
-          ${l.concluido ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : ''}
+        <button type="button" onclick="alternarLembrete(${l.id})" aria-pressed="${l.concluido ? 'true' : 'false'}" aria-label="${escaparHtml(l.titulo)}" class="dm-lembrete-check ${l.concluido ? 'marcado' : ''}">
+          ${l.concluido ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>' : ''}
         </button>
-        <span class="text-2xl flex-shrink-0">${escaparHtml(l.icone)}</span>
+        <span class="dm-lembrete-icone dm-lembrete-icone-grande">${imagemIcone(l.icone)}</span>
       </div>
       <div class="flex-1 min-w-0">
-        <span class="${l.concluido ? 'line-through text-gray-400' : 'text-gray-700'} font-medium block">${escaparHtml(l.titulo)}</span>
-        ${l.objeto_deixado ? `<span class="text-sm text-gray-600 mt-1 block">📦 ${t('objeto')}: <strong>${escaparHtml(l.objeto_deixado)}</strong></span>` : ''}
-        ${l.hora_deixado ? `<span class="text-sm text-gray-600 block">⏰ ${t('horario')}: <strong>${escaparHtml(l.hora_deixado)}</strong></span>` : ''}
+        <span class="dm-lembrete-texto">${escaparHtml(l.titulo)}</span>
+        ${l.objeto_deixado ? `<span class="dm-lembrete-detalhe mt-1">${imagemIcone('caixa', 'dm-ico-inline', true)} ${t('objeto')}: <strong>${escaparHtml(l.objeto_deixado)}</strong></span>` : ''}
+        ${l.hora_deixado ? `<span class="dm-lembrete-detalhe">${imagemIcone('relogio', 'dm-ico-inline', true)} ${t('horario')}: <strong>${escaparHtml(l.hora_deixado)}</strong></span>` : ''}
       </div>
-      <button onclick="removerLembrete(${l.id})" class="text-gray-400 hover:text-red-500 transition p-2 flex-shrink-0">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+      <button type="button" onclick="removerLembrete(${l.id})" aria-label="${t('excluir')}: ${escaparHtml(l.titulo)}" class="dm-lembrete-remover">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
       </button>
     </div>
   `).join('')
@@ -1582,22 +1636,22 @@ async function carregarNotificacoes() {
   const lista = document.getElementById('lista-notificacoes')
   const resultado = await api('GET', `/lembretes/${usuarioAtual.id}`)
   if (!resultado.sucesso) {
-    lista.innerHTML = `<p class="text-sm text-red-500 py-3">${t('naoFoiPossivel')}</p>`
+    lista.innerHTML = `<p class="dm-texto-sm py-3" style="color: var(--perigo)">${t('naoFoiPossivel')}</p>`
     return
   }
 
   const pendentes = resultado.dados.filter(lembrete => !lembrete.concluido)
   if (pendentes.length === 0) {
-    lista.innerHTML = `<p class="text-sm text-gray-400 py-3">${t('tudoEmDia')}</p>`
+    lista.innerHTML = `<p class="dm-texto-fraco dm-texto-sm py-3">${t('tudoEmDia')}</p>`
     return
   }
 
   lista.innerHTML = pendentes.map(lembrete => `
     <button type="button" onclick="abrirLembretesAPartirDaNotificacao()" class="notification-item">
-      <span class="text-xl">${escaparHtml(lembrete.icone || '📌')}</span>
+      <span class="dm-icone-tile dm-tile-pessego">${imagemIcone(lembrete.icone || '📌', 'dm-ico', true)}</span>
       <span class="min-w-0 text-left">
-        <strong class="block truncate text-gray-700">${escaparHtml(lembrete.titulo)}</strong>
-        <small class="block text-gray-500">${lembrete.hora_deixado ? `${t('horario')}: ${escaparHtml(lembrete.hora_deixado)}` : t('lembretePendente')}</small>
+        <strong class="block truncate">${escaparHtml(lembrete.titulo)}</strong>
+        <small class="block">${lembrete.hora_deixado ? `${t('horario')}: ${escaparHtml(lembrete.hora_deixado)}` : t('lembretePendente')}</small>
       </span>
     </button>
   `).join('')
@@ -1646,25 +1700,25 @@ async function carregarSugestoes(renovar = false) {
     const resultado = await api('GET', `/sugestoes/${usuarioAtual.id}`)
 
     if (!resultado.sucesso || !Array.isArray(resultado.dados)) {
-      container.innerHTML = `<p class="text-gray-400 text-center py-4 col-span-3">${t('erroSugestoes')}</p>`
+      container.innerHTML = `<p class="dm-vazio col-span-full">${t('erroSugestoes')}</p>`
       return
     }
 
     if (resultado.dados.length === 0) {
-      container.innerHTML = `<p class="text-gray-400 text-center py-4 col-span-3">${t('carregarSugestoes')}</p>`
+      container.innerHTML = `<div class="dm-vazio col-span-full"><img src="img/mimo/mimo-neutro.svg" alt="Mimo" class="dm-vazio-mimo" width="200" height="184"><p>${t('carregarSugestoes')}</p></div>`
       return
     }
 
     container.innerHTML = resultado.dados.map(s => {
       const sugestao = traduzirSugestao(s)
       return `
-      <div class="suggestion-card bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+      <div class="suggestion-card">
         <div class="flex items-start justify-between gap-3">
-          <div class="suggestion-icon">${s.icone}</div>
-          <span class="text-xs font-bold uppercase tracking-wider text-mint-600">${t('paraVoce')}</span>
+          <div class="suggestion-icon">${imagemIcone(s.icone)}</div>
+          <span class="suggestion-tag">${t('paraVoce')}</span>
         </div>
-        <h4 class="font-semibold text-gray-800 mt-3">${sugestao.titulo}</h4>
-        <p class="text-sm text-gray-600 mt-1 leading-relaxed">${sugestao.descricao}</p>
+        <h4 class="suggestion-titulo">${sugestao.titulo}</h4>
+        <p class="suggestion-descricao">${sugestao.descricao}</p>
       </div>
     `
     }).join('')
@@ -1733,36 +1787,36 @@ function renderizarHistoricoBemEstar() {
 
   listaSono.innerHTML = historicoSono.length
     ? historicoSono.slice(0, 5).map(registro => `
-      <div class="flex items-center justify-between gap-3 bg-white/80 border border-violet-100 rounded-xl px-3 py-3">
-        <div class="flex items-center gap-3 min-w-0">
-          <span class="text-xl">🌙</span>
+      <div class="dm-item-historico">
+        <div class="dm-item-historico-info">
+          <span class="dm-lembrete-icone">${imagemIcone('lua', 'dm-ico', true)}</span>
           <div class="min-w-0">
-            <p class="font-semibold text-gray-700">${registro.horas_sono}h ${t('sonoResumo')}</p>
-            <p class="text-xs text-gray-400">${formatarData(registro.data_registro)} · ${t('qualidade')} ${registro.qualidade}/5</p>
+            <p class="dm-item-titulo">${registro.horas_sono}h ${t('sonoResumo')}</p>
+            <p class="dm-item-meta">${formatarData(registro.data_registro)} · ${t('qualidade')} ${registro.qualidade}/5</p>
           </div>
         </div>
-        <button type="button" onclick="editarSonoHistorico(${registro.id})" class="shrink-0 text-xs font-bold text-violet-600 hover:text-violet-800 px-2 py-1 rounded-lg hover:bg-violet-50">${t('editar')}</button>
+        <button type="button" onclick="editarSonoHistorico(${registro.id})" class="dm-item-editar">${t('editar')}</button>
       </div>
     `).join('')
-    : `<p class="text-sm text-gray-400 py-2">${t('nenhumSono')}</p>`
+    : `<p class="dm-vazio">${t('nenhumSono')}</p>`
 
   listaEnergia.innerHTML = historicoEnergia.length
     ? historicoEnergia.slice(0, 5).map(registro => `
-      <div class="flex items-center justify-between gap-3 bg-white/80 border border-orange-100 rounded-xl px-3 py-3">
-        <div class="flex items-center gap-3 min-w-0">
-          <span class="text-xl">⚡</span>
+      <div class="dm-item-historico">
+        <div class="dm-item-historico-info">
+          <span class="dm-lembrete-icone">${imagemIcone('raio', 'dm-ico', true)}</span>
           <div class="min-w-0 flex-1">
             <div class="flex items-center justify-between gap-3">
-              <p class="font-semibold text-gray-700">${registro.nivel_energia}/10</p>
-              <span class="text-xs text-gray-400">${formatarData(registro.data_registro)}</span>
+              <p class="dm-item-titulo">${registro.nivel_energia}/10</p>
+              <span class="dm-item-meta">${formatarData(registro.data_registro)}</span>
             </div>
-            <div class="h-1.5 w-full bg-orange-100 rounded-full overflow-hidden mt-1.5"><div class="h-full bg-orange-400 rounded-full" style="width: ${registro.nivel_energia * 10}%"></div></div>
+            <div class="dm-mini-barra" aria-hidden="true"><div style="width: ${registro.nivel_energia * 10}%"></div></div>
           </div>
         </div>
-        <button type="button" onclick="editarEnergiaHistorico(${registro.id})" class="shrink-0 text-xs font-bold text-orange-600 hover:text-orange-800 px-2 py-1 rounded-lg hover:bg-orange-50">${t('editar')}</button>
+        <button type="button" onclick="editarEnergiaHistorico(${registro.id})" class="dm-item-editar">${t('editar')}</button>
       </div>
     `).join('')
-    : `<p class="text-sm text-gray-400 py-2">${t('nenhumaEnergia')}</p>`
+    : `<p class="dm-vazio">${t('nenhumaEnergia')}</p>`
 }
 
 async function carregarHistoricoBemEstar() {
@@ -1785,7 +1839,9 @@ async function carregarGraficos() {
   ])
   if (!usuarioAtual || usuarioAtual.id !== usuarioId) return
   if (![dadosHumor, dadosSono, dadosEnergia].every(resultado => resultado.sucesso && Array.isArray(resultado.dados))) {
-    exibirToast(t('erroGraficos'), 'erro')
+    // Só avisa quando a pessoa está vendo os gráficos; a atualização em segundo plano
+    // (após registrar humor, sono ou energia) não deve exibir erro fora dessa tela.
+    if (!document.getElementById('tela-graficos').classList.contains('hidden')) exibirToast(t('erroGraficos'), 'erro')
     return
   }
 
@@ -1807,45 +1863,34 @@ async function carregarGraficos() {
 
   if (humorVazio && sonoVazio && energiaVazia) return
 
-  const isEscuro = configuracoes.tema === 'escuro'
-  const paleta = {
-    texto: isEscuro ? '#e5e7eb' : '#526c6e',
-    grid: isEscuro ? 'rgba(148, 163, 184, 0.18)' : 'rgba(148, 163, 184, 0.24)',
-    tooltipBg: isEscuro ? '#0f172a' : '#ffffff',
-    tooltipBorder: isEscuro ? 'rgba(148, 163, 184, 0.35)' : 'rgba(148, 163, 184, 0.2)',
-    tooltipTexto: isEscuro ? '#f8fafc' : '#1f2937'
-  }
+  const cores = coresGraficos()
+  const semMovimento = configuracoes.reduzirMovimento || window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const opcoesBase = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 700, easing: 'easeOutQuart' },
+    animation: semMovimento ? false : { duration: 600, easing: 'easeOutCubic' },
     interaction: { mode: 'nearest', intersect: false },
     plugins: {
       legend: { display: false },
-      tooltip: {
-        backgroundColor: paleta.tooltipBg,
-        titleColor: paleta.tooltipTexto,
-        bodyColor: paleta.tooltipTexto,
-        borderColor: paleta.tooltipBorder,
-        borderWidth: 1,
-        padding: 10,
-        displayColors: false,
-        cornerRadius: 10
-      }
+      tooltip: { ...tooltipGraficos(cores), displayColors: false }
     },
     scales: {
       x: {
         grid: { display: false, drawBorder: false },
         border: { display: false },
-        ticks: { color: paleta.texto, font: { weight: '600', size: 11 } }
+        ticks: { color: cores.texto, font: { weight: '700', size: 12 } }
       },
       y: {
-        grid: { color: paleta.grid, drawBorder: false },
+        grid: { color: cores.grade, drawBorder: false },
         border: { display: false },
-        ticks: { color: paleta.texto, font: { weight: '600', size: 11 } }
+        ticks: { color: cores.texto, font: { weight: '700', size: 12 } }
       }
     }
+  }
+  const transparente = (hex, alfa) => {
+    const n = parseInt(hex.slice(1), 16)
+    return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${alfa})`
   }
 
   const mapaEmoji = { '😊': 5, '😔': 2, '😰': 3, '😫': 2, '😤': 1, '😐': 3 }
@@ -1860,16 +1905,17 @@ async function carregarGraficos() {
         datasets: [{
           label: t('humor'),
           data: valoresHumor,
-          borderColor: '#34d399',
+          borderColor: cores.rosa,
           borderWidth: 3,
           pointRadius: 4,
           pointHoverRadius: 6,
-          pointBackgroundColor: '#10b981',
-          pointBorderColor: '#ecfdf5',
+          pointBackgroundColor: cores.rosa,
+          pointBorderColor: cores.superficie,
           pointBorderWidth: 2,
-          backgroundColor: 'rgba(52, 211, 153, 0.18)',
+          backgroundColor: transparente(cores.rosa, 0.14),
           fill: true,
-          tension: 0.38
+          tension: 0.38,
+          cubicInterpolationMode: 'monotone'
         }]
       },
       options: {
@@ -1897,11 +1943,13 @@ async function carregarGraficos() {
         datasets: [{
           label: t('horasSono'),
           data: valoresSono,
-          backgroundColor: ['#a78bfa', '#8b5cf6', '#7c3aed', '#a78bfa', '#c4b5fd', '#8b5cf6'],
+          backgroundColor: cores.azul,
+          hoverBackgroundColor: cores.azulClaro,
           borderRadius: 10,
           borderSkipped: false,
-          borderColor: 'rgba(139, 92, 246, 0.7)',
-          borderWidth: 1.5
+          borderColor: cores.azul,
+          borderWidth: 0,
+          maxBarThickness: 40
         }]
       },
       options: {
@@ -1929,16 +1977,17 @@ async function carregarGraficos() {
         datasets: [{
           label: t('energia'),
           data: valoresEnergia,
-          borderColor: '#fb923c',
+          borderColor: cores.verde,
           borderWidth: 3,
           pointRadius: 4,
           pointHoverRadius: 6,
-          pointBackgroundColor: '#f97316',
-          pointBorderColor: '#fff7ed',
+          pointBackgroundColor: cores.verde,
+          pointBorderColor: cores.superficie,
           pointBorderWidth: 2,
-          backgroundColor: 'rgba(251, 146, 60, 0.18)',
+          backgroundColor: transparente(cores.verde, 0.14),
           fill: true,
-          tension: 0.34
+          tension: 0.34,
+          cubicInterpolationMode: 'monotone'
         }]
       },
       options: {

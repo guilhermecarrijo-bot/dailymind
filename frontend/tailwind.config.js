@@ -1,13 +1,20 @@
 /** @type {import('tailwindcss').Config} */
+// Escalas derivadas da paleta oficial do DailyMind:
+// azul claro 185,205,241 · azul médio 102,117,181 · pêssego 235,198,180 · rosa 210,113,134
+// verde claro 202,211,132 · verde escuro 132,158,22 · lilás 211,192,204
 module.exports = {
   content: ['./index.html', './js/**/*.js'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Nunito', 'ui-rounded', 'Segoe UI', 'system-ui', 'sans-serif']
+      },
       colors: {
-        mint: { 50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a' },
-        lavender: { 50: '#faf5ff', 100: '#f3e8ff', 200: '#e9d5ff', 300: '#d8b4fe', 400: '#c084fc', 500: '#a855f7', 600: '#9333ea' },
-        peach: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316' },
-        sky: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' }
+        mint: { 50: '#F5F7E6', 100: '#ECF0CC', 200: '#DDE4A9', 300: '#CAD384', 400: '#A9BC45', 500: '#849E16', 600: '#667B10', 700: '#4E610C' },
+        lavender: { 50: '#F8F3F6', 100: '#F0E7ED', 200: '#E3D5DE', 300: '#D3C0CC', 400: '#B99AAE', 500: '#9A7690', 600: '#74546A' },
+        peach: { 50: '#FDF6F2', 100: '#FAEBE3', 200: '#F3D8CA', 300: '#EBC6B4', 400: '#DDA488', 500: '#C98060', 600: '#92533A' },
+        sky: { 50: '#F1F5FD', 100: '#E2EAFB', 200: '#CEDBF6', 300: '#B9CDF1', 400: '#8E9FD6', 500: '#6675B5', 600: '#4B5898' },
+        rosa: { 50: '#FBEEF1', 100: '#F6DCE2', 200: '#EDC3CD', 300: '#E39BAB', 400: '#D27186', 500: '#B9546C', 600: '#A13D57' }
       }
     }
   }

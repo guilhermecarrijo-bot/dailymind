@@ -3,52 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#22c55e">
+  <meta name="theme-color" content="#6675B5">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="DailyMind">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preload" href="fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
   <title data-i18n="documentTitulo">DailyMind - Cuide da sua mente</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="css/estilo.css">
-  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="css/tailwind.css?v=20261128-icones">
+  <link rel="stylesheet" href="css/estilo.css?v=20261128-icones">
 </head>
-<body class="font-sans antialiased bg-gradient-to-b from-mint-50 to-lavender-50 min-h-screen">
+<body class="antialiased min-h-screen">
 
   <!-- App Container -->
   <div id="app" class="min-h-screen">
-    
+
     <!-- Tela de Login/Cadastro -->
-    <div id="tela-auth" class="min-h-screen flex items-center justify-center p-4 lg:p-8">
-      <div class="grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+    <div id="tela-auth" class="dm-auth">
+      <div class="dm-auth-grade">
         <div class="wellness-panel">
-          <div class="wellness-badge">DailyMind</div>
-          <div class="flex items-center gap-3 mb-5">
-            <div class="text-4xl">🧠</div>
-            <h1 class="logo-marca text-4xl font-black bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</h1>
-          </div>
-          <h2 class="text-3xl font-black text-slate-800 leading-tight mb-4" data-i18n="heroTitulo">Seu espaço leve para perceber o que você precisa.</h2>
-          <p class="text-base text-slate-600 mb-6" data-i18n="heroDescricao">Acompanhe humor, sono, energia e lembretes com uma rotina mais gentil, clara e útil para o seu dia.</p>
+          <img src="img/logo-dailymind.png" alt="Daily Mind" class="dm-logo-img dm-logo-hero" width="960" height="241">
+          <h2 class="dm-hero-titulo" data-i18n="heroTitulo">Seu espaço leve para perceber o que você precisa.</h2>
+          <p class="dm-hero-texto" data-i18n="heroDescricao">Acompanhe humor, sono, energia e lembretes com uma rotina mais gentil, clara e útil para o seu dia.</p>
           <div class="feature-grid">
-            <article class="feature-card">
-              <span class="feature-emoji">😊</span>
+            <article class="feature-card feature-rosa">
+              <span class="feature-emoji"><img src="img/icones/rosto-feliz.svg" alt="Bem-estar" class="dm-ico" data-icone="rosto-feliz" width="48" height="48" aria-hidden="true"></span>
               <div>
                 <h3 data-i18n="humor">Humor</h3>
                 <p data-i18n="humorFeatureDescricao">Registre como você está em poucos segundos.</p>
               </div>
             </article>
-            <article class="feature-card">
-              <span class="feature-emoji">🌙</span>
+            <article class="feature-card feature-azul">
+              <span class="feature-emoji"><img src="img/icones/lua.svg" alt="Sono" class="dm-ico" data-icone="lua" width="48" height="48" aria-hidden="true"></span>
               <div>
                 <h3 data-i18n="sono">Sono</h3>
                 <p data-i18n="sonoFeatureDescricao">Veja seu descanso e o impacto no seu ritmo.</p>
               </div>
             </article>
-            <article class="feature-card">
-              <span class="feature-emoji">⚡</span>
+            <article class="feature-card feature-verde">
+              <span class="feature-emoji"><img src="img/icones/raio.svg" alt="Energia" class="dm-ico" data-icone="raio" width="48" height="48" aria-hidden="true"></span>
               <div>
                 <h3 data-i18n="energia">Energia</h3>
                 <p data-i18n="energiaFeatureDescricao">Monitore o nível de disposição ao longo do dia.</p>
@@ -71,69 +68,68 @@
           </div>
         </div>
 
-        <div class="w-full max-w-md mx-auto">
+        <div class="dm-auth-coluna">
           <!-- Logo -->
-          <div class="text-center mb-8 lg:hidden">
-            <div class="text-5xl mb-2">🧠</div>
-            <h1 class="logo-marca text-3xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</h1>
-            <p class="text-gray-500 mt-1" data-i18n="tagline">Cuide da sua mente, um dia de cada vez</p>
+          <div class="dm-auth-marca">
+            <img src="img/logo-dailymind.png" alt="Daily Mind" class="dm-logo-img" width="960" height="241">
+            <p class="dm-auth-tagline" data-i18n="tagline">Cuide da sua mente, um dia de cada vez</p>
           </div>
 
           <!-- Formulário de Login -->
-          <div id="form-login" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center" data-i18n="entrar">Entrar</h2>
-            <form class="space-y-4">
+          <div id="form-login" class="dm-card dm-auth-card">
+            <h2 class="dm-auth-titulo" data-i18n="entrar">Entrar</h2>
+            <form class="dm-form">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="email">E-mail</label>
-                <input type="email" id="login-email" required data-i18n-placeholder="email" placeholder="E-mail" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                <label for="login-email" class="dm-label" data-i18n="email">E-mail</label>
+                <input type="email" id="login-email" required autocomplete="email" data-i18n-placeholder="email" placeholder="E-mail" class="dm-input">
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="senha">Senha</label>
-                <input type="password" id="login-senha" required autocomplete="current-password" data-i18n-placeholder="senha" placeholder="Senha" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                <label for="login-senha" class="dm-label" data-i18n="senha">Senha</label>
+                <input type="password" id="login-senha" required autocomplete="current-password" data-i18n-placeholder="senha" placeholder="Senha" class="dm-input">
               </div>
-              <button type="submit" id="btn-login" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
+              <button type="submit" id="btn-login" class="dm-btn dm-btn-primario dm-btn-bloco">
                 <span data-i18n="entrar">Entrar</span>
               </button>
             </form>
-            <p class="text-center mt-6 text-gray-500">
+            <p class="dm-auth-alternar">
               <span data-i18n="naoTemConta">Não tem conta?</span>
-              <button onclick="mostrarCadastro()" class="text-mint-600 font-semibold hover:underline" data-i18n="criarConta">Criar conta</button>
+              <button type="button" onclick="mostrarCadastro()" class="dm-link" data-i18n="criarConta">Criar conta</button>
             </p>
           </div>
 
           <!-- Formulário de Cadastro -->
-          <div id="form-cadastro" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hidden">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center" data-i18n="criarConta">Criar Conta</h2>
-            <form class="space-y-4">
+          <div id="form-cadastro" class="dm-card dm-auth-card hidden">
+            <h2 class="dm-auth-titulo" data-i18n="criarConta">Criar Conta</h2>
+            <form class="dm-form">
               <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="nomeCompleto">Nome completo</label>
-                  <input type="text" id="cadastro-nome" required minlength="3" data-i18n-placeholder="nomeCompleto" placeholder="Nome completo" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                <label for="cadastro-nome" class="dm-label" data-i18n="nomeCompleto">Nome completo</label>
+                <input type="text" id="cadastro-nome" required minlength="3" autocomplete="name" data-i18n-placeholder="nomeCompleto" placeholder="Nome completo" class="dm-input">
               </div>
               <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="email">E-mail</label>
-                  <input type="email" id="cadastro-email" required data-i18n-placeholder="email" placeholder="E-mail" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                <label for="cadastro-email" class="dm-label" data-i18n="email">E-mail</label>
+                <input type="email" id="cadastro-email" required autocomplete="email" data-i18n-placeholder="email" placeholder="E-mail" class="dm-input">
               </div>
               <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="senha">Senha</label>
-                  <input type="password" id="cadastro-senha" required minlength="8" maxlength="128" autocomplete="new-password" data-i18n-placeholder="senha" placeholder="Senha" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                <label for="cadastro-senha" class="dm-label" data-i18n="senha">Senha</label>
+                <input type="password" id="cadastro-senha" required minlength="8" maxlength="128" autocomplete="new-password" data-i18n-placeholder="senha" placeholder="Senha" class="dm-input">
               </div>
-              <div class="grid grid-cols-2 gap-4">
+              <div class="dm-form-duas-colunas">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="idadeOpcional">Idade (opcional)</label>
-                  <input type="number" id="cadastro-idade" min="1" max="150" placeholder="Idade" data-i18n-placeholder="idadePlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                  <label for="cadastro-idade" class="dm-label" data-i18n="idadeOpcional">Idade (opcional)</label>
+                  <input type="number" id="cadastro-idade" min="1" max="150" placeholder="Idade" data-i18n-placeholder="idadePlaceholder" class="dm-input">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="ocupacaoOpcional">Ocupação (opcional)</label>
-                  <input type="text" id="cadastro-ocupacao" placeholder="Ex: Estudante" data-i18n-placeholder="ocupacaoPlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+                  <label for="cadastro-ocupacao" class="dm-label" data-i18n="ocupacaoOpcional">Ocupação (opcional)</label>
+                  <input type="text" id="cadastro-ocupacao" placeholder="Ex: Estudante" data-i18n-placeholder="ocupacaoPlaceholder" class="dm-input">
                 </div>
               </div>
-              <button type="submit" id="btn-cadastro" class="w-full bg-gradient-to-r from-mint-500 to-lavender-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md">
+              <button type="submit" id="btn-cadastro" class="dm-btn dm-btn-primario dm-btn-bloco">
                 <span data-i18n="criarMinhaConta">Criar minha conta</span>
               </button>
             </form>
-            <p class="text-center mt-6 text-gray-500">
+            <p class="dm-auth-alternar">
               <span data-i18n="jaTemConta">Já tem conta?</span>
-              <button onclick="mostrarLogin()" class="text-mint-600 font-semibold hover:underline" data-i18n="entrar">Entrar</button>
+              <button type="button" onclick="mostrarLogin()" class="dm-link" data-i18n="entrar">Entrar</button>
             </p>
           </div>
         </div>
@@ -143,35 +139,32 @@
     <!-- Dashboard Principal -->
     <div id="tela-dashboard" class="hidden min-h-screen">
       <!-- Navbar -->
-      <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-mint-100">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">🧠</span>
-            <span class="logo-marca text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span>
-          </div>
-          <div class="flex items-center gap-4">
+      <header class="dm-header">
+        <div class="dm-header-conteudo">
+          <img src="img/logo-dailymind.png" alt="Daily Mind" class="dm-logo-img dm-logo-header" width="960" height="241">
+          <div class="dm-header-acoes">
             <!-- Badge de notificação -->
-            <button id="btn-notificacoes" type="button" aria-label="Abrir notificações" data-i18n-aria="abrirNotificacoes" aria-expanded="false" class="relative p-2 text-gray-600 hover:text-mint-600 transition">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button id="btn-notificacoes" type="button" aria-label="Abrir notificações" data-i18n-aria="abrirNotificacoes" aria-expanded="false" aria-controls="painel-notificacoes" class="dm-icon-btn">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
               </svg>
-              <span id="badge-notificacoes" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center hidden">0</span>
+              <span id="badge-notificacoes" class="dm-badge-contador hidden">0</span>
             </button>
             <div id="painel-notificacoes" class="notification-panel hidden" role="status" aria-live="polite">
-              <div class="flex items-center justify-between gap-4 mb-3">
-                <h2 class="font-bold text-gray-800" data-i18n="notificacoes">Notificações</h2>
-                <button type="button" onclick="fecharNotificacoes()" class="text-gray-400 hover:text-gray-700 text-xl" aria-label="Fechar notificações" data-i18n-aria="fecharNotificacoes">&times;</button>
+              <div class="notification-panel-topo">
+                <h2 class="dm-titulo-secao" data-i18n="notificacoes">Notificações</h2>
+                <button type="button" onclick="fecharNotificacoes()" class="dm-icon-btn dm-icon-btn-sm" aria-label="Fechar notificações" data-i18n-aria="fecharNotificacoes"><span aria-hidden="true">&times;</span></button>
               </div>
               <div id="lista-notificacoes">
-                <p class="text-sm text-gray-400 py-3" data-i18n="nenhumaNotificacao">Nenhuma notificação pendente.</p>
+                <p class="dm-texto-fraco dm-texto-sm py-3" data-i18n="nenhumaNotificacao">Nenhuma notificação pendente.</p>
               </div>
             </div>
-            <button id="nav-admin" type="button" onclick="mostrarTela('admin')" class="hidden items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-700 transition hover:bg-violet-100">
-              <span>⚙️</span>
+            <button id="nav-admin" type="button" onclick="mostrarTela('admin')" class="dm-chip-admin hidden">
+              <img src="img/icones/engrenagem.svg" alt="Administração" class="dm-ico-inline" data-icone="engrenagem" width="48" height="48" aria-hidden="true">
               <span data-i18n="painelAdmin">Painel Admin</span>
             </button>
             <!-- Perfil -->
-            <button id="btn-perfil" class="w-10 h-10 bg-gradient-to-r from-mint-400 to-lavender-400 rounded-full flex items-center justify-center text-white font-bold" onclick="mostrarPerfil()">
+            <button id="btn-perfil" type="button" class="dm-avatar-btn" onclick="mostrarPerfil()" aria-label="Perfil" data-i18n-aria="navPerfil">
               <span id="inicial-usuario">U</span>
             </button>
           </div>
@@ -179,126 +172,136 @@
       </header>
 
       <!-- Conteúdo Principal -->
-      <main class="pt-20 pb-24 px-4 max-w-6xl mx-auto">
-        
+      <main class="dm-pagina">
+
         <!-- Saudação -->
-        <div class="mb-8">
-          <h1 class="text-2xl font-bold text-gray-800"><span data-i18n="saudacao">Olá,</span> <span id="nome-usuario" data-i18n="usuarioPadrao">Usuário</span>! ☀️</h1>
-          <p class="text-gray-500" data-i18n="comoVoceEsta">Como você está hoje?</p>
-        </div>
+        <section class="dm-boas-vindas">
+          <div class="dm-boas-vindas-texto">
+            <h1 class="dm-titulo-pagina"><span data-i18n="saudacao">Olá,</span> <span id="nome-usuario" data-i18n="usuarioPadrao">Usuário</span>! <img src="img/icones/sol.svg" alt="Sol" class="dm-ico-inline dm-ico-titulo" data-icone="sol" width="48" height="48" aria-hidden="true"></h1>
+            <p class="dm-subtitulo" data-i18n="comoVoceEsta">Como você está hoje?</p>
+          </div>
+          <img src="img/mimo/mimo.svg" alt="Mimo" class="dm-boas-vindas-mimo" width="200" height="250">
+        </section>
 
         <!-- Cards de Registro Rápido -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="dm-grade-registros">
           <!-- Humor -->
-          <div id="card-humor" class="mood-card mood-neutro bg-white p-6 rounded-2xl shadow-md border cursor-pointer hover:shadow-lg transition" onclick="abrirModalHumor()">
-            <div class="flex items-start justify-between gap-4 mb-5">
+          <div id="card-humor" class="mood-card mood-neutro dm-card dm-card-interativo" role="button" tabindex="0" onclick="abrirModalHumor()">
+            <div class="mood-card-topo">
               <div>
-                <div class="flex items-center gap-2">
-                  <span class="text-sm font-bold uppercase tracking-widest text-gray-500" data-i18n="humorHoje">Humor de hoje</span>
+                <div class="mood-card-rotulos">
+                  <span class="dm-eyebrow dm-eyebrow-rosa" data-i18n="humorHoje">Humor de hoje</span>
                   <span id="humor-status" class="mood-status" data-i18n="aindaNaoRegistrado">Ainda não registrado</span>
                 </div>
-                <p class="text-xs text-gray-500 mt-2" data-i18n="humorCheckin">Um check-in rápido para se escutar.</p>
+                <p class="dm-texto-fraco dm-texto-xs mt-2" data-i18n="humorCheckin">Um check-in rápido para se escutar.</p>
               </div>
-              <div id="humor-bolha" class="mood-bubble"><span id="humor-atual">😊</span></div>
+              <div id="humor-bolha" class="mood-bubble">
+                <span id="humor-atual" class="sr-only" aria-hidden="true">😊</span>
+                <img src="img/mimo/mimo-feliz.svg" alt="Mimo" class="mood-face mood-face-feliz" width="200" height="184">
+                <img src="img/mimo/mimo-triste.svg" alt="Mimo" class="mood-face mood-face-triste" width="200" height="184">
+                <img src="img/mimo/mimo-ansioso.svg" alt="Mimo" class="mood-face mood-face-ansioso" width="200" height="184">
+                <img src="img/mimo/mimo-cansado.svg" alt="Mimo" class="mood-face mood-face-cansado" width="200" height="184">
+                <img src="img/mimo/mimo-irritado.svg" alt="Mimo" class="mood-face mood-face-irritado" width="200" height="184">
+                <img src="img/mimo/mimo-neutro.svg" alt="Mimo" class="mood-face mood-face-neutro" width="200" height="184">
+              </div>
             </div>
-            <p class="text-xl font-bold text-gray-800" id="humor-texto" data-i18n="humorPergunta">Como você está?</p>
-            <p class="text-sm text-gray-500 mt-1" id="humor-descricao" data-i18n="humorEscolha">Escolha uma opção para registrar seu momento.</p>
-            <div class="flex items-center justify-between gap-3 mt-5 pt-4 border-t border-black/5">
-              <span class="text-xs font-semibold text-gray-400" data-i18n="humorMuda">Seu registro pode mudar ao longo do dia.</span>
-              <span class="text-sm font-bold text-mint-600" data-i18n="atualizar">Atualizar →</span>
+            <p class="mood-card-titulo" id="humor-texto" data-i18n="humorPergunta">Como você está?</p>
+            <p class="dm-texto-suave dm-texto-sm mt-1" id="humor-descricao" data-i18n="humorEscolha">Escolha uma opção para registrar seu momento.</p>
+            <div class="mood-card-rodape">
+              <span class="dm-texto-fraco dm-texto-xs" data-i18n="humorMuda">Seu registro pode mudar ao longo do dia.</span>
+              <span class="dm-acao-texto" data-i18n="atualizar">Atualizar →</span>
             </div>
           </div>
 
           <!-- Sono -->
-          <div class="bg-white p-6 rounded-2xl shadow-md border border-lavender-100 cursor-pointer hover:shadow-lg transition" onclick="abrirModalSono()">
-            <div class="flex items-start justify-between mb-4">
+          <div class="dm-card dm-card-interativo dm-card-registro dm-card-sono" role="button" tabindex="0" onclick="abrirModalSono()">
+            <div class="dm-card-registro-topo">
               <div>
-                <span class="text-sm font-medium text-gray-500" data-i18n="sono">Sono</span>
-                <p class="text-xs text-lavender-600 mt-1" data-i18n="recupereRitmo">Recupere seu ritmo</p>
+                <span class="dm-eyebrow dm-eyebrow-azul" data-i18n="sono">Sono</span>
+                <p class="dm-texto-suave dm-texto-xs mt-1" data-i18n="recupereRitmo">Recupere seu ritmo</p>
               </div>
-              <span class="text-3xl">😴</span>
+              <span class="dm-icone-tile dm-tile-azul"><img src="img/icones/dormir.svg" alt="Descanso" class="dm-ico" data-icone="dormir" width="48" height="48" aria-hidden="true"></span>
             </div>
-            <div class="flex items-end justify-between gap-3">
-              <p class="text-gray-700 font-semibold" id="sono-texto" data-i18n="registrar">Toque para registrar</p>
-              <span class="text-xs text-gray-400" data-i18n="editar">Editar</span>
+            <div class="dm-card-registro-valor">
+              <p class="dm-valor-texto" id="sono-texto" data-i18n="registrar">Toque para registrar</p>
+              <span class="dm-acao-texto" data-i18n="editar">Editar</span>
             </div>
-            <div class="mt-3">
-              <div class="h-2 w-full bg-violet-100 rounded-full overflow-hidden">
-                <div id="sono-bar" class="h-full bg-violet-500 rounded-full" style="width: 0%"></div>
-              </div>
+            <div class="dm-barra dm-barra-azul">
+              <div id="sono-bar" class="dm-barra-preenchimento" style="width: 0%"></div>
             </div>
           </div>
 
           <!-- Energia -->
-          <div class="bg-white p-6 rounded-2xl shadow-md border border-peach-100 cursor-pointer hover:shadow-lg transition" onclick="abrirModalEnergia()">
-            <div class="flex items-start justify-between mb-4">
+          <div class="dm-card dm-card-interativo dm-card-registro dm-card-energia" role="button" tabindex="0" onclick="abrirModalEnergia()">
+            <div class="dm-card-registro-topo">
               <div>
-                <span class="text-sm font-medium text-gray-500" data-i18n="energia">Energia</span>
-                <p class="text-xs text-orange-600 mt-1" data-i18n="combustivelHoje">Seu combustível de hoje</p>
+                <span class="dm-eyebrow dm-eyebrow-verde" data-i18n="energia">Energia</span>
+                <p class="dm-texto-suave dm-texto-xs mt-1" data-i18n="combustivelHoje">Seu combustível de hoje</p>
               </div>
-              <span class="text-3xl">⚡</span>
+              <span class="dm-icone-tile dm-tile-verde"><img src="img/icones/raio.svg" alt="Energia" class="dm-ico" data-icone="raio" width="48" height="48" aria-hidden="true"></span>
             </div>
-            <div class="flex items-end justify-between gap-3">
-              <p class="text-gray-700 font-semibold" id="energia-texto" data-i18n="registrar">Toque para registrar</p>
-              <span class="text-xs text-gray-400" data-i18n="editar">Editar</span>
+            <div class="dm-card-registro-valor">
+              <p class="dm-valor-texto" id="energia-texto" data-i18n="registrar">Toque para registrar</p>
+              <span class="dm-acao-texto" data-i18n="editar">Editar</span>
             </div>
-            <div class="mt-3">
-              <div class="h-2 w-full bg-orange-100 rounded-full overflow-hidden">
-                <div id="energia-bar" class="h-full bg-orange-500 rounded-full" style="width: 0%"></div>
-              </div>
+            <div class="dm-barra dm-barra-verde">
+              <div id="energia-bar" class="dm-barra-preenchimento" style="width: 0%"></div>
             </div>
           </div>
         </div>
 
         <!-- Histórico de bem-estar -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
-          <div class="bg-gradient-to-br from-violet-50 to-white p-6 rounded-2xl border border-violet-100 shadow-sm">
-            <div class="flex items-start justify-between gap-4 mb-5">
+        <section class="dm-grade-historico">
+          <div class="dm-card dm-card-historico dm-historico-azul">
+            <div class="dm-card-cabecalho">
               <div>
-                <p class="text-xs font-bold uppercase tracking-widest text-violet-500" data-i18n="ritmoDescanso">Ritmo de descanso</p>
-                <h2 class="text-xl font-bold text-gray-800 mt-1" data-i18n="historicoSono">Histórico de sono</h2>
-                <p class="text-sm text-gray-500 mt-1" data-i18n="ajustarRegistro">Ajuste qualquer registro quando precisar.</p>
+                <p class="dm-eyebrow dm-eyebrow-azul" data-i18n="ritmoDescanso">Ritmo de descanso</p>
+                <h2 class="dm-titulo-secao mt-1" data-i18n="historicoSono">Histórico de sono</h2>
+                <p class="dm-texto-suave dm-texto-sm mt-1" data-i18n="ajustarRegistro">Ajuste qualquer registro quando precisar.</p>
               </div>
-              <span class="text-3xl">🌙</span>
+              <span class="dm-icone-tile dm-tile-azul"><img src="img/icones/lua.svg" alt="Sono" class="dm-ico" data-icone="lua" width="48" height="48" aria-hidden="true"></span>
             </div>
-            <div id="historico-sono" class="space-y-2">
-              <p class="text-sm text-gray-400" data-i18n="carregando">Carregando registros...</p>
+            <div id="historico-sono" class="dm-lista">
+              <p class="dm-texto-fraco dm-texto-sm" data-i18n="carregando">Carregando registros...</p>
             </div>
           </div>
-          <div class="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border border-orange-100 shadow-sm">
-            <div class="flex items-start justify-between gap-4 mb-5">
+          <div class="dm-card dm-card-historico dm-historico-verde">
+            <div class="dm-card-cabecalho">
               <div>
-                <p class="text-xs font-bold uppercase tracking-widest text-orange-500" data-i18n="disposicaoDiaria">Disposição diária</p>
-                <h2 class="text-xl font-bold text-gray-800 mt-1" data-i18n="historicoEnergia">Histórico de energia</h2>
-                <p class="text-sm text-gray-500 mt-1" data-i18n="verEvolucao">Veja a evolução e altere o que foi anotado.</p>
+                <p class="dm-eyebrow dm-eyebrow-verde" data-i18n="disposicaoDiaria">Disposição diária</p>
+                <h2 class="dm-titulo-secao mt-1" data-i18n="historicoEnergia">Histórico de energia</h2>
+                <p class="dm-texto-suave dm-texto-sm mt-1" data-i18n="verEvolucao">Veja a evolução e altere o que foi anotado.</p>
               </div>
-              <span class="text-3xl">⚡</span>
+              <span class="dm-icone-tile dm-tile-verde"><img src="img/icones/raio.svg" alt="Energia" class="dm-ico" data-icone="raio" width="48" height="48" aria-hidden="true"></span>
             </div>
-            <div id="historico-energia" class="space-y-2">
-              <p class="text-sm text-gray-400" data-i18n="carregando">Carregando registros...</p>
+            <div id="historico-energia" class="dm-lista">
+              <p class="dm-texto-fraco dm-texto-sm" data-i18n="carregando">Carregando registros...</p>
             </div>
           </div>
         </section>
 
         <!-- Lembretes do Dia -->
-        <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 mb-8">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold text-gray-800" data-i18n="lembretesHoje">Lembretes de hoje</h2>
-            <button onclick="abrirModalLembrete()" class="text-mint-600 hover:text-mint-700 font-semibold text-sm" data-i18n="novo">+ Novo</button>
+        <section class="dm-card dm-secao">
+          <div class="dm-card-cabecalho items-center">
+            <h2 class="dm-titulo-secao" data-i18n="lembretesHoje">Lembretes de hoje</h2>
+            <button type="button" onclick="abrirModalLembrete()" class="dm-btn dm-btn-secundario dm-btn-sm" data-i18n="novo">+ Novo</button>
           </div>
-          <div id="lista-lembretes" class="space-y-3">
-            <p class="text-gray-400 text-center py-4" data-i18n="semLembretes">Nenhum lembrete ainda</p>
+          <div id="lista-lembretes" class="dm-lista">
+            <p class="dm-vazio" data-i18n="semLembretes">Nenhum lembrete ainda</p>
           </div>
-        </div>
+        </section>
 
         <!-- Sugestões de Autocuidado -->
-        <div class="suggestions-panel bg-gradient-to-br from-mint-50 to-lavender-50 p-6 rounded-2xl border border-mint-100 mb-8">
-          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
-            <div>
-              <h2 class="text-lg font-bold text-gray-800" data-i18n="sugestoes">💡 Sugestões para você</h2>
-              <p class="text-sm text-gray-500 mt-1" data-i18n="sugestoesDescricao">Ideias pequenas para cuidar de você no seu ritmo.</p>
+        <section class="suggestions-panel dm-card dm-secao">
+          <div class="suggestions-topo">
+            <div class="suggestions-titulo">
+              <img src="img/mimo/mimo-piscando.svg" alt="Mimo" class="suggestions-mimo" width="200" height="250">
+              <div>
+                <h2 class="dm-titulo-secao dm-titulo-com-icone"><img src="img/icones/lampada.svg" alt="Ideia" class="dm-ico-inline" data-icone="lampada" width="48" height="48" aria-hidden="true"><span data-i18n="sugestoes">Sugestões para você</span></h2>
+                <p class="dm-texto-suave dm-texto-sm mt-1" data-i18n="sugestoesDescricao">Ideias pequenas para cuidar de você no seu ritmo.</p>
+              </div>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="suggestions-acoes">
               <span id="sugestoes-contador" class="suggestions-count" aria-live="polite">2:00</span>
               <button id="btn-atualizar-sugestoes" type="button" class="suggestions-refresh" aria-label="Atualizar sugestões" data-i18n-aria="atualizarSugestoes" data-i18n-title="atualizarSugestoes" title="Atualizar sugestões">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M5.05 15A7 7 0 0017.5 17.5L20 15M4 9a7 7 0 0112.45-2.5L20 9"></path></svg>
@@ -306,85 +309,82 @@
               </button>
             </div>
           </div>
-          <div id="lista-sugestoes" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <p class="text-gray-400 text-center py-4 col-span-3" data-i18n="carregarSugestoes">Registre seu humor para ver sugestões</p>
+          <div id="lista-sugestoes" class="dm-grade-sugestoes">
+            <p class="dm-vazio col-span-full" data-i18n="carregarSugestoes">Registre seu humor para ver sugestões</p>
           </div>
-        </div>
+        </section>
 
       </main>
 
       <!-- Menu Inferior -->
-      <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 z-50">
-        <div class="max-w-6xl mx-auto flex justify-around py-3">
-          <button onclick="mostrarTela('dashboard')" class="flex flex-col items-center text-mint-600">
+      <nav class="dm-nav">
+        <div class="dm-nav-conteudo">
+          <button type="button" onclick="mostrarTela('dashboard')" class="dm-nav-item" aria-current="page">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-            <span class="text-xs mt-1" data-i18n="navInicio">Início</span>
+            <span data-i18n="navInicio">Início</span>
           </button>
-          <button onclick="mostrarTela('graficos')" class="flex flex-col items-center text-gray-400 hover:text-lavender-600 transition">
+          <button type="button" onclick="mostrarTela('graficos')" class="dm-nav-item">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-            <span class="text-xs mt-1" data-i18n="navGraficos">Gráficos</span>
+            <span data-i18n="navGraficos">Gráficos</span>
           </button>
-          <button onclick="mostrarTela('lembretes')" class="flex flex-col items-center text-gray-400 hover:text-peach-600 transition">
+          <button type="button" onclick="mostrarTela('lembretes')" class="dm-nav-item">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="text-xs mt-1" data-i18n="navLembretes">Lembretes</span>
+            <span data-i18n="navLembretes">Lembretes</span>
           </button>
-          <button onclick="mostrarTela('perfil')" class="flex flex-col items-center text-gray-400 hover:text-sky-600 transition">
+          <button type="button" onclick="mostrarTela('perfil')" class="dm-nav-item">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-            <span class="text-xs mt-1" data-i18n="navPerfil">Perfil</span>
+            <span data-i18n="navPerfil">Perfil</span>
           </button>
-          <button onclick="mostrarTela('configuracoes')" aria-label="Configurações" data-i18n-aria="navConfiguracoes" class="flex flex-col items-center text-gray-400 hover:text-gray-700 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"></path></svg>
-            <span class="text-xs mt-1" data-i18n="navConfiguracoes">Configurações</span>
+          <button type="button" onclick="mostrarTela('configuracoes')" aria-label="Configurações" data-i18n-aria="navConfiguracoes" class="dm-nav-item">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span data-i18n="navConfiguracoes">Configurações</span>
           </button>
         </div>
       </nav>
     </div>
 
     <!-- Tela de Administração -->
-    <div id="tela-admin" class="hidden min-h-screen pt-20 pb-24 px-4 max-w-6xl mx-auto">
-      <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-mint-100">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <button onclick="mostrarTela('dashboard')" class="flex items-center gap-2 text-gray-600 hover:text-mint-600 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div id="tela-admin" class="hidden dm-pagina dm-pagina-admin">
+      <header class="dm-header">
+        <div class="dm-header-conteudo">
+          <button type="button" onclick="mostrarTela('dashboard')" class="dm-voltar">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="font-semibold" data-i18n="voltar">Voltar</span>
+            <span data-i18n="voltar">Voltar</span>
           </button>
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">🧠</span>
-            <span class="logo-marca text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span>
-          </div>
-          <button type="button" onclick="fazerLogout()" class="rounded-lg px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 transition" data-i18n="sair">Sair da conta</button>
+          <img src="img/logo-dailymind.png" alt="Daily Mind" class="dm-logo-img dm-logo-header" width="960" height="241">
+          <button type="button" onclick="fazerLogout()" class="dm-btn dm-btn-perigo dm-btn-sm" data-i18n="sair">Sair da conta</button>
         </div>
       </header>
 
-      <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div class="admin-topo">
         <div>
-          <p class="text-xs font-bold uppercase tracking-widest text-violet-600" data-i18n="painel">Painel</p>
-          <h1 class="text-3xl font-bold text-gray-800 mt-1" data-i18n="areaAdministrativa">Área administrativa</h1>
-          <p class="text-sm text-gray-500 mt-1" data-i18n="adminSubtitulo">Acompanhe quem usa o DailyMind e como as pessoas estão se sentindo.</p>
+          <p class="dm-eyebrow dm-eyebrow-azul" data-i18n="painel">Painel</p>
+          <h1 class="dm-titulo-pagina mt-1" data-i18n="areaAdministrativa">Área administrativa</h1>
+          <p class="dm-texto-suave dm-texto-sm mt-1" data-i18n="adminSubtitulo">Acompanhe quem usa o DailyMind e como as pessoas estão se sentindo.</p>
         </div>
-        <div class="flex flex-col sm:flex-row sm:items-end gap-3">
-          <label class="flex flex-col gap-1 text-xs font-semibold text-gray-500">
+        <div class="admin-filtros">
+          <label class="admin-campo">
             <span data-i18n="dataInicial">Data inicial</span>
-            <input id="admin-data-inicio" type="date" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white">
+            <input id="admin-data-inicio" type="date" class="dm-input dm-input-sm">
           </label>
-          <label class="flex flex-col gap-1 text-xs font-semibold text-gray-500">
+          <label class="admin-campo">
             <span data-i18n="dataFinal">Data final</span>
-            <input id="admin-data-fim" type="date" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white">
+            <input id="admin-data-fim" type="date" class="dm-input dm-input-sm">
           </label>
-          <button id="btn-admin-filtrar" type="button" class="bg-violet-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-violet-700 transition" data-i18n="filtrar">Filtrar</button>
-          <button id="btn-exportar-csv" type="button" class="bg-mint-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-mint-600 transition" data-i18n="exportarCsv">Exportar CSV</button>
+          <button id="btn-admin-filtrar" type="button" class="dm-btn dm-btn-primario dm-btn-sm" data-i18n="filtrar">Filtrar</button>
+          <button id="btn-exportar-csv" type="button" class="dm-btn dm-btn-secundario dm-btn-sm" data-i18n="exportarCsv">Exportar CSV</button>
         </div>
       </div>
 
-      <div id="admin-metricas" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-6"></div>
+      <div id="admin-metricas" class="admin-metricas"></div>
 
-      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+      <div class="admin-grade-graficos">
         <div class="chart-panel">
           <div class="chart-header">
-            <h3 class="font-semibold text-gray-700" data-i18n="distribuicaoHumor">Distribuição de humor</h3>
-            <span class="chart-pill" data-i18n="humor">Humor</span>
+            <h3 class="chart-titulo" data-i18n="distribuicaoHumor">Distribuição de humor</h3>
+            <span class="chart-pill chart-pill-rosa" data-i18n="humor">Humor</span>
           </div>
           <div class="chart-area" style="height: 260px;">
             <canvas id="grafico-admin-humor" height="220"></canvas>
@@ -393,8 +393,8 @@
 
         <div class="chart-panel">
           <div class="chart-header">
-            <h3 class="font-semibold text-gray-700" data-i18n="cadastrosPorMes">Cadastros por mês</h3>
-            <span class="chart-pill purple" data-i18n="usuarios">Usuários</span>
+            <h3 class="chart-titulo" data-i18n="cadastrosPorMes">Cadastros por mês</h3>
+            <span class="chart-pill chart-pill-azul" data-i18n="usuarios">Usuários</span>
           </div>
           <div class="chart-area" style="height: 260px;">
             <canvas id="grafico-admin-usuarios" height="220"></canvas>
@@ -405,10 +405,10 @@
       <div class="chart-panel mb-6">
         <div class="chart-header">
           <div>
-            <h3 class="font-semibold text-gray-700" data-i18n="atividadeDiaria">Atividade diária</h3>
-            <p class="text-xs text-gray-500" data-i18n="atividadeDescricao">Acessos, pessoas ativas e registros feitos por dia.</p>
+            <h3 class="chart-titulo" data-i18n="atividadeDiaria">Atividade diária</h3>
+            <p class="dm-texto-fraco dm-texto-xs" data-i18n="atividadeDescricao">Acessos, pessoas ativas e registros feitos por dia.</p>
           </div>
-          <span class="chart-pill orange" data-i18n="engajamento">Engajamento</span>
+          <span class="chart-pill chart-pill-verde" data-i18n="engajamento">Engajamento</span>
         </div>
         <div class="chart-area" style="height: 280px;">
           <canvas id="grafico-admin-atividade" height="240"></canvas>
@@ -416,62 +416,59 @@
       </div>
 
       <section class="admin-section">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+        <div class="admin-section-topo">
           <div>
-            <h2 class="text-xl font-bold text-gray-800" data-i18n="usuarios">Usuários</h2>
-            <p id="admin-usuarios-total" class="text-sm text-gray-500"></p>
+            <h2 class="dm-titulo-secao" data-i18n="usuarios">Usuários</h2>
+            <p id="admin-usuarios-total" class="dm-texto-suave dm-texto-sm"></p>
           </div>
-          <form id="form-admin-busca" class="flex items-center gap-2">
-            <input id="admin-busca-usuarios" type="search" maxlength="100" placeholder="Buscar por nome ou e-mail" data-i18n-placeholder="buscarPlaceholder" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white">
-            <button id="btn-admin-busca" type="submit" class="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm font-semibold" data-i18n="buscar">Buscar</button>
+          <form id="form-admin-busca" class="admin-busca" role="search">
+            <input id="admin-busca-usuarios" type="search" maxlength="100" placeholder="Buscar por nome ou e-mail" data-i18n-placeholder="buscarPlaceholder" aria-label="Buscar por nome ou e-mail" data-i18n-aria="buscarPlaceholder" class="dm-input dm-input-sm">
+            <button id="btn-admin-busca" type="submit" class="dm-btn dm-btn-escuro dm-btn-sm" data-i18n="buscar">Buscar</button>
           </form>
         </div>
 
-        <div class="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-          <table class="min-w-full text-left text-sm">
-            <thead class="bg-gray-50 text-gray-600">
+        <div class="admin-tabela-wrap">
+          <table class="admin-tabela">
+            <thead>
               <tr>
-                <th class="px-4 py-3 font-semibold" data-i18n="colunaUsuario">Usuário</th>
-                <th class="px-4 py-3 font-semibold whitespace-nowrap" data-i18n="colunaCadastro">Cadastro</th>
-                <th class="px-4 py-3 font-semibold whitespace-nowrap" data-i18n="colunaUltimoAcesso">Último acesso</th>
-                <th class="px-4 py-3 font-semibold text-right" data-i18n="colunaAcessos">Acessos</th>
-                <th class="px-4 py-3 font-semibold text-right" data-i18n="colunaRegistros">Registros</th>
-                <th class="px-4 py-3 font-semibold whitespace-nowrap" data-i18n="colunaEmocao">Emoção mais usada</th>
-                <th class="px-4 py-3 font-semibold" data-i18n="colunaStatus">Status</th>
-                <th class="px-4 py-3 font-semibold" data-i18n="colunaAcoes">Ações</th>
+                <th data-i18n="colunaUsuario">Usuário</th>
+                <th class="whitespace-nowrap" data-i18n="colunaCadastro">Cadastro</th>
+                <th class="whitespace-nowrap" data-i18n="colunaUltimoAcesso">Último acesso</th>
+                <th class="text-right" data-i18n="colunaAcessos">Acessos</th>
+                <th class="text-right" data-i18n="colunaRegistros">Registros</th>
+                <th class="whitespace-nowrap" data-i18n="colunaEmocao">Emoção mais usada</th>
+                <th data-i18n="colunaStatus">Status</th>
+                <th data-i18n="colunaAcoes">Ações</th>
               </tr>
             </thead>
             <tbody id="admin-usuarios-tabela"></tbody>
           </table>
         </div>
 
-        <div id="admin-paginacao" class="flex items-center justify-end gap-3 mt-4"></div>
+        <div id="admin-paginacao" class="admin-paginacao"></div>
       </section>
     </div>
 
     <!-- Tela de Gráficos -->
-    <div id="tela-graficos" class="hidden min-h-screen pt-20 pb-24 px-4 max-w-6xl mx-auto">
+    <div id="tela-graficos" class="hidden dm-pagina">
       <!-- Header com botão de volta -->
-      <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-mint-100">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <button onclick="mostrarTela('dashboard')" class="flex items-center gap-2 text-gray-600 hover:text-mint-600 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <header class="dm-header">
+        <div class="dm-header-conteudo">
+          <button type="button" onclick="mostrarTela('dashboard')" class="dm-voltar">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="font-semibold" data-i18n="voltarDashboard">Voltar</span>
+            <span data-i18n="voltarDashboard">Voltar</span>
           </button>
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">🧠</span>
-            <span class="logo-marca text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span>
-          </div>
-          <div class="w-20"></div>
+          <img src="img/logo-dailymind.png" alt="Daily Mind" class="dm-logo-img dm-logo-header" width="960" height="241">
+          <div class="dm-header-espaco" aria-hidden="true"></div>
         </div>
       </header>
-      <h1 class="text-2xl font-bold text-gray-800 mb-6" data-i18n="graficosTitulo">📊 Seus Gráficos</h1>
+      <h1 class="dm-titulo-pagina dm-titulo-com-icone mb-6"><img src="img/icones/grafico.svg" alt="Gráficos" class="dm-ico-titulo" data-icone="grafico" width="48" height="48" aria-hidden="true"><span data-i18n="graficosTitulo">Seus Gráficos</span></h1>
       <div class="chart-panel chart-card mb-6">
         <div class="chart-header">
-          <h3 class="font-semibold text-gray-700" data-i18n="humor30">Humor nos últimos 30 dias</h3>
-          <span class="chart-pill" data-i18n="humor">Humor</span>
+          <h3 class="chart-titulo" data-i18n="humor30">Humor nos últimos 30 dias</h3>
+          <span class="chart-pill chart-pill-rosa" data-i18n="humor">Humor</span>
         </div>
         <div class="chart-area">
           <canvas id="grafico-humor" height="220"></canvas>
@@ -479,8 +476,8 @@
       </div>
       <div class="chart-panel chart-card">
         <div class="chart-header">
-          <h3 class="font-semibold text-gray-700" data-i18n="sono30">Sono nos últimos 30 dias</h3>
-          <span class="chart-pill purple" data-i18n="sono">Sono</span>
+          <h3 class="chart-titulo" data-i18n="sono30">Sono nos últimos 30 dias</h3>
+          <span class="chart-pill chart-pill-azul" data-i18n="sono">Sono</span>
         </div>
         <div class="chart-area">
           <canvas id="grafico-sono" height="220"></canvas>
@@ -488,8 +485,8 @@
       </div>
       <div class="chart-panel chart-card mt-6">
         <div class="chart-header">
-          <h3 class="font-semibold text-gray-700" data-i18n="energia30">Energia nos últimos 30 dias</h3>
-          <span class="chart-pill orange" data-i18n="energia">Energia</span>
+          <h3 class="chart-titulo" data-i18n="energia30">Energia nos últimos 30 dias</h3>
+          <span class="chart-pill chart-pill-verde" data-i18n="energia">Energia</span>
         </div>
         <div class="chart-area">
           <canvas id="grafico-energia" height="220"></canvas>
@@ -498,61 +495,55 @@
     </div>
 
     <!-- Tela de Lembretes -->
-    <div id="tela-lembretes" class="hidden min-h-screen pt-20 pb-24 px-4 max-w-6xl mx-auto">
+    <div id="tela-lembretes" class="hidden dm-pagina">
       <!-- Header com botão de volta -->
-      <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-mint-100">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <button onclick="mostrarTela('dashboard')" class="flex items-center gap-2 text-gray-600 hover:text-mint-600 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <header class="dm-header">
+        <div class="dm-header-conteudo">
+          <button type="button" onclick="mostrarTela('dashboard')" class="dm-voltar">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="font-semibold" data-i18n="voltarDashboard">Voltar</span>
+            <span data-i18n="voltarDashboard">Voltar</span>
           </button>
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">🧠</span>
-            <span class="logo-marca text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span>
-          </div>
-          <div class="w-20"></div>
+          <img src="img/logo-dailymind.png" alt="Daily Mind" class="dm-logo-img dm-logo-header" width="960" height="241">
+          <div class="dm-header-espaco" aria-hidden="true"></div>
         </div>
       </header>
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold text-gray-800" data-i18n="todosLembretes">⏰ Todos os Lembretes</h1>
-        <button onclick="abrirModalLembrete()" class="bg-mint-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-mint-600 transition" data-i18n="novo">+ Novo</button>
+      <div class="dm-pagina-topo">
+        <h1 class="dm-titulo-pagina dm-titulo-com-icone"><img src="img/icones/despertador.svg" alt="Lembretes" class="dm-ico-titulo" data-icone="despertador" width="48" height="48" aria-hidden="true"><span data-i18n="todosLembretes">Todos os Lembretes</span></h1>
+        <button type="button" onclick="abrirModalLembrete()" class="dm-btn dm-btn-primario" data-i18n="novo">+ Novo</button>
       </div>
-      <div id="lista-lembretes-tela" class="space-y-3">
-        <p class="text-gray-400 text-center py-8" data-i18n="nenhumLembrete">Nenhum lembrete criado</p>
+      <div id="lista-lembretes-tela" class="dm-lista">
+        <p class="dm-vazio" data-i18n="nenhumLembrete">Nenhum lembrete criado</p>
       </div>
     </div>
 
     <!-- Tela de Perfil -->
-    <div id="tela-perfil" class="hidden min-h-screen pt-20 pb-24 px-4 max-w-2xl mx-auto">
+    <div id="tela-perfil" class="hidden dm-pagina dm-pagina-estreita">
       <!-- Header com botão de volta -->
-      <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-mint-100">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <button onclick="mostrarTela('dashboard')" class="flex items-center gap-2 text-gray-600 hover:text-mint-600 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <header class="dm-header">
+        <div class="dm-header-conteudo">
+          <button type="button" onclick="mostrarTela('dashboard')" class="dm-voltar">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="font-semibold" data-i18n="voltarDashboard">Voltar</span>
+            <span data-i18n="voltarDashboard">Voltar</span>
           </button>
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">🧠</span>
-            <span class="text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span>
-          </div>
-          <div class="w-20"></div>
+          <img src="img/logo-dailymind.png" alt="Daily Mind" class="dm-logo-img dm-logo-header" width="960" height="241">
+          <div class="dm-header-espaco" aria-hidden="true"></div>
         </div>
       </header>
-      <div class="flex items-start justify-between gap-4 mb-6">
+      <div class="dm-pagina-topo items-start">
         <div>
-          <h1 class="text-2xl font-bold text-gray-800" data-i18n="meuPerfil">👤 Meu Perfil</h1>
-          <p class="text-sm text-gray-500 mt-1" data-i18n="perfilDescricao">Suas informações ficam salvas na sua conta.</p>
+          <h1 class="dm-titulo-pagina dm-titulo-com-icone"><img src="img/icones/perfil.svg" alt="Perfil" class="dm-ico-titulo" data-icone="perfil" width="48" height="48" aria-hidden="true"><span data-i18n="meuPerfil">Meu Perfil</span></h1>
+          <p class="dm-texto-suave dm-texto-sm mt-1" data-i18n="perfilDescricao">Suas informações ficam salvas na sua conta.</p>
         </div>
         <span id="perfil-status" class="profile-save-status" aria-live="polite" data-i18n="sincronizado">Sincronizado</span>
       </div>
-      <div class="profile-card bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden mb-6">
+      <div class="profile-card dm-card mb-6">
         <div id="perfil-banner-preview" class="profile-banner" role="img" aria-label="Banner do perfil" data-i18n-aria="bannerPerfil">
           <img id="perfil-banner-imagem" class="profile-banner-image" alt="" aria-hidden="true">
-          <label for="perfil-banner" class="profile-media-button" title="Alterar banner" data-i18n-title="alterarBanner">📷 <span data-i18n="alterarBanner">Alterar banner</span></label>
+          <label for="perfil-banner" class="profile-media-button" title="Alterar banner" data-i18n-title="alterarBanner"><img src="img/icones/camera.svg" alt="Câmera" class="dm-ico-inline" data-icone="camera" width="48" height="48" aria-hidden="true"> <span data-i18n="alterarBanner">Alterar banner</span></label>
           <input type="file" id="perfil-banner" accept="image/*" class="sr-only">
         </div>
         <div class="profile-summary">
@@ -569,213 +560,214 @@
           </div>
         </div>
       </div>
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
-        <form id="form-perfil" class="space-y-4">
+      <div class="dm-card dm-secao">
+        <form id="form-perfil" class="dm-form">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="nome">Nome</label>
-            <input type="text" id="perfil-nome" maxlength="100" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+            <label for="perfil-nome" class="dm-label" data-i18n="nome">Nome</label>
+            <input type="text" id="perfil-nome" maxlength="100" required autocomplete="name" class="dm-input">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="email">E-mail</label>
-            <input type="email" id="perfil-email" disabled class="w-full border border-gray-200 rounded-lg px-4 py-3 bg-gray-50 text-gray-500">
+            <label for="perfil-email" class="dm-label" data-i18n="email">E-mail</label>
+            <input type="email" id="perfil-email" disabled class="dm-input">
           </div>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="dm-form-duas-colunas">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="idadeOpcional">Idade (opcional)</label>
-              <input type="number" id="perfil-idade" min="1" max="150" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+              <label for="perfil-idade" class="dm-label" data-i18n="idadeOpcional">Idade (opcional)</label>
+              <input type="number" id="perfil-idade" min="1" max="150" class="dm-input">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="ocupacaoOpcional">Ocupação (opcional)</label>
-              <input type="text" id="perfil-ocupacao" maxlength="100" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+              <label for="perfil-ocupacao" class="dm-label" data-i18n="ocupacaoOpcional">Ocupação (opcional)</label>
+              <input type="text" id="perfil-ocupacao" maxlength="100" class="dm-input">
             </div>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="biografia">Biografia</label>
-            <textarea id="perfil-bio" rows="4" maxlength="280" placeholder="Conte um pouco sobre você..." data-i18n-placeholder="biografiaPlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition resize-y"></textarea>
-            <p class="flex justify-between text-xs text-gray-400 mt-1"><span data-i18n="ate280">Até 280 caracteres</span><span id="perfil-bio-contador">0/280</span></p>
+            <label for="perfil-bio" class="dm-label" data-i18n="biografia">Biografia</label>
+            <textarea id="perfil-bio" rows="4" maxlength="280" placeholder="Conte um pouco sobre você..." data-i18n-placeholder="biografiaPlaceholder" class="dm-input dm-textarea"></textarea>
+            <p class="dm-contador"><span data-i18n="ate280">Até 280 caracteres</span><span id="perfil-bio-contador">0/280</span></p>
           </div>
-          <button id="btn-salvar-perfil" type="submit" class="profile-save-button w-full bg-mint-500 text-white font-bold py-3 rounded-lg hover:bg-mint-600 transition shadow-md">
+          <button id="btn-salvar-perfil" type="submit" class="profile-save-button dm-btn dm-btn-primario dm-btn-bloco">
             <span data-i18n="salvarAlteracoes">Salvar alterações</span>
           </button>
         </form>
-          <button type="button" id="btn-logout" class="w-full mt-4 border-2 border-red-300 text-red-600 font-bold py-3 rounded-lg hover:bg-red-50 transition">
+        <button type="button" id="btn-logout" class="dm-btn dm-btn-perigo dm-btn-bloco mt-4">
           <span data-i18n="sair">Sair da conta</span>
         </button>
       </div>
     </div>
 
     <!-- Tela de Configurações -->
-    <div id="tela-configuracoes" class="hidden min-h-screen pt-20 pb-24 px-4 max-w-3xl mx-auto">
-      <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-mint-100">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <button onclick="mostrarTela('dashboard')" class="flex items-center gap-2 text-gray-600 hover:text-mint-600 transition">
+    <div id="tela-configuracoes" class="hidden dm-pagina dm-pagina-media">
+      <header class="dm-header">
+        <div class="dm-header-conteudo">
+          <button type="button" onclick="mostrarTela('dashboard')" class="dm-voltar">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            <span class="font-semibold" data-i18n="voltar">Voltar</span>
+            <span data-i18n="voltar">Voltar</span>
           </button>
-          <div class="flex items-center gap-2"><span class="text-2xl">🧠</span><span class="logo-marca text-xl font-bold bg-gradient-to-r from-mint-500 to-lavender-500 bg-clip-text text-transparent">DailyMind</span></div>
-          <div class="w-20"></div>
+          <img src="img/logo-dailymind.png" alt="Daily Mind" class="dm-logo-img dm-logo-header" width="960" height="241">
+          <div class="dm-header-espaco" aria-hidden="true"></div>
         </div>
       </header>
 
       <div class="mb-6">
-        <p class="text-xs font-bold uppercase tracking-widest text-mint-600" data-i18n="preferencias">Preferências</p>
-        <h1 class="text-3xl font-bold text-gray-800 mt-1" data-i18n="configuracoesTitulo">Configurações</h1>
-        <p class="text-gray-500 mt-2" data-i18n="configuracoesDescricao">Personalize o DailyMind do seu jeito. As escolhas ficam salvas neste dispositivo.</p>
+        <p class="dm-eyebrow dm-eyebrow-azul" data-i18n="preferencias">Preferências</p>
+        <h1 class="dm-titulo-pagina mt-1" data-i18n="configuracoesTitulo">Configurações</h1>
+        <p class="dm-texto-suave mt-2" data-i18n="configuracoesDescricao">Personalize o DailyMind do seu jeito. As escolhas ficam salvas neste dispositivo.</p>
       </div>
 
-      <div class="settings-list space-y-4">
-        <section class="settings-section bg-white p-5 sm:p-6 rounded-2xl shadow-md border border-gray-100">
-          <div class="flex items-start gap-4 mb-5"><span class="settings-icon">🎨</span><div><h2 class="text-lg font-bold text-gray-800" data-i18n="aparencia">Aparência</h2><p class="text-sm text-gray-500" data-i18n="aparenciaDescricao">Escolha como o DailyMind aparece para você.</p></div></div>
-          <label for="seletor-tema" class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="tema">Tema</label>
-          <select id="seletor-tema" class="settings-select w-full border border-gray-300 rounded-xl px-4 py-3 bg-white outline-none focus:ring-2 focus:ring-mint-500">
+      <div class="settings-list">
+        <section class="settings-section dm-card">
+          <div class="settings-cabecalho"><span class="settings-icon dm-tile-rosa"><img src="img/icones/paleta.svg" alt="Arte" class="dm-ico" data-icone="paleta" width="48" height="48" aria-hidden="true"></span><div><h2 class="dm-titulo-secao" data-i18n="aparencia">Aparência</h2><p class="dm-texto-suave dm-texto-sm" data-i18n="aparenciaDescricao">Escolha como o DailyMind aparece para você.</p></div></div>
+          <label for="seletor-tema" class="dm-label" data-i18n="tema">Tema</label>
+          <select id="seletor-tema" class="settings-select dm-input">
             <option value="claro" data-i18n="temaClaro">Claro</option>
             <option value="escuro" data-i18n="temaEscuro">Escuro</option>
           </select>
         </section>
 
-        <section class="settings-section bg-white p-5 sm:p-6 rounded-2xl shadow-md border border-gray-100">
-          <div class="flex items-start gap-4 mb-5"><span class="settings-icon">🌐</span><div><h2 class="text-lg font-bold text-gray-800" data-i18n="idiomaTitulo">Idioma</h2><p class="text-sm text-gray-500" data-i18n="idiomaDescricao">Altere os textos principais da interface.</p></div></div>
-          <label for="seletor-idioma" class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="idioma">Idioma</label>
-          <select id="seletor-idioma" class="settings-select w-full border border-gray-300 rounded-xl px-4 py-3 bg-white outline-none focus:ring-2 focus:ring-mint-500">
+        <section class="settings-section dm-card">
+          <div class="settings-cabecalho"><span class="settings-icon dm-tile-azul"><img src="img/icones/globo.svg" alt="Idioma" class="dm-ico" data-icone="globo" width="48" height="48" aria-hidden="true"></span><div><h2 class="dm-titulo-secao" data-i18n="idiomaTitulo">Idioma</h2><p class="dm-texto-suave dm-texto-sm" data-i18n="idiomaDescricao">Altere os textos principais da interface.</p></div></div>
+          <label for="seletor-idioma" class="dm-label" data-i18n="idioma">Idioma</label>
+          <select id="seletor-idioma" class="settings-select dm-input">
             <option value="pt-BR">Português (Brasil)</option>
             <option value="en">English</option>
             <option value="es">Español</option>
           </select>
         </section>
 
-        <section class="settings-section bg-white p-5 sm:p-6 rounded-2xl shadow-md border border-gray-100">
-          <div class="flex items-start gap-4 mb-5"><span class="settings-icon">♿</span><div><h2 class="text-lg font-bold text-gray-800" data-i18n="acessibilidadeTitulo">Acessibilidade</h2><p class="text-sm text-gray-500" data-i18n="acessibilidadeDescricao">Ajustes para deixar a experiência mais confortável.</p></div></div>
+        <section class="settings-section dm-card">
+          <div class="settings-cabecalho"><span class="settings-icon dm-tile-verde"><img src="img/icones/acessibilidade.svg" alt="Acessibilidade" class="dm-ico" data-icone="acessibilidade" width="48" height="48" aria-hidden="true"></span><div><h2 class="dm-titulo-secao" data-i18n="acessibilidadeTitulo">Acessibilidade</h2><p class="dm-texto-suave dm-texto-sm" data-i18n="acessibilidadeDescricao">Ajustes para deixar a experiência mais confortável.</p></div></div>
           <label class="settings-toggle"><span><strong data-i18n="fonteMaior">Fonte maior</strong><small data-i18n="fonteMaiorDescricao">Aumenta o tamanho dos textos.</small></span><input id="opcao-fonte-maior" type="checkbox"><span class="settings-switch" aria-hidden="true"></span></label>
           <label class="settings-toggle"><span><strong data-i18n="altoContraste">Alto contraste</strong><small data-i18n="altoContrasteDescricao">Reforça a leitura de textos e bordas.</small></span><input id="opcao-alto-contraste" type="checkbox"><span class="settings-switch" aria-hidden="true"></span></label>
           <label class="settings-toggle"><span><strong data-i18n="reduzirMovimento">Reduzir movimento</strong><small data-i18n="reduzirMovimentoDescricao">Diminui transições e animações.</small></span><input id="opcao-reduzir-movimento" type="checkbox"><span class="settings-switch" aria-hidden="true"></span></label>
         </section>
       </div>
-      <p id="configuracoes-status" class="text-sm text-mint-700 font-semibold mt-5 text-center" aria-live="polite"></p>
+      <p id="configuracoes-status" class="dm-status-salvo" aria-live="polite"></p>
     </div>
 
   </div>
 
   <!-- Confirmação de perfil salvo -->
-  <div id="modal-confirmacao-perfil" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-7 w-full max-w-sm text-center shadow-2xl">
-      <div class="profile-save-check mx-auto mb-4">✓</div>
-      <h3 class="text-xl font-bold text-gray-800" data-i18n="perfilSalvo">Perfil salvo</h3>
-      <p class="text-gray-500 mt-2" data-i18n="perfilSalvoDescricao">Suas alterações foram confirmadas e já estão na sua conta.</p>
-      <button type="button" onclick="fecharModal('modal-confirmacao-perfil')" class="w-full mt-6 bg-mint-500 text-white font-bold py-3 rounded-lg hover:bg-mint-600 transition" data-i18n="entendi">Entendi</button>
+  <div id="modal-confirmacao-perfil" class="dm-modal-fundo z-[70] hidden" role="dialog" aria-modal="true" aria-labelledby="titulo-perfil-salvo">
+    <div class="dm-modal dm-modal-sm text-center">
+      <img src="img/mimo/mimo-piscando.svg" alt="Mimo" class="dm-modal-mimo" width="200" height="250">
+      <h3 id="titulo-perfil-salvo" class="dm-titulo-modal" data-i18n="perfilSalvo">Perfil salvo</h3>
+      <p class="dm-texto-suave mt-2" data-i18n="perfilSalvoDescricao">Suas alterações foram confirmadas e já estão na sua conta.</p>
+      <button type="button" onclick="fecharModal('modal-confirmacao-perfil')" class="dm-btn dm-btn-primario dm-btn-bloco mt-6" data-i18n="entendi">Entendi</button>
     </div>
   </div>
 
   <!-- Modais -->
   <!-- Modal de Humor -->
-  <div id="modal-humor" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-      <div class="flex items-start justify-between gap-4 mb-6">
-        <div>
-          <p class="text-xs font-bold uppercase tracking-widest text-mint-600" data-i18n="checkinEmocional">Check-in emocional</p>
-          <h3 class="text-2xl font-bold text-gray-800 mt-1" data-i18n="comoVoceEsta">Como você está hoje?</h3>
-          <p class="text-sm text-gray-500 mt-1" data-i18n="semRespostaCerta">Não existe resposta certa. Escolha o que mais combina com agora.</p>
-        </div>
-        <span class="text-3xl">🫶</span>
+  <div id="modal-humor" class="dm-modal-fundo hidden" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-humor">
+    <div class="dm-modal dm-modal-lg">
+      <div class="dm-modal-cabecalho">
+        <p class="dm-eyebrow dm-eyebrow-rosa" data-i18n="checkinEmocional">Check-in emocional</p>
+        <h3 id="titulo-modal-humor" class="dm-titulo-modal mt-1" data-i18n="comoVoceEsta">Como você está hoje?</h3>
+        <p class="dm-texto-suave dm-texto-sm mt-1" data-i18n="semRespostaCerta">Não existe resposta certa. Escolha o que mais combina com agora.</p>
       </div>
-      <div class="mood-picker grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-        <button type="button" onclick="registrarHumor('😊')" data-humor="😊" aria-label="Feliz" class="emoji-btn mood-option"><span class="text-3xl">😊</span><span>Feliz</span></button>
-        <button type="button" onclick="registrarHumor('😔')" data-humor="😔" aria-label="Triste" class="emoji-btn mood-option"><span class="text-3xl">😔</span><span>Triste</span></button>
-        <button type="button" onclick="registrarHumor('😰')" data-humor="😰" aria-label="Ansioso" class="emoji-btn mood-option"><span class="text-3xl">😰</span><span>Ansioso</span></button>
-        <button type="button" onclick="registrarHumor('😫')" data-humor="😫" aria-label="Cansado" class="emoji-btn mood-option"><span class="text-3xl">😫</span><span>Cansado</span></button>
-        <button type="button" onclick="registrarHumor('😤')" data-humor="😤" aria-label="Irritado" class="emoji-btn mood-option"><span class="text-3xl">😤</span><span>Irritado</span></button>
-        <button type="button" onclick="registrarHumor('😐')" data-humor="😐" aria-label="Neutro" class="emoji-btn mood-option"><span class="text-3xl">😐</span><span>Neutro</span></button>
+      <div class="mood-picker">
+        <button type="button" onclick="registrarHumor('😊')" data-humor="😊" aria-label="Feliz" class="emoji-btn mood-option"><img src="img/mimo/mimo-feliz.svg" alt="Mimo" class="mood-option-mimo" width="200" height="184"><span>Feliz</span></button>
+        <button type="button" onclick="registrarHumor('😔')" data-humor="😔" aria-label="Triste" class="emoji-btn mood-option"><img src="img/mimo/mimo-triste.svg" alt="Mimo" class="mood-option-mimo" width="200" height="184"><span>Triste</span></button>
+        <button type="button" onclick="registrarHumor('😰')" data-humor="😰" aria-label="Ansioso" class="emoji-btn mood-option"><img src="img/mimo/mimo-ansioso.svg" alt="Mimo" class="mood-option-mimo" width="200" height="184"><span>Ansioso</span></button>
+        <button type="button" onclick="registrarHumor('😫')" data-humor="😫" aria-label="Cansado" class="emoji-btn mood-option"><img src="img/mimo/mimo-cansado.svg" alt="Mimo" class="mood-option-mimo" width="200" height="184"><span>Cansado</span></button>
+        <button type="button" onclick="registrarHumor('😤')" data-humor="😤" aria-label="Irritado" class="emoji-btn mood-option"><img src="img/mimo/mimo-irritado.svg" alt="Mimo" class="mood-option-mimo" width="200" height="184"><span>Irritado</span></button>
+        <button type="button" onclick="registrarHumor('😐')" data-humor="😐" aria-label="Neutro" class="emoji-btn mood-option"><img src="img/mimo/mimo-neutro.svg" alt="Mimo" class="mood-option-mimo" width="200" height="184"><span>Neutro</span></button>
       </div>
-      <button type="button" onclick="fecharModal('modal-humor')" class="w-full text-gray-500 font-semibold py-2" data-i18n="fechar">Fechar</button>
+      <div class="text-center">
+        <button type="button" onclick="fecharModal('modal-humor')" class="dm-btn dm-btn-suave dm-btn-largo" data-i18n="fechar">Fechar</button>
+      </div>
     </div>
   </div>
 
   <!-- Modal de Sono -->
-  <div id="modal-sono" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
-      <h3 id="modal-sono-titulo" class="text-xl font-bold text-gray-800 mb-1 text-center" data-i18n="horasSono">Horas de sono</h3>
-      <p class="text-sm text-gray-500 text-center mb-5" data-i18n="sonoDescricaoModal">Conte como foi sua noite, sem cobrança.</p>
+  <div id="modal-sono" class="dm-modal-fundo hidden" role="dialog" aria-modal="true" aria-labelledby="modal-sono-titulo">
+    <div class="dm-modal dm-modal-sm">
+      <h3 id="modal-sono-titulo" class="dm-titulo-modal text-center" data-i18n="horasSono">Horas de sono</h3>
+      <p class="dm-texto-suave dm-texto-sm text-center mt-1 mb-5" data-i18n="sonoDescricaoModal">Conte como foi sua noite, sem cobrança.</p>
       <div class="mb-6">
-        <input type="range" id="input-sono" min="0" max="24" step="0.5" value="7" class="w-full accent-lavender-500">
-        <div class="text-center mt-2">
-          <span id="sono-valor" class="text-3xl font-bold text-lavender-600">7</span>
-          <span class="text-gray-500" data-i18n="unidadeHoras"> horas</span>
+        <input type="range" id="input-sono" min="0" max="24" step="0.5" value="7" class="dm-range dm-range-azul" aria-labelledby="modal-sono-titulo">
+        <div class="dm-range-valor">
+          <span id="sono-valor" class="dm-range-numero dm-cor-azul">7</span>
+          <span class="dm-texto-suave" data-i18n="unidadeHoras"> horas</span>
         </div>
       </div>
-      <label for="input-qualidade-sono" class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="qualidadePercebida">Qualidade percebida</label>
+      <label for="input-qualidade-sono" class="dm-label" data-i18n="qualidadePercebida">Qualidade percebida</label>
       <div class="flex items-center gap-3 mb-6">
-        <input type="range" id="input-qualidade-sono" min="1" max="5" step="1" value="5" class="flex-1 accent-lavender-500">
-        <span id="qualidade-sono-valor" class="w-12 text-center font-bold text-lavender-600">5/5</span>
+        <input type="range" id="input-qualidade-sono" min="1" max="5" step="1" value="5" class="dm-range dm-range-azul flex-1">
+        <span id="qualidade-sono-valor" class="w-12 text-center font-extrabold dm-cor-azul">5/5</span>
       </div>
-      <button id="btn-salvar-sono" onclick="registrarSono()" class="w-full bg-lavender-500 text-white font-bold py-3 rounded-lg hover:bg-lavender-600 transition mb-3">
+      <button id="btn-salvar-sono" type="button" onclick="registrarSono()" class="dm-btn dm-btn-primario dm-btn-bloco mb-2">
         <span data-i18n="confirmar">Confirmar</span>
       </button>
-      <button onclick="fecharModal('modal-sono')" class="w-full text-gray-500 font-semibold py-2" data-i18n="cancelar">Cancelar</button>
+      <button type="button" onclick="fecharModal('modal-sono')" class="dm-btn dm-btn-fantasma dm-btn-bloco" data-i18n="cancelar">Cancelar</button>
     </div>
   </div>
 
   <!-- Modal de Energia -->
-  <div id="modal-energia" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
-      <h3 id="modal-energia-titulo" class="text-xl font-bold text-gray-800 mb-1 text-center" data-i18n="nivelEnergia">Nível de energia</h3>
-      <p class="text-sm text-gray-500 text-center mb-5" data-i18n="energiaDescricaoModal">Registre sua disposição real para o dia.</p>
+  <div id="modal-energia" class="dm-modal-fundo hidden" role="dialog" aria-modal="true" aria-labelledby="modal-energia-titulo">
+    <div class="dm-modal dm-modal-sm">
+      <h3 id="modal-energia-titulo" class="dm-titulo-modal text-center" data-i18n="nivelEnergia">Nível de energia</h3>
+      <p class="dm-texto-suave dm-texto-sm text-center mt-1 mb-5" data-i18n="energiaDescricaoModal">Registre sua disposição real para o dia.</p>
       <div class="mb-6">
-        <input type="range" id="input-energia" min="1" max="10" step="1" value="5" class="w-full accent-peach-500">
-        <div class="text-center mt-2">
-          <span id="energia-valor" class="text-3xl font-bold text-peach-600">5</span>
-          <span class="text-gray-500"> / 10</span>
+        <input type="range" id="input-energia" min="1" max="10" step="1" value="5" class="dm-range dm-range-verde" aria-labelledby="modal-energia-titulo">
+        <div class="dm-range-valor">
+          <span id="energia-valor" class="dm-range-numero dm-cor-verde">5</span>
+          <span class="dm-texto-suave"> / 10</span>
         </div>
-        <div class="flex justify-between text-xs text-gray-400 mt-2"><span data-i18n="noLimite">No limite</span><span data-i18n="cheioEnergia">Cheio de energia</span></div>
+        <div class="flex justify-between dm-texto-fraco dm-texto-xs mt-2"><span data-i18n="noLimite">No limite</span><span data-i18n="cheioEnergia">Cheio de energia</span></div>
       </div>
-      <button id="btn-salvar-energia" onclick="registrarEnergia()" class="w-full bg-peach-500 text-white font-bold py-3 rounded-lg hover:bg-peach-600 transition mb-3">
+      <button id="btn-salvar-energia" type="button" onclick="registrarEnergia()" class="dm-btn dm-btn-primario dm-btn-bloco mb-2">
         <span data-i18n="confirmar">Confirmar</span>
       </button>
-      <button onclick="fecharModal('modal-energia')" class="w-full text-gray-500 font-semibold py-2" data-i18n="cancelar">Cancelar</button>
+      <button type="button" onclick="fecharModal('modal-energia')" class="dm-btn dm-btn-fantasma dm-btn-bloco" data-i18n="cancelar">Cancelar</button>
     </div>
   </div>
 
   <!-- Modal de Lembrete -->
-  <div id="modal-lembrete" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm max-h-96 overflow-y-auto">
-      <h3 class="text-xl font-bold text-gray-800 mb-4 text-center" data-i18n="novoLembrete">Novo Lembrete</h3>
-      <form id="form-lembrete" class="space-y-4">
+  <div id="modal-lembrete" class="dm-modal-fundo hidden" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-lembrete">
+    <div class="dm-modal dm-modal-sm dm-modal-rolavel">
+      <h3 id="titulo-modal-lembrete" class="dm-titulo-modal text-center mb-4" data-i18n="novoLembrete">Novo Lembrete</h3>
+      <form id="form-lembrete" class="dm-form">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="titulo">Título</label>
-          <input type="text" id="lembrete-titulo" required placeholder="Ex: Beber água" data-i18n-placeholder="lembreteTituloPlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+          <label for="lembrete-titulo" class="dm-label" data-i18n="titulo">Título</label>
+          <input type="text" id="lembrete-titulo" required placeholder="Ex: Beber água" data-i18n-placeholder="lembreteTituloPlaceholder" class="dm-input">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="objetoDeixado">Objeto deixado (opcional)</label>
-          <input type="text" id="lembrete-objeto" placeholder="Ex: Chaves, celular" data-i18n-placeholder="lembreteObjetoPlaceholder" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+          <label for="lembrete-objeto" class="dm-label" data-i18n="objetoDeixado">Objeto deixado (opcional)</label>
+          <input type="text" id="lembrete-objeto" placeholder="Ex: Chaves, celular" data-i18n-placeholder="lembreteObjetoPlaceholder" class="dm-input">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="horarioDeixado">Que horas deixou? (opcional)</label>
-          <input type="time" id="lembrete-hora" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-mint-500 focus:border-mint-500 outline-none transition">
+          <label for="lembrete-hora" class="dm-label" data-i18n="horarioDeixado">Que horas deixou? (opcional)</label>
+          <input type="time" id="lembrete-hora" class="dm-input">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="icone">Ícone</label>
-          <div class="flex gap-2 flex-wrap">
-            <button type="button" onclick="selecionarIcone('💧')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">💧</button>
-            <button type="button" onclick="selecionarIcone('💊')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">💊</button>
-            <button type="button" onclick="selecionarIcone('🧘')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">🧘</button>
-            <button type="button" onclick="selecionarIcone('📚')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">📚</button>
-            <button type="button" onclick="selecionarIcone('🏃')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">🏃</button>
-            <button type="button" onclick="selecionarIcone('🍎')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">🍎</button>
-            <button type="button" onclick="selecionarIcone('😴')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">😴</button>
-            <button type="button" onclick="selecionarIcone('📌')" class="icone-btn text-2xl p-2 rounded-lg border-2 border-gray-200 hover:border-mint-400 transition">📌</button>
+          <span class="dm-label" data-i18n="icone">Ícone</span>
+          <div class="dm-icones">
+            <button type="button" onclick="selecionarIcone('💧')" class="icone-btn"><img src="img/icones/gota.svg" alt="Água" class="dm-ico" data-icone="gota" width="48" height="48"></button>
+            <button type="button" onclick="selecionarIcone('💊')" class="icone-btn"><img src="img/icones/pilula.svg" alt="Remédio" class="dm-ico" data-icone="pilula" width="48" height="48"></button>
+            <button type="button" onclick="selecionarIcone('🧘')" class="icone-btn"><img src="img/icones/meditacao.svg" alt="Meditação" class="dm-ico" data-icone="meditacao" width="48" height="48"></button>
+            <button type="button" onclick="selecionarIcone('📚')" class="icone-btn"><img src="img/icones/livros.svg" alt="Estudos" class="dm-ico" data-icone="livros" width="48" height="48"></button>
+            <button type="button" onclick="selecionarIcone('🏃')" class="icone-btn"><img src="img/icones/tenis.svg" alt="Exercício" class="dm-ico" data-icone="tenis" width="48" height="48"></button>
+            <button type="button" onclick="selecionarIcone('🍎')" class="icone-btn"><img src="img/icones/maca.svg" alt="Alimentação" class="dm-ico" data-icone="maca" width="48" height="48"></button>
+            <button type="button" onclick="selecionarIcone('😴')" class="icone-btn"><img src="img/icones/dormir.svg" alt="Descanso" class="dm-ico" data-icone="dormir" width="48" height="48"></button>
+            <button type="button" onclick="selecionarIcone('📌')" class="icone-btn"><img src="img/icones/alfinete.svg" alt="Lembrete" class="dm-ico" data-icone="alfinete" width="48" height="48"></button>
           </div>
         </div>
-        <button type="submit" class="w-full bg-mint-500 text-white font-bold py-3 rounded-lg hover:bg-mint-600 transition">
+        <button type="submit" class="dm-btn dm-btn-primario dm-btn-bloco">
           <span data-i18n="criarLembrete">Criar lembrete</span>
         </button>
       </form>
-      <button onclick="fecharModal('modal-lembrete')" class="w-full text-gray-500 font-semibold py-2 mt-2" data-i18n="cancelar">Cancelar</button>
+      <button type="button" onclick="fecharModal('modal-lembrete')" class="dm-btn dm-btn-fantasma dm-btn-bloco mt-2" data-i18n="cancelar">Cancelar</button>
     </div>
   </div>
 
   <!-- Toast de feedback -->
-  <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white font-semibold hidden transition-all duration-300 z-50"></div>
+  <div id="toast" class="dm-toast hidden" role="status" aria-live="polite"></div>
 
-  <script src="js/pwa-offline.js?v=20261127-admin"></script>
-  <script src="js/app.js?v=20261127-admin"></script>
+  <script src="js/pwa-offline.js?v=20261128-icones"></script>
+  <script src="js/icones.js?v=20261128-icones"></script>
+  <script src="js/app.js?v=20261128-icones"></script>
+  <script src="js/interface.js?v=20261128-icones"></script>
   <script>
     if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
       window.addEventListener('load', () => {
